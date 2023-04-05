@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.groupe1</groupId>
-    <artifactId>card-service</artifactId>
+    <artifactId>card-public</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>CardService</name>
+    <name>CardPublic</name>
     <description>Atelier3</description>
     <properties>
         <java.version>17</java.version>
