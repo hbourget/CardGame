@@ -1,10 +1,13 @@
 package com.groupe1.atelier3.inventory.controllers;
 
 import com.groupe1.atelier3.cards.models.Card;
+import com.groupe1.atelier3.cards.models.CardDTO;
 import com.groupe1.atelier3.inventory.controllers.InventoryService;
 import com.groupe1.atelier3.inventory.models.Inventory;
 import com.groupe1.atelier3.users.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,29 +16,43 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
+
 @RestController
 public class InventoryCrt {
     @Autowired
     private final InventoryService inventoryService;
+    private final String cardServiceUrl = "http://localhost:8082";
     private final RestTemplate restTemplate = new RestTemplate();
     public InventoryCrt(InventoryService inventoryService) {
         this.inventoryService = inventoryService;
     }
     @PostMapping("/inventory/add/{inventoryId}/{cardId}")
     public void AddCardToInv(@PathVariable Integer inventoryId, @PathVariable Integer cardId) {
-        System.out.println("TEST CTRL INVENTORY CARTE ID:" + cardId);
-         inventoryService.addCardToInv(inventoryId, cardId);
+        inventoryService.addCardToInv(inventoryId, cardId);
     }
-
     @PostMapping("/inventory/remove/{inventoryId}/{cardId}")
     public void RemoveCardFromInv(@PathVariable Integer inventoryId, @PathVariable Integer cardId) {
         inventoryService.removeCardFromInv(inventoryId, cardId);
     }
 
-    @GetMapping("/inventory/{username}")
-    public Inventory getInventory(@PathVariable String username) {
-        User user = restTemplate.getForObject("http://localhost:8081/user/" + username, User.class);
-        return inventoryService.getInventory(user.getIdInventory());
+    @PostMapping("/inventory/add/{inventoryId}")
+    public Object AddAllCardToInv(@PathVariable Integer inventoryId) {
+
+        String urlCardSvc = cardServiceUrl + "/cards";
+        ResponseEntity<List<Card>> responseEntity = restTemplate.exchange(urlCardSvc, HttpMethod.GET, null, new ParameterizedTypeReference<List<Card>>() {});
+        List<Card> cards = responseEntity.getBody();
+        return inventoryService.addAllCardToInv(inventoryId, cards);
+    }
+    @PostMapping("/inventory/remove/{inventoryId}")
+    public Object RemoveAllCardFromInv(@PathVariable Integer inventoryId) {
+        return inventoryService.removeAllCardFromInv(inventoryId);
+    }
+
+    @GetMapping("/inventory/{idUser}")
+    public List<Card> getInventory(@PathVariable Integer idUser) {
+        User user = restTemplate.getForObject("http://localhost:8081/user/" + idUser, User.class);
+        return inventoryService.getInventoryCards(user.getIdInventory());
     }
 
     @PostMapping("/inventory/create")

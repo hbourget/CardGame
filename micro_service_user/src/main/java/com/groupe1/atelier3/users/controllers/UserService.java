@@ -21,8 +21,8 @@ public class UserService {
     private final RestTemplate restTemplate = new RestTemplate();
     private final String inventoryServiceUrl = "http://localhost:8083";
 
-    public UserDTO GetUser(String username) {
-        Optional<User> userOptional = userRepository.findByUsername(username);
+    public UserDTO GetUser(Integer id) {
+        Optional<User> userOptional = userRepository.findById(id);
         UserDTO userDto = userMapper.toDTO(userOptional.get());
         return userDto;
     }
@@ -43,34 +43,28 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void addBalance(String username, int amount) {
-        Optional<User> userOptional = userRepository.findByUsername(username);
+    public UserDTO addBalance(Integer idUser, int amount) {
+        Optional<User> userOptional = userRepository.findById(idUser);
         User user = userOptional.get();
         user.setBalance(user.getBalance() + amount);
         userRepository.save(user);
+        return userMapper.toDTO(user);
+
     }
 
-    public void substractBalance(String username, int amount) {
-        Optional<User> userOptional = userRepository.findByUsername(username);
+    public UserDTO substractBalance(Integer idUser, int amount) {
+        Optional<User> userOptional = userRepository.findById(idUser);
         User user = userOptional.get();
         user.setBalance(user.getBalance() - amount);
         userRepository.save(user);
-    }
-
-    public void addInventory(String username, Inventory inventory) {
-        Optional<User> userOptional = userRepository.findByUsername(username);
-        User user = userOptional.get();
-        user.setInventory(inventory);
-        userRepository.save(user);
+        return userMapper.toDTO(user);
     }
 
     public User saveUser(User user) {
         userRepository.save(user);
-
         String urlSaveInv = inventoryServiceUrl + "/inventory/create";
         Inventory inventory = restTemplate.postForObject(urlSaveInv, null, Inventory.class);
-
-        user.setIdInventory(inventory.getId()); // Associer l'ID de l'inventaire à l'utilisateur
+        user.setIdInventory(inventory.getId());
         User savedUser = userRepository.save(user);
         return savedUser;
     }

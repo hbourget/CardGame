@@ -13,6 +13,14 @@ public class User {
   private double balance;
   private Integer idInventory;
 
+  public User(Integer id, String username, String password, Integer idInventory) {
+    this.id = id;
+    this.username = username;
+    this.password = password;
+    this.balance = 0;
+    this.idInventory = idInventory;
+  }
+
   public User(String username, String password, Integer idInventory) {
     this.username = username;
     this.password = password;

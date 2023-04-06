@@ -13,28 +13,27 @@ public class UserCrt {
     @Autowired
     private UserService uService;
 
-    @GetMapping("/user/{username}")
-    public UserDTO GetCard(@PathVariable String username) {
-        return uService.GetUser(username);
+    @GetMapping("/user/{id}")
+    public UserDTO GetUser(@PathVariable Integer id) {
+        return uService.GetUser(id);
     }
-
     @GetMapping("/users")
-    public Iterable<UserDTO> GetCard() {
+    public Iterable<UserDTO> GetUsers() {
         return uService.GetUsers();
     }
 
-    @PostMapping("/user/substractbalance/{username}/{balance}")
-    public void SubstractBalance(@PathVariable String username, @PathVariable Integer balance) {
-        uService.substractBalance(username, balance);
+    @PostMapping("/user/substractbalance/{id}/{balance}")
+    public UserDTO SubstractBalance(@PathVariable Integer id, @PathVariable Integer balance) {
+        return uService.substractBalance(id, balance);
     }
-    @PostMapping("/user/addbalance/{username}/{balance}")
-    public void AddBalance(@PathVariable String username, @PathVariable Integer balance) {
-        uService.addBalance(username, balance);
+    @PostMapping("/user/addbalance/{id}/{balance}")
+    public UserDTO AddBalance(@PathVariable Integer id, @PathVariable Integer balance) {
+        return uService.addBalance(id, balance);
     }
     @PostMapping("/user/save/{username}/{password}")
-    public void SaveUser(@PathVariable String username, @PathVariable String password) {
+    public User SaveUser(@PathVariable String username, @PathVariable String password) {
         User user = new User(username, password);
-        uService.saveUser(user);
+        return uService.saveUser(user);
     }
 
     /*@PostMapping("/save")

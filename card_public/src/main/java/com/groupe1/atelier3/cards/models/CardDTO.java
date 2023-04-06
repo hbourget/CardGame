@@ -2,6 +2,7 @@ package com.groupe1.atelier3.cards.models;
 
 public class CardDTO {
     //class Card with attributes name, description, power , health, price and image
+    private Integer id;
     private String name;
     private String description;
     private int power;
@@ -10,6 +11,15 @@ public class CardDTO {
     private String image;
 
     //constructor
+    public CardDTO(Integer id, String name, String description, int power, int health, int price, String image) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.power = power;
+        this.health = health;
+        this.price = price;
+        this.image = image;
+    }
     public CardDTO(String name, String description, int power, int health, int price, String image) {
         this.name = name;
         this.description = description;
@@ -70,6 +80,10 @@ public class CardDTO {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public Integer getId() {
+        return id;
     }
 
 }

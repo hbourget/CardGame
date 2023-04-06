@@ -16,19 +16,17 @@ public class CardCrt {
     @Autowired
     private CardService cService;
 
-
     public CardCrt(CardService cService) {
         this.cService = cService;
-
     }
 
     @GetMapping("/card/{id}")
-    public CardDTO GetCard(@PathVariable int id) {
+    public Object GetCard(@PathVariable int id) {
         return cService.GetCard(id);
     }
 
     @PostMapping("/card")
-    public List<CardDTO> addCards(@RequestBody CardWrapper cardWrapper) {
+    public List<Card> addCards(@RequestBody CardWrapper cardWrapper) {
         if (cardWrapper.getCard() != null && cardWrapper.getCards() == null) {
             return Collections.singletonList(cService.addCard(cardWrapper.getCard()));
         } else if (cardWrapper.getCard() == null && cardWrapper.getCards() != null) {
@@ -36,11 +34,6 @@ public class CardCrt {
         } else {
             throw new IllegalArgumentException("Veuillez fournir une carte ou une liste de cartes, mais pas les deux.");
         }
-    }
-
-    @GetMapping("/cardsinterne")
-    public Iterable<Card> getAllCardsInterne() {
-        return cService.getAllCardsIntern();
     }
 
     @GetMapping("/cards")

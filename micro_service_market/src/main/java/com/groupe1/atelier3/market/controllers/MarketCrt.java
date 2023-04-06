@@ -18,17 +18,23 @@ public class MarketCrt {
     public MarketCrt(MarketService marketService) {
         this.marketService = marketService;
     }
-    @PostMapping("/buy/{username}/{cardId}")
-    public Card BuyCard(@PathVariable String username, @PathVariable Integer cardId) {
+    @PostMapping("/buy/{idUser}/{cardId}")
+    public Object BuyCard(@PathVariable Integer idUser, @PathVariable Integer cardId) {
         Card card = restTemplate.getForObject("http://localhost:8082/card/" + cardId, Card.class);
-        User user = restTemplate.getForObject("http://localhost:8081/user/" + username, User.class);
+        User user = restTemplate.getForObject("http://localhost:8081/user/" + idUser, User.class);
         return marketService.buyCard(user, card);
     }
 
-    @PostMapping("/sell/{username}/{cardId}")
-    public Card SellCard(@PathVariable String username, @PathVariable Integer cardId) {
+    @PostMapping("/sell/{idUser}/{cardId}")
+    public Object SellCard(@PathVariable Integer idUser, @PathVariable Integer cardId) {
         Card card = restTemplate.getForObject("http://localhost:8082/card/" + cardId, Card.class);
-        User user = restTemplate.getForObject("http://localhost:8081/user/" + username, User.class);
+        User user = restTemplate.getForObject("http://localhost:8081/user/" + idUser, User.class);
         return marketService.sellCard(user, card);
+    }
+
+    @PostMapping("/sell/{idUser}")
+    public Object SellAllCards(@PathVariable Integer idUser) {
+        User user = restTemplate.getForObject("http://localhost:8081/user/" + idUser, User.class);
+        return marketService.sellAllCards(user);
     }
 }

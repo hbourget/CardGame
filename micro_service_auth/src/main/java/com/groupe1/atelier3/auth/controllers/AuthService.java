@@ -35,32 +35,39 @@ public class AuthService {
             return null;
         }
     }
-    public UserDTO register(AuthDTO authDTO) {
+    public Object register(AuthDTO authDTO) {
+        String usr = authDTO.getUsername();
+
+        String urlGetAllUsers = userServiceUrl + "/users";
+        ResponseEntity<List<UserDTO>> responseEntity = restTemplate.exchange(urlGetAllUsers, HttpMethod.GET, null, new ParameterizedTypeReference<List<UserDTO>>() {});
+        List<UserDTO> usersDTO = responseEntity.getBody();
+
+        //check if usr already exists
+        for (UserDTO userDTO : usersDTO) {
+            if (userDTO.getUsername().equals(usr)) {
+                return ResponseEntity.status(409).body("Un utilisateur existe déjà avec le nom " + usr + ".");
+            }
+        }
+
         User userNew = authMapper.toEntity(authDTO);
 
         String urlSave = userServiceUrl + "/user/save/{username}/{password}";
-        restTemplate.postForObject(urlSave, null, Void.class, userNew.getUsername(), userNew.getPassword());
+        User myUser = restTemplate.postForObject(urlSave, null, User.class, userNew.getUsername(), userNew.getPassword());
 
-        String urlAddBal = userServiceUrl + "/user/addbalance/{username}/{balance}";
-        restTemplate.postForObject(urlAddBal, null, Void.class, userNew.getUsername(), 50);
-
-        //retrieve the user from the database
-        String url = userServiceUrl + "/user/" + userNew.getUsername();
-        UserDTO user = restTemplate.getForObject(url, UserDTO.class);
+        // On récupère le UserDTO correspondant a retourner
+        String url = userServiceUrl + "/user/" + myUser.getId();
+        UserDTO userdto = restTemplate.getForObject(url, UserDTO.class);
 
         ArrayList<Card> cardsList = getStarterCards();
 
         for (int i = 0; i < 3 && i < cardsList.size(); i++) {
-            int cardId = cardsList.get(i).getId();
-            Integer inventoryId = user.getIdInventory();
-            System.out.println("cardId: " + cardId);
-            System.out.println("cardId better: " + cardsList.get(i).getId());
-            System.out.println("Name: " + cardsList.get(i).getName());
+            Integer cardId = cardsList.get(i).getId();
+            Integer inventoryId = userdto.getIdInventory();
             String inventoryAddCard = inventoryServiceUrl + "/inventory/add/{inventoryId}/{cardId}";
             restTemplate.postForObject(inventoryAddCard, null, Void.class, inventoryId, cardId);
         }
 
-        return user;
+        return userdto;
     }
 
     private ArrayList<Card> getStarterCards(){

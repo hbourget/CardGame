@@ -4,6 +4,8 @@ import com.groupe1.atelier3.cards.models.Card;
 import com.groupe1.atelier3.inventory.controllers.InventoryService;
 import com.groupe1.atelier3.users.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -14,19 +16,19 @@ public class MarketService {
     @Autowired
     private InventoryService inventoryService;
 
-    public Card buyCard(User user, Card card) {
+    public Object buyCard(User user, Card card) {
         if (user != null) {
             //check if balance is enough
             if (user.getBalance() < card.getPrice()) {
-                return null;
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La carte est trop chère.");
             }
             //check if card is already in inventory
             Integer idInv = user.getIdInventory();
             if (inventoryService.getInventory(idInv).getCards().contains(card.getId())) {
-                return null;
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("L'utilisateur possède déjà la carte.");
             }
-            String url = userServiceUrl + "/user/substractbalance/{username}/{balance}";
-            restTemplate.postForObject(url, null, Void.class, user.getUsername(), card.getPrice());
+            String url = userServiceUrl + "/user/substractbalance/{id}/{balance}";
+            restTemplate.postForObject(url, null, Void.class, user.getId(), card.getPrice());
 
             inventoryService.addCardToInv(user.getIdInventory(), card.getId());
         }
@@ -34,19 +36,44 @@ public class MarketService {
         return card;
     }
 
-    public Card sellCard(User user, Card card) {
+    public Object sellCard(User user, Card card) {
         if (user != null) {
             //check if card is in inventory
             Integer idInv = user.getIdInventory();
             if (!inventoryService.getInventory(idInv).getCards().contains(card.getId())) {
-                return null;
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("L'utilisateur ne possède pas la carte.");
             }
-            String url = userServiceUrl + "/user/addbalance/{username}/{balance}";
-            restTemplate.postForObject(url, null, Void.class, user.getUsername(), card.getPrice());
+            String url = userServiceUrl + "/user/addbalance/{id}/{balance}";
+            restTemplate.postForObject(url, null, Void.class, user.getId(), card.getPrice());
 
             inventoryService.removeCardFromInv(user.getIdInventory(), card.getId());
         }
         //return cardMapper.toDTO(card.get());
         return card;
+    }
+    public Object sellAllCards(User user) {
+        int sommetotal = 0;
+        if (user != null) {
+            //check if card is in inventory
+            Integer idInv = user.getIdInventory();
+            if (inventoryService.getInventory(idInv).getCards().isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("L'utilisateur ne possède pas de carte.");
+            }
+            //sell all cards
+            for (Integer cardId : inventoryService.getInventory(idInv).getCards()) {
+                String urlCard = "http://localhost:8082/card/" + cardId;
+                ResponseEntity<Card> response = restTemplate.getForEntity(urlCard, Card.class);
+                Card card = response.getBody();
+
+                String url = userServiceUrl + "/user/addbalance/{id}/{balance}";
+                restTemplate.postForObject(url, null, Void.class, user.getId(), card.getPrice());
+                sommetotal += card.getPrice();
+            }
+            inventoryService.removeAllCardFromInv(user.getIdInventory());
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("L'utilisateur n'existe pas.");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body("Toutes les cartes de " + user.getUsername() + " ont été vendues pour un montant de " + sommetotal + "€.");
     }
 }
