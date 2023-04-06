@@ -11,22 +11,25 @@ public class InventoryService {
     @Autowired
     private InventoryRepository inventoryRepository;
 
-    public void addCardToInv(Integer inventoryId, Card card) {
+    public void addCardToInv(Integer inventoryId, Integer cardId) {
         Inventory inventory = inventoryRepository.findById(inventoryId).get();
-        if (inventory.getCards().contains(card)) {
+        if (inventory.getCards().contains(cardId)) {
             return;
         }
-        inventory.getCards().add(card);
+        inventory.getCards().add(cardId);
         inventoryRepository.save(inventory);
     }
 
-    public void removeCardFromInv(Integer inventoryId, Card card) {
+    public void removeCardFromInv(Integer inventoryId, Integer cardId) {
         Inventory inventory = inventoryRepository.findById(inventoryId).get();
-        if (!inventory.getCards().contains(card)) {
+        if (!inventory.getCards().contains(cardId)) {
             return;
         }
-        inventory.getCards().remove(card);
+        inventory.getCards().remove(cardId);
         inventoryRepository.save(inventory);
     }
 
+    public Inventory getInventory(Integer idInv) {
+        return inventoryRepository.findById(idInv).get();
+    }
 }

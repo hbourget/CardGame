@@ -35,6 +35,16 @@ public class CardService {
         return null;
     }
 
+    public Iterable<Card> getAllCardsIntern() {
+        Iterable<Card> cards = cardRepository.findAll();
+        /*List<Card> cardsList = cards.Tolist();
+        List<CardDTO> cardsDTO = new ArrayList<>();
+        for (Card card : cards) {
+            cardsDTO.add(cardMapper.toDTO(card));
+        }*/
+        return cards;
+    }
+
     public Iterable<CardDTO> getAllCards() {
         Iterable<Card> cards = cardRepository.findAll();
         List<CardDTO> cardsDTO = new ArrayList<>();

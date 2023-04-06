@@ -10,20 +10,20 @@ public class Inventory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @ElementCollection
+    @CollectionTable(name="my_idcard_list")
+    private List<Integer> idCards;
 
-    @OneToMany
-    private List<Card> cards;
-
-    public Inventory(int id, List<Card> cards) {
+    public Inventory(int id, List<Integer> idCards) {
         this.id = id;
-        this.cards = cards;
+        this.idCards = idCards;
     }
-    public Inventory(ArrayList<Card> cards) {
-        this.cards = cards;
+    public Inventory(ArrayList<Integer> idCards) {
+        this.idCards = idCards;
     }
 
     public Inventory() {
-        this.cards = new ArrayList<Card>();
+        this.idCards = new ArrayList<Integer>();
     }
 
     //getters and setters
@@ -31,11 +31,11 @@ public class Inventory {
         return id;
     }
 
-    public List<Card> getCards() {
-        return cards;
+    public List<Integer> getCards() {
+        return this.idCards;
     }
 
-    public void setCards(List<Card> cards) {
-        this.cards = cards;
+    public void setCards(List<Integer> idCards) {
+        this.idCards = idCards;
     }
 }

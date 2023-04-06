@@ -2,6 +2,7 @@ package com.groupe1.atelier3.cards.models;
 
 public class CardDTO {
     //class Card with attributes name, description, power , health, price and image
+    private int id;
     private String name;
     private String description;
     private int power;

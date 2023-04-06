@@ -53,12 +53,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public Inventory getInventoryById(int id) {
-        Optional<User> userOptional = userRepository.findById(id);
-        User user = userOptional.get();
-        Inventory inv = findInventoryById(user.getIdInventory());
-        return user.getInventory();
+    public void saveUser(User user) {
+        userRepository.save(user);
     }
-
-
 }

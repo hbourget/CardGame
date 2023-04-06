@@ -2,6 +2,7 @@ package com.groupe1.atelier3.cards.models;
 
 public class Card {
     //class Card with attributes name, description, power , health, price and image
+    private int id;
     private String name;
     private String description;
     private int power;
@@ -10,6 +11,16 @@ public class Card {
     private String image;
 
     //constructor
+    public Card(Integer id, String name, String description, int power, int health, int price, String image) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.power = power;
+        this.health = health;
+        this.price = price;
+        this.image = image;
+    }
+
     public Card(String name, String description, int power, int health, int price, String image) {
         this.name = name;
         this.description = description;
@@ -70,6 +81,10 @@ public class Card {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public int getId() {
+        return id;
     }
 }
 

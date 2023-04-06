@@ -1,6 +1,7 @@
 package com.groupe1.atelier3.cards.controllers;
 
 import com.groupe1.atelier3.cards.models.CardDTO;
+import com.groupe1.atelier3.cards.models.Card;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,11 @@ public class CardCrt {
     public CardDTO AddCard(@RequestBody CardDTO card) {
         System.out.println("test");
         return cService.addCard(card);
+    }
+
+    @GetMapping("/cardsinterne")
+    public Iterable<Card> getAllCardsInterne() {
+        return cService.getAllCardsIntern();
     }
 
     @GetMapping("/cards")

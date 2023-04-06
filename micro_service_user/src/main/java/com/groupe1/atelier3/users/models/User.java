@@ -19,6 +19,12 @@ public class User {
     this.idInventory = idInventory;
   }
 
+  public User(String username, String password) {
+    this.username = username;
+    this.password = password;
+    this.balance = 0;
+  }
+
   public User() {}
 
   public Integer getId() { return id; }
