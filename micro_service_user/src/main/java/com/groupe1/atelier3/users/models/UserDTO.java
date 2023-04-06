@@ -5,13 +5,12 @@ import jakarta.persistence.*;
 public class UserDTO {
     private String username;
     private double balance;
-    @OneToOne
-    private Inventory inventory;
+    private Integer idInventory;
 
-    public UserDTO(String username, double balance, Inventory inventory) {
+    public UserDTO(String username, double balance, Integer idInventory) {
         this.username = username;
         this.balance = balance;
-        this.inventory = inventory;
+        this.idInventory = idInventory;
     }
 
     public String getUsername() {
@@ -30,11 +29,11 @@ public class UserDTO {
         this.balance = balance;
     }
 
-    public Inventory getInventory() {
-        return inventory;
+    public Integer getIdInventory() {
+        return this.idInventory;
     }
 
-    public void setInventory(Inventory inventory) {
-        this.inventory = inventory;
+    public void setIdInventory(Integer idInventory) {
+        this.idInventory = idInventory;
     }
 }

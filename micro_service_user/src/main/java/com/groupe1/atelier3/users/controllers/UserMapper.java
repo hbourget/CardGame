@@ -6,6 +6,6 @@ import com.groupe1.atelier3.users.models.UserDTO;
 
 public class UserMapper {
     public static UserDTO toDTO(User user) {
-        return new UserDTO(user.getUsername(), user.getBalance(), user.getInventory());
+        return new UserDTO(user.getUsername(), user.getBalance(), user.getIdInventory());
     }
 }

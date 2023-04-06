@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.groupe1</groupId>
-    <artifactId>inventory-public</artifactId>
+    <artifactId>user-public</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>InventoryPublic</name>
-    <description>Atelier3 InventoryPublic</description>
+    <name>UserPublic</name>
+    <description>UserPublic</description>
     <properties>
         <java.version>17</java.version>
     </properties>
@@ -38,11 +38,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.groupe1</groupId>
-            <artifactId>card-public</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

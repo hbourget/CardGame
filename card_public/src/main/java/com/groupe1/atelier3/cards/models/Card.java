@@ -1,14 +1,7 @@
 package com.groupe1.atelier3.cards.models;
 
-import jakarta.persistence.*;
-
-@Entity
-@Table(name = "CARD")
 public class Card {
-    //class Card with attributes id, name, description, power , health, price and image
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    //class Card with attributes name, description, power , health, price and image
     private String name;
     private String description;
     private int power;
@@ -17,8 +10,7 @@ public class Card {
     private String image;
 
     //constructor
-    public Card(Integer id, String name, String description, int power, int health, int price, String image) {
-        this.id = id;
+    public Card(String name, String description, int power, int health, int price, String image) {
         this.name = name;
         this.description = description;
         this.power = power;
@@ -26,13 +18,11 @@ public class Card {
         this.price = price;
         this.image = image;
     }
+
     public Card() {
 
     }
     //getters and setters
-    public int getId() {
-        return id;
-    }
 
     public String getName() {
         return name;
@@ -81,8 +71,5 @@ public class Card {
     public void setImage(String image) {
         this.image = image;
     }
-
-    public String toString () {
-        return "Card [id=" + id + ", name=" + name + ", description=" + description + ", power=" + power + ", health=" + health + ", price=" + price + ", image=" + image + "]";
-    }
 }
+

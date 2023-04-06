@@ -1,11 +1,17 @@
 package com.groupe1.atelier3.inventory.models;
+
 import com.groupe1.atelier3.cards.models.Card;
+import jakarta.persistence.*;
+
 import java.util.*;
 
+@Entity
 public class Inventory {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @OneToMany
     private List<Card> cards;
 
     public Inventory(int id, List<Card> cards) {

@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.groupe1</groupId>
-    <artifactId>Atelier2</artifactId>
+    <artifactId>micro-service-user</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Atelier2</name>
-    <description>Atelier2</description>
+    <name>MicroServiceUser</name>
+    <description>MicroServiceUser</description>
     <properties>
         <java.version>17</java.version>
     </properties>
@@ -34,6 +34,16 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.groupe1</groupId>
+            <artifactId>inventory-public</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.groupe1</groupId>
+            <artifactId>card-public</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
