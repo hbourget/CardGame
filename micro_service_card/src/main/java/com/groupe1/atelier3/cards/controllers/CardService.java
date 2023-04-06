@@ -26,6 +26,17 @@ public class CardService {
         return cardMapper.toDTO(card);
     }
 
+    public List<CardDTO> addCards(List<CardDTO> cards) {
+        List<CardDTO> savedCards = new ArrayList<>();
+
+        for (CardDTO card : cards) {
+            savedCards.add(card);
+            cardRepository.save(cardMapper.toEntity(card));
+        }
+
+        return savedCards;
+    }
+
     public CardDTO GetCard(int id) {
         Optional<Card> cardOpt = cardRepository.findById(id);
         if (cardOpt.isPresent()) {
@@ -45,13 +56,18 @@ public class CardService {
         return cards;
     }
 
-    public Iterable<CardDTO> getAllCards() {
+    /*public Iterable<CardDTO> getAllCards() {
         Iterable<Card> cards = cardRepository.findAll();
         List<CardDTO> cardsDTO = new ArrayList<>();
         for (Card card : cards) {
             cardsDTO.add(cardMapper.toDTO(card));
         }
         return cardsDTO;
+    }*/
+    public Iterable<Card> getAllCards() {
+        Iterable<Card> cards = cardRepository.findAll();
+        return cards;
     }
+
 
 }

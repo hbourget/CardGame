@@ -2,9 +2,13 @@ package com.groupe1.atelier3.cards.controllers;
 
 import com.groupe1.atelier3.cards.models.CardDTO;
 import com.groupe1.atelier3.cards.models.Card;
+import com.groupe1.atelier3.cards.models.CardWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Collections;
+import java.util.List;
 
 @RestController
 @Order(1)
@@ -24,9 +28,14 @@ public class CardCrt {
     }
 
     @PostMapping("/card")
-    public CardDTO AddCard(@RequestBody CardDTO card) {
-        System.out.println("test");
-        return cService.addCard(card);
+    public List<CardDTO> addCards(@RequestBody CardWrapper cardWrapper) {
+        if (cardWrapper.getCard() != null && cardWrapper.getCards() == null) {
+            return Collections.singletonList(cService.addCard(cardWrapper.getCard()));
+        } else if (cardWrapper.getCard() == null && cardWrapper.getCards() != null) {
+            return cService.addCards(cardWrapper.getCards());
+        } else {
+            throw new IllegalArgumentException("Veuillez fournir une carte ou une liste de cartes, mais pas les deux.");
+        }
     }
 
     @GetMapping("/cardsinterne")
@@ -35,7 +44,7 @@ public class CardCrt {
     }
 
     @GetMapping("/cards")
-    public Iterable<CardDTO> getAllCards() {
+    public Iterable<Card> getAllCards() {
         return cService.getAllCards();
     }
 

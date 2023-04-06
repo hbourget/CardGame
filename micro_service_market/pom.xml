@@ -11,8 +11,8 @@
     <groupId>com.groupe1</groupId>
     <artifactId>micro-service-market</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>MicroServiceMarket</name>
-    <description>MicroServiceMarket</description>
+    <name>ServiceMarket</name>
+    <description>ServiceMarket</description>
     <properties>
         <java.version>17</java.version>
     </properties>

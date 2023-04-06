@@ -9,7 +9,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 public class MarketService {
-    private final String userServiceUrl = "http://localhost:8080/user-service";
+    private final String userServiceUrl = "http://localhost:8081";
     private final RestTemplate restTemplate = new RestTemplate();
     @Autowired
     private InventoryService inventoryService;

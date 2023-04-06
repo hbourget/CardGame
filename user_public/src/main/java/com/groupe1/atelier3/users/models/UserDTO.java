@@ -1,6 +1,4 @@
 package com.groupe1.atelier3.users.models;
-import com.groupe1.atelier3.inventory.models.Inventory;
-import jakarta.persistence.*;
 
 public class UserDTO {
 
@@ -25,7 +23,6 @@ public class UserDTO {
     public UserDTO() {
         // Constructeur par défaut sans arguments
     }
-
 
     public String getUsername() {
         return username;

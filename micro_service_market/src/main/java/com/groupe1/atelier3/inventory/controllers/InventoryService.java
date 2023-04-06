@@ -16,7 +16,9 @@ public class InventoryService {
         if (inventory.getCards().contains(cardId)) {
             return;
         }
+
         inventory.getCards().add(cardId);
+        System.out.println("TEST INVENTORY CARTE ID:" + cardId);
         inventoryRepository.save(inventory);
     }
 
@@ -31,5 +33,9 @@ public class InventoryService {
 
     public Inventory getInventory(Integer idInv) {
         return inventoryRepository.findById(idInv).get();
+    }
+
+    public void saveInventory(Inventory inventory) {
+        inventoryRepository.save(inventory);
     }
 }

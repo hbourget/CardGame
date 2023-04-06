@@ -3,6 +3,8 @@ package com.groupe1.atelier3.users.controllers;
 import com.groupe1.atelier3.users.models.User;
 import com.groupe1.atelier3.users.models.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -29,9 +31,16 @@ public class UserCrt {
     public void AddBalance(@PathVariable String username, @PathVariable Integer balance) {
         uService.addBalance(username, balance);
     }
-
-    @PostMapping("/user/save/{user}")
-    public void SaveUser(@RequestBody User user) {
+    @PostMapping("/user/save/{username}/{password}")
+    public void SaveUser(@PathVariable String username, @PathVariable String password) {
+        User user = new User(username, password);
         uService.saveUser(user);
     }
+
+    /*@PostMapping("/save")
+    public ResponseEntity<User> saveUser(@RequestBody User user) {
+        User savedUser = uService.saveUser(user);
+        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+    }*/
+
 }

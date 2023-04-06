@@ -6,6 +6,7 @@ import com.groupe1.atelier3.users.models.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.groupe1.atelier3.inventory.models.Inventory;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,9 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
     private UserMapper userMapper = new UserMapper();
+
+    private final RestTemplate restTemplate = new RestTemplate();
+    private final String inventoryServiceUrl = "http://localhost:8083";
 
     public UserDTO GetUser(String username) {
         Optional<User> userOptional = userRepository.findByUsername(username);
@@ -53,7 +57,21 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void saveUser(User user) {
+    public void addInventory(String username, Inventory inventory) {
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        User user = userOptional.get();
+        user.setInventory(inventory);
         userRepository.save(user);
+    }
+
+    public User saveUser(User user) {
+        userRepository.save(user);
+
+        String urlSaveInv = inventoryServiceUrl + "/inventory/create";
+        Inventory inventory = restTemplate.postForObject(urlSaveInv, null, Inventory.class);
+
+        user.setIdInventory(inventory.getId()); // Associer l'ID de l'inventaire à l'utilisateur
+        User savedUser = userRepository.save(user);
+        return savedUser;
     }
 }

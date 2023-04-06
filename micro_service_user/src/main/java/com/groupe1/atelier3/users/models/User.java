@@ -1,4 +1,5 @@
 package com.groupe1.atelier3.users.models;
+import com.groupe1.atelier3.inventory.models.Inventory;
 import jakarta.persistence.*;
 
 @Entity
@@ -39,7 +40,13 @@ public class User {
 
   public Integer getIdInventory() { return this.idInventory; }
 
+  public void setIdInventory(Integer idInventory) { this.idInventory = idInventory; }
+
   public String toString() {
     return ("User: " + username + " has " + balance + " dollars");
+  }
+
+  public void setInventory(Inventory inventory) {
+    this.idInventory = inventory.getId();
   }
 }
