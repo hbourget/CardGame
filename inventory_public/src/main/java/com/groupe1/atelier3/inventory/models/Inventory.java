@@ -1,23 +1,25 @@
 package com.groupe1.atelier3.inventory.models;
+
 import com.groupe1.atelier3.cards.models.Card;
+import jakarta.persistence.*;
+
 import java.util.*;
 
 public class Inventory {
 
     private int id;
+    private List<Integer> idCards;
 
-    private List<Card> cards;
-
-    public Inventory(int id, List<Card> cards) {
+    public Inventory(int id, List<Integer> idCards) {
         this.id = id;
-        this.cards = cards;
+        this.idCards = idCards;
     }
-    public Inventory(ArrayList<Card> cards) {
-        this.cards = cards;
+    public Inventory(ArrayList<Integer> idCards) {
+        this.idCards = idCards;
     }
 
     public Inventory() {
-        this.cards = new ArrayList<Card>();
+        this.idCards = new ArrayList<Integer>();
     }
 
     //getters and setters
@@ -25,11 +27,11 @@ public class Inventory {
         return id;
     }
 
-    public List<Card> getCards() {
-        return cards;
+    public List<Integer> getCards() {
+        return this.idCards;
     }
 
-    public void setCards(List<Card> cards) {
-        this.cards = cards;
+    public void setCards(List<Integer> idCards) {
+        this.idCards = idCards;
     }
 }
