@@ -33,7 +33,7 @@ public class RoomCrt {
 
     @PostMapping("/room")
     public ResponseEntity<List<Room>> addRooms(@RequestBody RoomWrapper roomWrapper) {
-        if (roomWrapper.getRoom() != null && roomWrapper.getRooms() == null) {v
+        if (roomWrapper.getRoom() != null && roomWrapper.getRooms() == null) {
             Room result = rService.addRoom(roomWrapper.getRoom());
             if (result == null) {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
