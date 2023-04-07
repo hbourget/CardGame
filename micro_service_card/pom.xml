@@ -11,7 +11,7 @@
     <groupId>com.groupe1</groupId>
     <artifactId>card-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>CardService</name>
+    <name>SVC_CARD</name>
     <description>CardService</description>
     <properties>
         <java.version>17</java.version>

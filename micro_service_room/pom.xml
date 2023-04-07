@@ -11,7 +11,7 @@
     <groupId>com.groupe1</groupId>
     <artifactId>room-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>RoomService</name>
+    <name>SVC_ROOM</name>
     <description>RoomService</description>
     <properties>
         <java.version>17</java.version>
@@ -37,13 +37,13 @@
         </dependency>
         <dependency>
             <groupId>com.groupe1</groupId>
-            <artifactId>user-public</artifactId>
+            <artifactId>public-user</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.groupe1</groupId>
-            <artifactId>card-public</artifactId>
+            <artifactId>public-card</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
