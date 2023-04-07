@@ -4,12 +4,15 @@ import com.groupe1.atelier3.users.models.User;
 import com.groupe1.atelier3.users.models.UserDTO;
 import com.groupe1.atelier3.users.models.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.groupe1.atelier3.inventory.models.Inventory;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -17,14 +20,45 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
     private UserMapper userMapper = new UserMapper();
-
     private final RestTemplate restTemplate = new RestTemplate();
     private final String inventoryServiceUrl = "http://localhost:8083";
 
-    public UserDTO GetUser(Integer id) {
+    public Object GetUserById(Integer id) {
         Optional<User> userOptional = userRepository.findById(id);
-        UserDTO userDto = userMapper.toDTO(userOptional.get());
-        return userDto;
+        if (userOptional.isPresent()) {
+            UserDTO userDto = userMapper.toDTO(userOptional.get());
+            return userDto;
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("L'utilisateur n'existe pas").getBody();
+        }
+    }
+
+    public Object GetUserByUsername(String username) {
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        if (userOptional.isPresent()) {
+            UserDTO userDto = userMapper.toDTO(userOptional.get());
+            return userDto;
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("L'utilisateur n'existe pas").getBody();
+        }
+    }
+
+    public Object GetUserAuthById(Integer id) {
+        Optional<User> userOptional = userRepository.findById(id);
+        if (userOptional.isPresent()) {
+            return userOptional.get();
+        } else {
+            return null;
+        }
+    }
+
+    public Object GetUserAuthByUsername(String username) {
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        if (userOptional.isPresent()) {
+            return userOptional.get();
+        } else {
+            return null;
+        }
     }
 
     public Iterable<UserDTO> GetUsers() {

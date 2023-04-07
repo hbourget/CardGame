@@ -22,23 +22,25 @@ public class InventoryService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public void addCardToInv(Integer inventoryId, Integer cardId) {
+    public Object addCardToInv(Integer inventoryId, Integer cardId) {
         Inventory inventory = inventoryRepository.findById(inventoryId).get();
         if (inventory.getCards().contains(cardId)) {
-            return;
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La carte est déjà dans l'inventaire.");
         }
 
         inventory.getCards().add(cardId);
         inventoryRepository.save(inventory);
+        return getInventoryCards(inventoryId);
     }
 
-    public void removeCardFromInv(Integer inventoryId, Integer cardId) {
+    public Object removeCardFromInv(Integer inventoryId, Integer cardId) {
         Inventory inventory = inventoryRepository.findById(inventoryId).get();
         if (!inventory.getCards().contains(cardId)) {
-            return;
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La carte n'est pas dans l'inventaire.");
         }
         inventory.getCards().remove(cardId);
         inventoryRepository.save(inventory);
+        return getInventoryCards(inventoryId);
     }
 
     public Object addAllCardToInv(Integer inventoryId, List<Card> cards) {
@@ -49,7 +51,7 @@ public class InventoryService {
             }
         }
         inventoryRepository.save(inventory);
-        return ResponseEntity.status(HttpStatus.OK).body("Les cartes qu'il manquait ont été ajoutées à l'inventaire.");
+        return getInventoryCards(inventoryId);
     }
 
     //remove all existing cards in inventory
@@ -57,7 +59,7 @@ public class InventoryService {
         Inventory inventory = inventoryRepository.findById(inventoryId).get();
         inventory.getCards().clear();
         inventoryRepository.save(inventory);
-        return ResponseEntity.status(HttpStatus.OK).body("Toutes les cartes ont été retirées de l'inventaire.");
+        return getInventoryCards(inventoryId);
     }
 
     public Inventory getInventory(Integer idInv) {

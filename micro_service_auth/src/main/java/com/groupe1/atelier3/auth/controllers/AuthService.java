@@ -8,6 +8,7 @@ import com.groupe1.atelier3.users.models.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -24,15 +25,17 @@ public class AuthService {
     private final String userServiceUrl = "http://localhost:8081";
     private final String cardServiceUrl = "http://localhost:8082";
     private final String inventoryServiceUrl = "http://localhost:8083";
-    public User checkAuth(User user, String password) {
-        if (user != null) {
-            if (user.getPassword().equals(password)) {
-                return user;
-            } else {
-                return null;
-            }
+    public Object checkAuth(Object obj, String password) {
+        if (obj == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("L'utilisateur n'existe pas.");
+        }
+        User user = (User) obj;
+        if (user.getPassword().equals(password)) {
+            String url = userServiceUrl + "/user/" + user.getId();
+            UserDTO userdto = restTemplate.getForObject(url, UserDTO.class);
+            return ResponseEntity.status(HttpStatus.OK).body(userdto);
         } else {
-            return null;
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Mot de passe incorrect.");
         }
     }
     public Object register(AuthDTO authDTO) {
@@ -64,7 +67,7 @@ public class AuthService {
             Integer cardId = cardsList.get(i).getId();
             Integer inventoryId = userdto.getIdInventory();
             String inventoryAddCard = inventoryServiceUrl + "/inventory/add/{inventoryId}/{cardId}";
-            restTemplate.postForObject(inventoryAddCard, null, Void.class, inventoryId, cardId);
+            ResponseEntity<Void> inventoryAddCardResponse = restTemplate.postForEntity(inventoryAddCard, null, Void.class, inventoryId, cardId);
         }
 
         return userdto;

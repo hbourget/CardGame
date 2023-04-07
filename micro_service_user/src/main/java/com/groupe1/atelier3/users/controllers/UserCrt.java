@@ -9,14 +9,29 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class UserCrt {
-    //User controller from SOA project using UserService
     @Autowired
     private UserService uService;
 
-    @GetMapping("/user/{id}")
-    public UserDTO GetUser(@PathVariable Integer id) {
-        return uService.GetUser(id);
+    @GetMapping("/user/{idOrUsername}")
+    public Object GetUser(@PathVariable String idOrUsername) {
+        try {
+            Integer id = Integer.parseInt(idOrUsername);
+            return uService.GetUserById(id);
+        } catch (NumberFormatException e) {
+            return uService.GetUserByUsername(idOrUsername);
+        }
     }
+
+    @GetMapping("/user/auth/{idOrUsername}")
+    public Object GetUserAuth(@PathVariable String idOrUsername) {
+        try {
+            Integer id = Integer.parseInt(idOrUsername);
+            return uService.GetUserAuthById(id);
+        } catch (NumberFormatException e) {
+            return uService.GetUserAuthByUsername(idOrUsername);
+        }
+    }
+
     @GetMapping("/users")
     public Iterable<UserDTO> GetUsers() {
         return uService.GetUsers();

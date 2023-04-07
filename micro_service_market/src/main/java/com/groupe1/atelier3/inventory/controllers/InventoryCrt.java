@@ -28,12 +28,12 @@ public class InventoryCrt {
         this.inventoryService = inventoryService;
     }
     @PostMapping("/inventory/add/{inventoryId}/{cardId}")
-    public void AddCardToInv(@PathVariable Integer inventoryId, @PathVariable Integer cardId) {
-        inventoryService.addCardToInv(inventoryId, cardId);
+    public Object AddCardToInv(@PathVariable Integer inventoryId, @PathVariable Integer cardId) {
+        return inventoryService.addCardToInv(inventoryId, cardId);
     }
     @PostMapping("/inventory/remove/{inventoryId}/{cardId}")
-    public void RemoveCardFromInv(@PathVariable Integer inventoryId, @PathVariable Integer cardId) {
-        inventoryService.removeCardFromInv(inventoryId, cardId);
+    public Object RemoveCardFromInv(@PathVariable Integer inventoryId, @PathVariable Integer cardId) {
+        return inventoryService.removeCardFromInv(inventoryId, cardId);
     }
 
     @PostMapping("/inventory/add/{inventoryId}")
