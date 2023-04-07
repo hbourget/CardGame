@@ -2,7 +2,6 @@ package com.groupe1.atelier3.cards.controllers;
 import com.groupe1.atelier3.cards.models.Card;
 import com.groupe1.atelier3.cards.models.CardDTO;
 import com.groupe1.atelier3.cards.models.CardRepository;
-import org.hibernate.cache.spi.access.CachedDomainDataAccess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

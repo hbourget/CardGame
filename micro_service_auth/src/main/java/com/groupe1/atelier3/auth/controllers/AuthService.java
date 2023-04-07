@@ -2,10 +2,8 @@ package com.groupe1.atelier3.auth.controllers;
 
 import com.groupe1.atelier3.auth.models.AuthDTO;
 import com.groupe1.atelier3.cards.models.Card;
-import com.groupe1.atelier3.inventory.models.Inventory;
 import com.groupe1.atelier3.users.models.User;
 import com.groupe1.atelier3.users.models.UserDTO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -16,7 +14,6 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AuthService {

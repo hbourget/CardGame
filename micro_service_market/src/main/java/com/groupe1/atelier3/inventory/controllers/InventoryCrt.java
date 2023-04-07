@@ -1,8 +1,6 @@
 package com.groupe1.atelier3.inventory.controllers;
 
 import com.groupe1.atelier3.cards.models.Card;
-import com.groupe1.atelier3.cards.models.CardDTO;
-import com.groupe1.atelier3.inventory.controllers.InventoryService;
 import com.groupe1.atelier3.inventory.models.Inventory;
 import com.groupe1.atelier3.users.models.User;
 import org.springframework.beans.factory.annotation.Autowired;

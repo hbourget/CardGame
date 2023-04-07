@@ -1,6 +1,5 @@
 package com.groupe1.atelier3.inventory.models;
 
-import com.groupe1.atelier3.cards.models.Card;
 import jakarta.persistence.*;
 
 import java.util.*;

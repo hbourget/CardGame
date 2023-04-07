@@ -1,6 +1,5 @@
 package com.groupe1.atelier3.cards.controllers;
 
-import com.groupe1.atelier3.cards.models.CardDTO;
 import com.groupe1.atelier3.cards.models.Card;
 import com.groupe1.atelier3.cards.models.CardWrapper;
 import org.springframework.beans.factory.annotation.Autowired;

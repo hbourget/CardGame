@@ -13,11 +13,12 @@ public class Card {
     private String description;
     private int power;
     private int health;
+    private String type;
     private int price;
     private String image;
 
     //constructor
-    public Card(Integer id, String name, String description, int power, int health, int price, String image) {
+    public Card(Integer id, String name, String description, int power, int health, int price, String image, String type) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -25,6 +26,7 @@ public class Card {
         this.health = health;
         this.price = price;
         this.image = image;
+        this.type = type;
     }
     public Card() {
 
@@ -80,6 +82,14 @@ public class Card {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String toString () {
