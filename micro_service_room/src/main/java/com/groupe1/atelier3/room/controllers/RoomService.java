@@ -20,8 +20,8 @@ public class RoomService {
     private RoomRepository roomRepository;
     private final RestTemplate restTemplate = new RestTemplate();
     private final String userServiceUrl = "http://localhost:8081";
-
     private final String cardServiceUrl = "http://localhost:8082";
+    private final String marketServiceUrl = "http://localhost:8083";
 
     public Room addRoom(Room room) {
         Room roomFinal = new Room(room.getName());
@@ -54,7 +54,7 @@ public class RoomService {
         if (roomOpt.isPresent()) {
             return roomOpt.get();
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La carte n'existe pas.");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La room n'existe pas.");
     }
 
     public Object GetRoomByName(String name) {
@@ -62,7 +62,7 @@ public class RoomService {
         if (roomOpt.isPresent()) {
             return roomOpt.get();
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La carte n'existe pas.");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La room n'existe pas.");
     }
 
     public Iterable<Room> getAllRooms() {
@@ -74,32 +74,6 @@ public class RoomService {
         roomRepository.deleteAll();
     }
 
-    public void addIdUser_1(int id, int idUser_1) {
-        Optional<Room> roomOpt = roomRepository.findById(id);
-        if (roomOpt.isPresent()) {
-            Room room = roomOpt.get();
-            room.setIdUser_1(idUser_1);
-            roomRepository.save(room);
-        }
-    }
-
-    public void addIdUser_2(int id, int idUser_2) {
-        Optional<Room> roomOpt = roomRepository.findById(id);
-        if (roomOpt.isPresent()) {
-            Room room = roomOpt.get();
-            room.setIdUser_2(idUser_2);
-            roomRepository.save(room);
-        }
-    }
-
-    public void updateStatus(int id, String status) {
-        Optional<Room> roomOpt = roomRepository.findById(id);
-        if (roomOpt.isPresent()) {
-            Room room = roomOpt.get();
-            room.setStatus(status);
-            roomRepository.save(room);
-        }
-    }
 
     public Object joinRoom(int id, int idUser) {
         Optional<Room> roomOpt = roomRepository.findById(id);
@@ -111,6 +85,9 @@ public class RoomService {
         }
 
         if (roomOpt.isPresent()) {
+            if (roomOpt.get().getStatus().equals("ended")) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("La room est terminée.");
+            }
             Room room = roomOpt.get();
             if (room.getIdUser_1() == 0) {
                 room.setIdUser_1(idUser);
@@ -143,9 +120,27 @@ public class RoomService {
         if (roomOpt.isPresent()) {
             Room room = roomOpt.get();
             if (room.getIdUser_1() == idUser) {
-                room.setIdUser_1(0);
+                if (room.getStatus().equals("started")) {
+                    room.setStatus("ended");
+                    room.setIdUserWinner(room.getIdUser_2());
+                    roomRepository.save(room);
+                    return room;
+                }
+                else {
+                    room.setIdUser_1(0);
+                    room.setIdCardUser_1(0);
+                }
             } else if (room.getIdUser_2() == idUser) {
-                room.setIdUser_2(0);
+                if (room.getStatus().equals("started")) {
+                    room.setStatus("ended");
+                    room.setIdUserWinner(room.getIdUser_1());
+                    roomRepository.save(room);
+                    return room;
+                }
+                else {
+                    room.setIdUser_2(0);
+                    room.setIdCardUser_2(0);
+                }
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("L'utilisateur n'est pas dans la room.");
             }
@@ -174,6 +169,15 @@ public class RoomService {
 
         if (!(objCard instanceof Card)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La carte n'existe pas.");
+        }
+
+        //check if user has the card using the market service url
+        String urlInventory = marketServiceUrl + "/inventory/" + playerId;
+        //this will return the list of the cards that the user has in his inventory
+        List<Integer> cards = restTemplate.getForObject(urlInventory, List.class);
+
+        if (!cards.contains(cardId)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("L'utilisateur n'a pas la carte.");
         }
 
         if (roomOpt.isPresent()) {
@@ -297,7 +301,6 @@ public class RoomService {
             //check if both remaningCoups are 0
             if(roomOpt.get().getRemainingCoupsUser_1() == 0 && roomOpt.get().getRemainingCoupsUser_2() == 0) {
                 room.setStatus("ended");
-                //check whether its the card of the victim or the attacker that has the most health
                 if(healthVictim > healthAttacker) {
                     room.setIdUserWinner(roomOpt.get().getIdUser_2());
                 }

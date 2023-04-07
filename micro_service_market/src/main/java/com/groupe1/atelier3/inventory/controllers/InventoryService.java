@@ -65,11 +65,10 @@ public class InventoryService {
         return inventoryRepository.findById(idInv).get();
     }
 
-    public List<Card> getInventoryCards(Integer idInv) {
+    public List<Integer> getInventoryCards(Integer idInv) {
         Inventory inv = inventoryRepository.findById(idInv).get();
 
-        String urlGetCards = cardServiceUrl + "/card/{id}";
-        return inv.getCards().stream().map(cardId -> restTemplate.getForObject(urlGetCards, Card.class, cardId)).collect(Collectors.toList());
+        return inv.getCards();
     }
 
     public void saveInventory(Inventory inventory) {

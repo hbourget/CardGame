@@ -48,7 +48,7 @@ public class InventoryCrt {
     }
 
     @GetMapping("/inventory/{idUser}")
-    public List<Card> getInventory(@PathVariable Integer idUser) {
+    public List<Integer> getInventory(@PathVariable Integer idUser) {
         User user = restTemplate.getForObject("http://localhost:8081/user/" + idUser, User.class);
         return inventoryService.getInventoryCards(user.getIdInventory());
     }
