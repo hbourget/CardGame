@@ -3,12 +3,14 @@ package com.groupe1.atelier3.inventory.controllers;
 import com.groupe1.atelier3.inventory.models.Inventory;
 import com.groupe1.atelier3.cards.models.Card;
 import com.groupe1.atelier3.inventory.models.InventoryRepository;
+import com.groupe1.atelier3.inventory.models.InventoryResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,7 +31,7 @@ public class InventoryService {
 
         inventory.getCards().add(cardId);
         inventoryRepository.save(inventory);
-        return getInventoryCards(inventoryId);
+        return getInventoryCardsIds(inventoryId);
     }
 
     public Object removeCardFromInv(Integer inventoryId, Integer cardId) {
@@ -39,7 +41,7 @@ public class InventoryService {
         }
         inventory.getCards().remove(cardId);
         inventoryRepository.save(inventory);
-        return getInventoryCards(inventoryId);
+        return getInventoryCardsIds(inventoryId);
     }
 
     public Object addAllCardToInv(Integer inventoryId, List<Card> cards) {
@@ -65,9 +67,18 @@ public class InventoryService {
         return inventoryRepository.findById(idInv).get();
     }
 
-    public List<Integer> getInventoryCards(Integer idInv) {
+    public InventoryResponse getInventoryCards(Integer idInv) {
+        List<Card> cards = new ArrayList<>();
         Inventory inv = inventoryRepository.findById(idInv).get();
+        for (Integer cardId : inv.getCards()) {
+            Card card = restTemplate.getForObject(cardServiceUrl + "/card/" + cardId, Card.class);
+            cards.add(card);
+        }
+        return new InventoryResponse(inv, cards);
+    }
 
+    public List<Integer> getInventoryCardsIds(Integer idInv) {
+        Inventory inv = inventoryRepository.findById(idInv).get();
         return inv.getCards();
     }
 

@@ -2,6 +2,7 @@ package com.groupe1.atelier3.inventory.controllers;
 
 import com.groupe1.atelier3.cards.models.Card;
 import com.groupe1.atelier3.inventory.models.Inventory;
+import com.groupe1.atelier3.inventory.models.InventoryResponse;
 import com.groupe1.atelier3.users.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
@@ -48,7 +49,7 @@ public class InventoryCrt {
     }
 
     @GetMapping("/inventory/{idUser}")
-    public List<Integer> getInventory(@PathVariable Integer idUser) {
+    public InventoryResponse getInventory(@PathVariable Integer idUser) {
         User user = restTemplate.getForObject("http://localhost:8081/user/" + idUser, User.class);
         return inventoryService.getInventoryCards(user.getIdInventory());
     }

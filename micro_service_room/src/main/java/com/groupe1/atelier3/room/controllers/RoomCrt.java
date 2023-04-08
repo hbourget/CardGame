@@ -55,6 +55,16 @@ public class RoomCrt {
         return rService.getAllRooms();
     }
 
+    @DeleteMapping("/room/{id}")
+    public Object deleteRoom(@PathVariable int id) {
+        return rService.deleteRoom(id);
+    }
+
+    @DeleteMapping("/rooms")
+    public Object deleteAllRooms() {
+        return rService.deleteAllRooms();
+    }
+
     @PostMapping("/room/{id}/join/{playerId}")
     public Object joinRoom(@PathVariable int id, @PathVariable int playerId) {
         return rService.joinRoom(id, playerId);

@@ -1,7 +1,9 @@
 package com.groupe1.atelier3.room.controllers;
 import com.groupe1.atelier3.cards.models.Card;
+import com.groupe1.atelier3.inventory.models.InventoryResponse;
 import com.groupe1.atelier3.room.models.Room;
 import com.groupe1.atelier3.room.models.RoomRepository;
+import com.groupe1.atelier3.room.models.RoomResponse;
 import com.groupe1.atelier3.users.models.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -52,18 +54,46 @@ public class RoomService {
 
     public Object GetRoomById(int id) {
         Optional<Room> roomOpt = roomRepository.findById(id);
+        RoomResponse roomResponse;
         if (roomOpt.isPresent()) {
-            return roomOpt.get();
+            Room room = roomOpt.get();
+            List<Card> cards = new ArrayList<>();
+            if (room.getIdUser_1() != 0) {
+                Card card1 = restTemplate.getForObject(cardServiceUrl + "/card/" + room.getIdCardUser_1(), Card.class);
+                cards.add(card1);
+            }
+            if (room.getIdUser_2() != 0) {
+                Card card2 = restTemplate.getForObject(cardServiceUrl + "/card/" + room.getIdCardUser_2(), Card.class);
+                cards.add(card2);
+            }
+            roomResponse = new RoomResponse(room, cards);
+            return roomResponse;
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La room n'existe pas.");
+        else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La room n'existe pas.");
+        }
     }
 
     public Object GetRoomByName(String name) {
         Optional<Room> roomOpt = roomRepository.findByName(name);
+        RoomResponse roomResponse;
         if (roomOpt.isPresent()) {
-            return roomOpt.get();
+            Room room = roomOpt.get();
+            List<Card> cards = new ArrayList<>();
+            if (room.getIdUser_1() != 0) {
+                Card card1 = restTemplate.getForObject(cardServiceUrl + "/card/" + room.getIdCardUser_1(), Card.class);
+                cards.add(card1);
+            }
+            if (room.getIdUser_2() != 0) {
+                Card card2 = restTemplate.getForObject(cardServiceUrl + "/card/" + room.getIdCardUser_2(), Card.class);
+                cards.add(card2);
+            }
+            roomResponse = new RoomResponse(room, cards);
+            return roomResponse;
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La room n'existe pas.");
+        else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La room n'existe pas.");
+        }
     }
 
     public Iterable<Room> getAllRooms() {
@@ -71,8 +101,9 @@ public class RoomService {
         return rooms;
     }
 
-    public void deleteAllRooms() {
+    public Object deleteAllRooms() {
         roomRepository.deleteAll();
+        return ResponseEntity.status(HttpStatus.OK).body("Toutes les rooms ont été supprimées.");
     }
 
 
@@ -152,6 +183,8 @@ public class RoomService {
             return room;
         }
         else {
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body("La room n'existe pas.");
+
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La room n'existe pas.");
         }
     }
@@ -175,7 +208,8 @@ public class RoomService {
         //check if user has the card using the market service url
         String urlInventory = marketServiceUrl + "/inventory/" + playerId;
         //this will return the list of the cards that the user has in his inventory
-        List<Integer> cards = restTemplate.getForObject(urlInventory, List.class);
+        InventoryResponse invR = restTemplate.getForObject(urlInventory, InventoryResponse.class);
+        List<Integer> cards = invR.getInventory().getCards();
 
         if (!cards.contains(cardId)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("L'utilisateur n'a pas la carte.");
@@ -204,7 +238,9 @@ public class RoomService {
                 room.setStatus("started");
             }
             roomRepository.save(room);
-            return room;
+            List<Card> cardsList = new ArrayList<>();
+            cardsList.add(card);
+            return new RoomResponse(room, cardsList);
         }
         else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La room n'existe pas.");
@@ -217,14 +253,14 @@ public class RoomService {
         String urlUser = userServiceUrl + "/user/" + playerId;
         Object objUser = restTemplate.getForObject(urlUser, UserDTO.class);
 
-        if (!(objUser instanceof UserDTO)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("L'utilisateur n'existe pas.");
-        }
 
         if (roomOpt.isPresent()) {
             Room room = roomOpt.get();
+            if (!(objUser instanceof UserDTO)) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("L'utilisateur n'existe pas.");
+            }
             if (room.getStatus().equals("ended")) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("La partie est terminée.");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("La room est terminée.");
             }
             if (room.getIdUser_1() != playerId && room.getIdUser_2() != playerId) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("L'utilisateur n'est pas dans la room.");
@@ -267,7 +303,7 @@ public class RoomService {
             Object objCardAttacker = restTemplate.getForObject(urlCard, Card.class);
 
             if (!(objCardAttacker instanceof Card)) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La carte n'existe pas.");
+                return new RoomResponse(room, ResponseEntity.status(HttpStatus.NOT_FOUND).body("La carte n'existe pas."));
             }
 
             Card cardAttacker = (Card) objCardAttacker;
@@ -314,7 +350,7 @@ public class RoomService {
 
             Random rand = new Random();
             int random = rand.nextInt(100);
-            if(random < 10) {
+            if(random < 30) {
                 healthVictim = healthVictim - powerAttacker / 2;
             }
 
@@ -344,6 +380,11 @@ public class RoomService {
                     String urlUserWinner = userServiceUrl + "/user/addbalance/" + room.getIdUser_2() + "/" + room.getReward();
                     restTemplate.postForObject(urlUserWinner, null, UserDTO.class);
                 }
+                List<Card> cards = new ArrayList<>();
+                Card instantVictim = new Card(cardVictim.getId() ,cardVictim.getName(), cardVictim.getDescription(), cardVictim.getPower(),  cardVictim.getHealth(), cardVictim.getPrice(), cardVictim.getImage(), cardVictim.getType(), cardVictim.getEnergy());
+                Card instantAttacker = new Card(cardAttacker.getId() ,cardAttacker.getName(), cardAttacker.getDescription(), cardAttacker.getPower(),  cardAttacker.getHealth(), cardAttacker.getPrice(), cardAttacker.getImage(), cardAttacker.getType(), cardAttacker.getEnergy());
+                cards.add(instantVictim);
+                cards.add(instantAttacker);
                 cardVictim.setEnergy(cardVictim.getEnergy() -10);
                 cardVictim.setHealth(150);
                 cardAttacker.setEnergy(cardVictim.getEnergy() -5);
@@ -351,15 +392,19 @@ public class RoomService {
                 restTemplate.put(cardServiceUrl + "/card/" + idCardVictim, cardVictim);
                 restTemplate.put(cardServiceUrl + "/card/" + idCardAttacker, cardAttacker);
                 roomRepository.save(room);
-                return room;
+
+                return new RoomResponse(room, cards, ResponseEntity.status(HttpStatus.OK).body("La partie est terminée."));
             }
             else
             {
+                List<Card> cards = new ArrayList<>();
+                cards.add(cardVictim);
+                cards.add(cardAttacker);
                 roomRepository.save(room);
-                return room;
+                return new RoomResponse(room, cards, ResponseEntity.status(HttpStatus.OK).body("La partie continue."));
             }
         }
-        return null;
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La room n'existe pas.");
     }
 
     public Object deleteRoom(int id) {
@@ -367,7 +412,7 @@ public class RoomService {
         if (roomOpt.isPresent()) {
             Room room = roomOpt.get();
             roomRepository.delete(room);
-            return ResponseEntity.status(HttpStatus.OK).body("La room " + room.getName() +" a été supprimée.");
+            return new RoomResponse(room, ResponseEntity.status(HttpStatus.OK).body("La room a été supprimée."));
         }
         else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La room n'existe pas.");
