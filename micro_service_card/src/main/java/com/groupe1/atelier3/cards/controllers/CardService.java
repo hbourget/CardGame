@@ -21,8 +21,6 @@ public class CardService {
     public Card addCard(CardDTO cardDTO) {
         Card card = cardMapper.toEntity(cardDTO);
         card = cardRepository.save(card);
-        System.out.println(cardDTO.getType());
-        System.out.println(card);
         return card;
     }
 

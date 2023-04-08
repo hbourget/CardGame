@@ -4,6 +4,8 @@ import com.groupe1.atelier3.cards.models.Card;
 import com.groupe1.atelier3.inventory.controllers.InventoryService;
 import com.groupe1.atelier3.users.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -27,8 +29,10 @@ public class MarketService {
             if (inventoryService.getInventory(idInv).getCards().contains(card.getId())) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("L'utilisateur possède déjà la carte.");
             }
-            String url = userServiceUrl + "/user/substractbalance/{id}/{balance}";
-            restTemplate.postForObject(url, null, Void.class, user.getId(), card.getPrice());
+
+            String url = userServiceUrl + "/user/{id}/subtractbalance";
+            HttpEntity<Integer> requestEntity = new HttpEntity<>(card.getPrice());
+            restTemplate.exchange(url, HttpMethod.PUT, requestEntity, Void.class, user.getId());
 
             inventoryService.addCardToInv(user.getIdInventory(), card.getId());
         }
@@ -43,8 +47,9 @@ public class MarketService {
             if (!inventoryService.getInventory(idInv).getCards().contains(card.getId())) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("L'utilisateur ne possède pas la carte.");
             }
-            String url = userServiceUrl + "/user/addbalance/{id}/{balance}";
-            restTemplate.postForObject(url, null, Void.class, user.getId(), card.getPrice());
+            String url = userServiceUrl + "/user/{id}/addbalance";
+            HttpEntity<Integer> requestEntity = new HttpEntity<>(card.getPrice());
+            restTemplate.exchange(url, HttpMethod.PUT, requestEntity, Void.class, user.getId());
 
             inventoryService.removeCardFromInv(user.getIdInventory(), card.getId());
         }
@@ -65,8 +70,10 @@ public class MarketService {
                 ResponseEntity<Card> response = restTemplate.getForEntity(urlCard, Card.class);
                 Card card = response.getBody();
 
-                String url = userServiceUrl + "/user/addbalance/{id}/{balance}";
-                restTemplate.postForObject(url, null, Void.class, user.getId(), card.getPrice());
+                String url = userServiceUrl + "/user/{id}/addbalance";
+                HttpEntity<Integer> requestEntity = new HttpEntity<>(card.getPrice());
+                restTemplate.exchange(url, HttpMethod.PUT, requestEntity, Void.class, user.getId());
+
                 sommetotal += card.getPrice();
             }
             inventoryService.removeAllCardFromInv(user.getIdInventory());

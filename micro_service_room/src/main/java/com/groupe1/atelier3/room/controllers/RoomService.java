@@ -256,6 +256,10 @@ public class RoomService {
 
         if (roomOpt.isPresent()) {
             Room room = roomOpt.get();
+            if (!room.getStatus().equals("started")) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("La partie n'a pas encore commencé, les 2 joueurs doivent selectionné une carte.");
+            }
+
             if (!(objUser instanceof UserDTO)) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("L'utilisateur n'existe pas.");
             }

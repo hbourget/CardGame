@@ -4,6 +4,7 @@ import com.groupe1.atelier3.cards.models.Card;
 import com.groupe1.atelier3.inventory.models.Inventory;
 import com.groupe1.atelier3.inventory.models.InventoryResponse;
 import com.groupe1.atelier3.users.models.User;
+import com.groupe1.atelier3.users.models.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -49,9 +51,20 @@ public class InventoryCrt {
     }
 
     @GetMapping("/inventory/{idUser}")
-    public InventoryResponse getInventory(@PathVariable Integer idUser) {
-        User user = restTemplate.getForObject("http://localhost:8081/user/" + idUser, User.class);
-        return inventoryService.getInventoryCards(user.getIdInventory());
+    public ResponseEntity<InventoryResponse> getInventory(@PathVariable Integer idUser) {
+        UserDTO user;
+        try {
+            user = restTemplate.getForObject("http://localhost:8081/user/" + idUser, UserDTO.class);
+        } catch (HttpClientErrorException e) {
+            if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } else {
+                throw e;
+            }
+        }
+
+        InventoryResponse inventoryResponse = inventoryService.getInventoryCards(user.getIdInventory());
+        return new ResponseEntity<>(inventoryResponse, HttpStatus.OK);
     }
 
     @PostMapping("/inventory/create")

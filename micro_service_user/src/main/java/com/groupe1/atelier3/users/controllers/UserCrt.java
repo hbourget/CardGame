@@ -22,6 +22,21 @@ public class UserCrt {
         }
     }
 
+    @GetMapping("/users")
+    public Iterable<UserDTO> GetUsers() {
+        return uService.GetUsers();
+    }
+
+    @PutMapping("/user/{id}/addbalance")
+    public UserDTO addBalance(@PathVariable Integer id, @RequestBody Integer balanceToAdd) {
+        return uService.addBalance(id, balanceToAdd);
+    }
+
+    @PutMapping("/user/{id}/subtractbalance")
+    public UserDTO subtractBalance(@PathVariable Integer id, @RequestBody Integer balanceToSubtract) {
+        return uService.subtractBalance(id, balanceToSubtract);
+    }
+
     @GetMapping("/user/auth/{idOrUsername}")
     public Object GetUserAuth(@PathVariable String idOrUsername) {
         try {
@@ -31,30 +46,10 @@ public class UserCrt {
             return uService.GetUserAuthByUsername(idOrUsername);
         }
     }
-
-    @GetMapping("/users")
-    public Iterable<UserDTO> GetUsers() {
-        return uService.GetUsers();
-    }
-
-    @PostMapping("/user/substractbalance/{id}/{balance}")
-    public UserDTO SubstractBalance(@PathVariable Integer id, @PathVariable Integer balance) {
-        return uService.substractBalance(id, balance);
-    }
-    @PostMapping("/user/addbalance/{id}/{balance}")
-    public UserDTO AddBalance(@PathVariable Integer id, @PathVariable Integer balance) {
-        return uService.addBalance(id, balance);
-    }
     @PostMapping("/user/save/{username}/{password}")
     public User SaveUser(@PathVariable String username, @PathVariable String password) {
         User user = new User(username, password);
         return uService.saveUser(user);
     }
-
-    /*@PostMapping("/save")
-    public ResponseEntity<User> saveUser(@RequestBody User user) {
-        User savedUser = uService.saveUser(user);
-        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
-    }*/
 
 }

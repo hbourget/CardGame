@@ -23,13 +23,13 @@ public class UserService {
     private final RestTemplate restTemplate = new RestTemplate();
     private final String inventoryServiceUrl = "http://localhost:8083";
 
-    public ResponseEntity<Object> GetUserById(Integer id) {
+    public ResponseEntity<UserDTO> GetUserById(Integer id) {
         Optional<User> userOptional = userRepository.findById(id);
         if (userOptional.isPresent()) {
             UserDTO userDto = userMapper.toDTO(userOptional.get());
-            return ResponseEntity.ok().body(userDto);
+            return ResponseEntity.ok(userDto);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("L'utilisateur n'existe pas");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
@@ -86,7 +86,7 @@ public class UserService {
 
     }
 
-    public UserDTO substractBalance(Integer idUser, int amount) {
+    public UserDTO subtractBalance(Integer idUser, int amount) {
         Optional<User> userOptional = userRepository.findById(idUser);
         User user = userOptional.get();
         user.setBalance(user.getBalance() - amount);
