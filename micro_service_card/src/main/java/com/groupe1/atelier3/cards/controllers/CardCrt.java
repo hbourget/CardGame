@@ -24,6 +24,11 @@ public class CardCrt {
         return cService.GetCard(id);
     }
 
+    @GetMapping("/cards")
+    public Iterable<Card> getAllCards() {
+        return cService.getAllCards();
+    }
+
     @PostMapping("/card")
     public List<Card> addCards(@RequestBody CardWrapper cardWrapper) {
         if (cardWrapper.getCard() != null && cardWrapper.getCards() == null) {
@@ -45,16 +50,10 @@ public class CardCrt {
         cService.deleteAllCards();
     }
 
-    @GetMapping("/cards")
-    public Iterable<Card> getAllCards() {
-        return cService.getAllCards();
-    }
-
     @PutMapping("/card/{id}")
     public Object updateCard(@PathVariable int id, @RequestBody Card card) {
         return cService.updateCard(id, card);
     }
-
 }
 
 

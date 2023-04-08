@@ -79,6 +79,7 @@ public class AuthService {
 
         Collections.shuffle(cards);
         for (int i = 0; i < 3 && i < cards.size(); i++) {
+            //check if card.get(i) is already in an inventory. This @GetMapping("/inventory") is returning a list of inventories
             cardsList.add(cards.get(i));
         }
         return cardsList;

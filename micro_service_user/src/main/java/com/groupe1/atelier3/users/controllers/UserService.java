@@ -102,4 +102,34 @@ public class UserService {
         User savedUser = userRepository.save(user);
         return savedUser;
     }
+
+
+    public UserDTO updateUser(int id, User user) {
+        Optional<User> userOptional = userRepository.findById(id);
+        if (userOptional.isPresent()) {
+            User userToUpdate = userOptional.get();
+            userToUpdate.setUsername(user.getUsername());
+            userToUpdate.setPassword(user.getPassword());
+            userToUpdate.setBalance(user.getBalance());
+            userRepository.save(userToUpdate);
+            return userMapper.toDTO(userToUpdate);
+        } else {
+            throw new NoSuchElementException("L'utilisateur n'existe pas");
+        }
+    }
+
+    public Object deleteUser(Integer id) {
+        Optional<User> userOptional = userRepository.findById(id);
+        if (userOptional.isPresent()) {
+            User userToDelete = userOptional.get();
+            userRepository.delete(userToDelete);
+            return userToDelete;
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("L'utilisateur n'existe pas").getBody();
+        }
+    }
+
+    public void deleteAllUsers() {
+        userRepository.deleteAll();
+    }
 }

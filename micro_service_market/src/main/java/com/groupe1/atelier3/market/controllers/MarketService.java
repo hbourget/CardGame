@@ -29,6 +29,10 @@ public class MarketService {
             if (inventoryService.getInventory(idInv).getCards().contains(card.getId())) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("L'utilisateur possède déjà la carte.");
             }
+            //check if card is already in other inventory
+            if (inventoryService.getInventoryByCardId(card.getId()) != null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La carte est déjà attribué à un autre utilisateur.");
+            }
 
             String url = userServiceUrl + "/user/{id}/subtractbalance";
             HttpEntity<Integer> requestEntity = new HttpEntity<>(card.getPrice());

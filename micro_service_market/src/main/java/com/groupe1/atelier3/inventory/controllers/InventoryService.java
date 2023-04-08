@@ -26,7 +26,7 @@ public class InventoryService {
     public Object addCardToInv(Integer inventoryId, Integer cardId) {
         Inventory inventory = inventoryRepository.findById(inventoryId).get();
         if (inventory.getCards().contains(cardId)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La carte est déjà dans l'inventaire.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La carte "+ cardId +" est déjà dans l'inventaire.");
         }
 
         inventory.getCards().add(cardId);
@@ -80,6 +80,25 @@ public class InventoryService {
     public List<Integer> getInventoryCardsIds(Integer idInv) {
         Inventory inv = inventoryRepository.findById(idInv).get();
         return inv.getCards();
+    }
+
+    public Inventory getInventoryByCardId(Integer cardId) {
+        Iterable<Inventory> inventories = inventoryRepository.findAll();
+        List<Inventory> inventoriesList = new ArrayList<>();
+        inventories.forEach(inventoriesList::add);
+        for (Inventory inventory : inventoriesList) {
+            if (inventory.getCards().contains(cardId)) {
+                return inventory;
+            }
+        }
+        return null;
+    }
+
+    public List<Inventory> getAllInventories() {
+        Iterable<Inventory> inventories = inventoryRepository.findAll();
+        List<Inventory> inventoriesList = new ArrayList<>();
+        inventories.forEach(inventoriesList::add);
+        return inventoriesList;
     }
 
     public void saveInventory(Inventory inventory) {

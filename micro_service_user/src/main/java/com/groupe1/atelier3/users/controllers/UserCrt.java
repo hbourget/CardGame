@@ -27,6 +27,11 @@ public class UserCrt {
         return uService.GetUsers();
     }
 
+    @PutMapping("/user/{id}")
+    public UserDTO UpdateUser(@PathVariable Integer id, @RequestBody User user) {
+        return uService.updateUser(id, user);
+    }
+
     @PutMapping("/user/{id}/addbalance")
     public UserDTO addBalance(@PathVariable Integer id, @RequestBody Integer balanceToAdd) {
         return uService.addBalance(id, balanceToAdd);
@@ -35,6 +40,16 @@ public class UserCrt {
     @PutMapping("/user/{id}/subtractbalance")
     public UserDTO subtractBalance(@PathVariable Integer id, @RequestBody Integer balanceToSubtract) {
         return uService.subtractBalance(id, balanceToSubtract);
+    }
+
+    @DeleteMapping("/user/{id}")
+    public void DeleteUser(@PathVariable Integer id) {
+        uService.deleteUser(id);
+    }
+
+    @DeleteMapping("/users")
+    public void DeleteUsers() {
+        uService.deleteAllUsers();
     }
 
     @GetMapping("/user/auth/{idOrUsername}")

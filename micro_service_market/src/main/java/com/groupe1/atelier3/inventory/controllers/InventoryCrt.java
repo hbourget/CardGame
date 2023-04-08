@@ -67,6 +67,12 @@ public class InventoryCrt {
         return new ResponseEntity<>(inventoryResponse, HttpStatus.OK);
     }
 
+    @GetMapping("/inventory")
+    public List<Inventory> getAllInventories() {
+        List<Inventory> inventories = inventoryService.getAllInventories();
+        return inventories;
+    }
+
     @PostMapping("/inventory/create")
     public ResponseEntity<Inventory> createInventory() {
         Inventory inventory = new Inventory();
