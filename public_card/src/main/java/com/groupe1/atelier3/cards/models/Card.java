@@ -3,16 +3,19 @@ package com.groupe1.atelier3.cards.models;
 import jakarta.persistence.*;
 
 public class Card {
+
     private Integer id;
     private String name;
     private String description;
     private int power;
     private int health;
     private String type;
+    private int energy;
     private int price;
     private String image;
 
-    public Card(Integer id, String name, String description, int power, int health, int price, String image, String type) {
+    //constructor
+    public Card(Integer id, String name, String description, int power, int health, int price, String image, String type, int energy) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -21,6 +24,7 @@ public class Card {
         this.price = price;
         this.image = image;
         this.type = type;
+        this.energy = energy;
     }
     public Card() {
 
@@ -84,6 +88,14 @@ public class Card {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public int getEnergy() {
+        return energy;
+    }
+
+    public void setEnergy(int energy) {
+        this.energy = energy;
     }
 
     public String toString () {

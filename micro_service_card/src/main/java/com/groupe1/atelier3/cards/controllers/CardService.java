@@ -21,6 +21,8 @@ public class CardService {
     public Card addCard(CardDTO cardDTO) {
         Card card = cardMapper.toEntity(cardDTO);
         card = cardRepository.save(card);
+        System.out.println(cardDTO.getType());
+        System.out.println(card);
         return card;
     }
 
@@ -44,18 +46,35 @@ public class CardService {
     }
 
 
-    /*public Iterable<CardDTO> getAllCards() {
-        Iterable<Card> cards = cardRepository.findAll();
-        List<CardDTO> cardsDTO = new ArrayList<>();
-        for (Card card : cards) {
-            cardsDTO.add(cardMapper.toDTO(card));
-        }
-        return cardsDTO;
-    }*/
+    public void deleteCard(int id) {
+        cardRepository.deleteById(id);
+    }
+
+    public void deleteAllCards() {
+        cardRepository.deleteAll();
+    }
 
     public Iterable<Card> getAllCards() {
         Iterable<Card> cards = cardRepository.findAll();
         return cards;
+    }
+
+    public Object updateCard(int id, Card cardNew) {
+        Optional<Card> cardOpt = cardRepository.findById(id);
+        if (cardOpt.isPresent()) {
+            Card card = cardOpt.get();
+            card.setHealth(cardNew.getHealth());
+            card.setEnergy(cardNew.getEnergy());
+            card.setDescription(cardNew.getDescription());
+            card.setImage(cardNew.getImage());
+            card.setName(cardNew.getName());
+            card.setType(cardNew.getType());
+            card.setPrice(cardNew.getPrice());
+            card.setPower(cardNew.getPower());
+            card = cardRepository.save(card);
+            return card;
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La carte n'existe pas.");
     }
 
 

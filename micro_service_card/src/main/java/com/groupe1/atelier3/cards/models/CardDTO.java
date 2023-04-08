@@ -7,13 +7,13 @@ public class CardDTO {
     private String description;
     private int power;
     private int health;
-
     private String type;
+    private int energy;
     private int price;
     private String image;
 
     //constructor
-    public CardDTO(Integer id, String name, String description, int power, int health, int price, String image, String type) {
+    public CardDTO(Integer id, String name, String description, int power, int health, int price, String image, String type, int energy) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -22,8 +22,9 @@ public class CardDTO {
         this.price = price;
         this.image = image;
         this.type = type;
+        this.energy = energy;
     }
-    public CardDTO(String name, String description, int power, int health, int price, String image, String type) {
+    public CardDTO(String name, String description, int power, int health, int price, String image, String type, int energy) {
         this.name = name;
         this.description = description;
         this.power = power;
@@ -31,6 +32,7 @@ public class CardDTO {
         this.price = price;
         this.image = image;
         this.type = type;
+        this.energy = energy;
     }
 
     public CardDTO() {
@@ -96,6 +98,14 @@ public class CardDTO {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public int getEnergy() {
+        return energy;
+    }
+
+    public void setEnergy(int energy) {
+        this.energy = energy;
     }
 
 }

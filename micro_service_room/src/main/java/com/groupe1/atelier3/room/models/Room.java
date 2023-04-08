@@ -2,6 +2,8 @@ package com.groupe1.atelier3.room.models;
 
 import jakarta.persistence.*;
 
+import java.util.Random;
+
 @Entity
 @Table(name = "ROOM")
 public class Room {
@@ -13,10 +15,11 @@ public class Room {
     private int idUser_2;
     private int idCardUser_1;
     private int idCardUser_2;
-    private int remainingCoupsUser_1;
-    private int remainingCoupsUser_2;
+    private int cooldownUser_1;
+    private int cooldownUser_2;
     private String status;
     private int idUserWinner;
+    private int reward;
 
     public Room(int id, String name) {
         this.id = id;
@@ -25,10 +28,13 @@ public class Room {
         this.idUser_2 = 0;
         this.idCardUser_1 = 0;
         this.idCardUser_2 = 0;
-        this.remainingCoupsUser_1 = 5;
-        this.remainingCoupsUser_2 = 5;
+        this.cooldownUser_1 = 0;
+        this.cooldownUser_2 = 0;
         this.status = "waiting";
         this.idUserWinner = 0;
+        Random random = new Random();
+        this.reward = random.nextInt(30 - 10 + 1) + 10;
+
     }
     public Room(String name) {
         this.name = name;
@@ -36,10 +42,12 @@ public class Room {
         this.idUser_2 = 0;
         this.idCardUser_1 = 0;
         this.idCardUser_2 = 0;
-        this.remainingCoupsUser_1 = 5;
-        this.remainingCoupsUser_2 = 5;
+        this.cooldownUser_1 = 0;
+        this.cooldownUser_2 = 0;
         this.status = "waiting";
         this.idUserWinner = 0;
+        Random random = new Random();
+        this.reward = random.nextInt(30 - 10 + 1) + 10;
     }
     public Room() {
 
@@ -97,20 +105,20 @@ public class Room {
         this.idCardUser_2 = idCardUser_2;
     }
 
-    public int getRemainingCoupsUser_1() {
-        return remainingCoupsUser_1;
+    public int getCooldownUser_1() {
+        return cooldownUser_1;
     }
 
-    public void setRemainingCoupsUser_1(int remainingCoupsUser_1) {
-        this.remainingCoupsUser_1 = remainingCoupsUser_1;
+    public void setCooldownUser_1(int cooldownUser_1) {
+        this.cooldownUser_1 = cooldownUser_1;
     }
 
-    public int getRemainingCoupsUser_2() {
-        return remainingCoupsUser_2;
+    public int getCooldownUser_2() {
+        return cooldownUser_2;
     }
 
-    public void setRemainingCoupsUser_2(int remainingCoupsUser_2) {
-        this.remainingCoupsUser_2 = remainingCoupsUser_2;
+    public void setCooldownUser_2(int cooldownUser_2) {
+        this.cooldownUser_2 = cooldownUser_2;
     }
 
     public int getIdUserWinner() {
@@ -119,5 +127,13 @@ public class Room {
 
     public void setIdUserWinner(int idUserWinner) {
         this.idUserWinner = idUserWinner;
+    }
+
+    public int getReward() {
+        return reward;
+    }
+
+    public void setReward(int reward) {
+        this.reward = reward;
     }
 }

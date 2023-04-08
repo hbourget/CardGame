@@ -13,6 +13,7 @@ import org.springframework.web.servlet.function.EntityResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class RoomService {
@@ -180,6 +181,12 @@ public class RoomService {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("L'utilisateur n'a pas la carte.");
         }
 
+        //check if card energy is > 5
+        Card card = (Card) objCard;
+        if (card.getEnergy() <= 5) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("La carte n'a pas assez d'energy pour participer.");
+        }
+
         if (roomOpt.isPresent()) {
             Room room = roomOpt.get();
             if (room.getIdUser_1() == 0 || room.getIdUser_2() == 0) {
@@ -224,13 +231,13 @@ public class RoomService {
             }
 
             if(playerId == roomOpt.get().getIdUser_1()) {
-                if(room.getRemainingCoupsUser_1() == 0) {
-                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("L'utilisateur n'a plus de coups.");
+                if(room.getCooldownUser_1() == 1) {
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("L'utilisateur a déjà joué ce tour.");
                 }
             }
             else {
-                if(room.getRemainingCoupsUser_2() == 0) {
-                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("L'utilisateur n'a plus de coups.");
+                if(room.getCooldownUser_2() == 1) {
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("L'utilisateur a déjà joué ce tour.");
                 }
             }
 
@@ -250,6 +257,7 @@ public class RoomService {
             if (!(objCardVictim instanceof Card)) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La carte n'existe pas.");
             }
+
             Card cardVictim = (Card) objCardVictim;
             int powerVictim = cardVictim.getPower();
             int healthVictim = cardVictim.getHealth();
@@ -267,49 +275,86 @@ public class RoomService {
             int healthAttacker = cardAttacker.getHealth();
             String typeAttacker = cardAttacker.getType();
 
-            //set health of victim according to powerAttacker and adjust regarding types (water, fire and earth)
-            if(typeVictim.equals("water") && typeAttacker.equals("fire")) {
-                healthVictim -= powerAttacker * 2;
+            if(typeAttacker.equals("Fire")) {
+                if(typeVictim.equals("Water")) {
+                    healthVictim = healthVictim - (powerAttacker / 2);
+                }
+                else if(typeVictim.equals("Earth")) {
+                    healthVictim = healthVictim - (powerAttacker * 2);
+                }
+                else {
+                    healthVictim = healthVictim - powerAttacker;
+                }
             }
-            else if(typeVictim.equals("fire") && typeAttacker.equals("earth")) {
-                healthVictim -= powerAttacker * 2;
+            else if(typeAttacker.equals("Water")) {
+                if(typeVictim.equals("Earth")) {
+                    healthVictim = healthVictim - (powerAttacker / 2);
+                }
+                else if(typeVictim.equals("Fire")) {
+                    healthVictim = healthVictim - (powerAttacker * 2);
+                }
+                else {
+                    healthVictim = healthVictim - powerAttacker;
+                }
             }
-            else if(typeVictim.equals("earth") && typeAttacker.equals("water")) {
-                healthVictim -= powerAttacker * 2;
-            }
-            else if(typeVictim.equals("water") && typeAttacker.equals("earth")) {
-                healthVictim -= powerAttacker / 2;
-            }
-            else if(typeVictim.equals("fire") && typeAttacker.equals("water")) {
-                healthVictim -= powerAttacker / 2;
-            }
-            else if(typeVictim.equals("earth") && typeAttacker.equals("fire")) {
-                healthVictim -= powerAttacker / 2;
+            else if(typeAttacker.equals("Earth")) {
+                if(typeVictim.equals("Fire")) {
+                    healthVictim = healthVictim - (powerAttacker / 2);
+                }
+                else if(typeVictim.equals("Water")) {
+                    healthVictim = healthVictim - (powerAttacker * 2);
+                }
+                else {
+                    healthVictim = healthVictim - powerAttacker;
+                }
             }
             else {
-                healthVictim -= powerAttacker;
+                healthVictim = healthVictim - powerAttacker;
             }
+
+            Random rand = new Random();
+            int random = rand.nextInt(100);
+            if(random < 10) {
+                healthVictim = healthVictim - powerAttacker / 2;
+            }
+
+            cardVictim.setHealth(healthVictim);
+            restTemplate.put(cardServiceUrl + "/card/" + idCardVictim, cardVictim);
 
             //set remove 1 coup from the attacker
             if(playerId == roomOpt.get().getIdUser_1()) {
-                room.setRemainingCoupsUser_1(roomOpt.get().getRemainingCoupsUser_1() - 1);
+                room.setCooldownUser_1(1);
+                room.setCooldownUser_2(0);
             }
             else {
-                room.setRemainingCoupsUser_2(roomOpt.get().getRemainingCoupsUser_2() - 1);
+                room.setCooldownUser_2(1);
+                room.setCooldownUser_1(0);
             }
 
             //check if both remaningCoups are 0
-            if(roomOpt.get().getRemainingCoupsUser_1() == 0 && roomOpt.get().getRemainingCoupsUser_2() == 0) {
+            if(cardVictim.getHealth() <= 0) {
                 room.setStatus("ended");
-                if(healthVictim > healthAttacker) {
-                    room.setIdUserWinner(roomOpt.get().getIdUser_2());
-                }
-                else if(healthVictim < healthAttacker) {
-                    room.setIdUserWinner(roomOpt.get().getIdUser_1());
+                if(playerId == room.getIdUser_1()) {
+                    room.setIdUserWinner(room.getIdUser_1());
+                    String urlUserWinner = userServiceUrl + "/user/addbalance/" + room.getIdUser_1() + "/" + room.getReward();
+                    restTemplate.postForObject(urlUserWinner, null, UserDTO.class);
                 }
                 else {
-                    room.setIdUserWinner(0);
+                    room.setIdUserWinner(room.getIdCardUser_2());
+                    String urlUserWinner = userServiceUrl + "/user/addbalance/" + room.getIdUser_2() + "/" + room.getReward();
+                    restTemplate.postForObject(urlUserWinner, null, UserDTO.class);
                 }
+                cardVictim.setEnergy(cardVictim.getEnergy() -10);
+                cardVictim.setHealth(150);
+                cardAttacker.setEnergy(cardVictim.getEnergy() -5);
+                cardAttacker.setHealth(150);
+                restTemplate.put(cardServiceUrl + "/card/" + idCardVictim, cardVictim);
+                restTemplate.put(cardServiceUrl + "/card/" + idCardAttacker, cardAttacker);
+                roomRepository.save(room);
+                return room;
+            }
+            else
+            {
                 roomRepository.save(room);
                 return room;
             }

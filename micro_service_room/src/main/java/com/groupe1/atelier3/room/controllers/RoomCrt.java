@@ -69,7 +69,7 @@ public class RoomCrt {
         return rService.addCardToRoom(id, cardId, playerId);
     }
 
-    @PostMapping("/room/{id}/playRound/{idUser}")
+    @PostMapping("/room/{id}/playround/{idUser}")
     public Object playRound(@PathVariable int id, @PathVariable int idUser) {
         return rService.playRound(id, idUser);
     }

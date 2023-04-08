@@ -13,6 +13,8 @@ public class CardMapper {
         cardDTO.setHealth(card.getHealth());
         cardDTO.setPrice(card.getPrice());
         cardDTO.setImage(card.getImage());
+        cardDTO.setType(card.getType());
+        cardDTO.setEnergy(card.getEnergy());
         return cardDTO;
     }
 
@@ -24,6 +26,8 @@ public class CardMapper {
         card.setHealth(cardDTO.getHealth());
         card.setPrice(cardDTO.getPrice());
         card.setImage(cardDTO.getImage());
+        card.setType(cardDTO.getType());
+        card.setEnergy(cardDTO.getEnergy());
         return card;
     }
 

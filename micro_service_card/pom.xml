@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.groupe1</groupId>
-    <artifactId>card-service</artifactId>
+    <artifactId>service-card</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>SVC_CARD</name>
     <description>CardService</description>

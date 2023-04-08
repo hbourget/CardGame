@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.groupe1</groupId>
-    <artifactId>micro-service-market</artifactId>
+    <artifactId>service-market</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>SVC_MARKET</name>
     <description>ServiceMarket</description>

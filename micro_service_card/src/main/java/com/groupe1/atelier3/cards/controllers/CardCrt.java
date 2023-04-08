@@ -35,9 +35,24 @@ public class CardCrt {
         }
     }
 
+    @DeleteMapping ("/card/{id}")
+    public void deleteCard(@PathVariable int id) {
+        cService.deleteCard(id);
+    }
+
+    @DeleteMapping ("/cards")
+    public void deleteAllCards() {
+        cService.deleteAllCards();
+    }
+
     @GetMapping("/cards")
     public Iterable<Card> getAllCards() {
         return cService.getAllCards();
+    }
+
+    @PutMapping("/card/{id}")
+    public Object updateCard(@PathVariable int id, @RequestBody Card card) {
+        return cService.updateCard(id, card);
     }
 
 }

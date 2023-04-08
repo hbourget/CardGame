@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.groupe1</groupId>
-    <artifactId>room-service</artifactId>
+    <artifactId>service-room</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>SVC_ROOM</name>
     <description>RoomService</description>

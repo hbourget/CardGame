@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.groupe1</groupId>
-    <artifactId>micro-service-user</artifactId>
+    <artifactId>service-user</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>SVC_USER</name>
     <description>ServiceUser</description>
