@@ -2,6 +2,7 @@ package com.groupe1.atelier3.auth.controllers;
 
 import com.groupe1.atelier3.auth.models.AuthDTO;
 import com.groupe1.atelier3.cards.models.Card;
+import com.groupe1.atelier3.inventory.models.Inventory;
 import com.groupe1.atelier3.users.models.User;
 import com.groupe1.atelier3.users.models.UserDTO;
 import org.springframework.core.ParameterizedTypeReference;
@@ -13,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -77,9 +79,23 @@ public class AuthService {
         List<Card> cards = responseEntity.getBody();
         ArrayList<Card> cardsList = new ArrayList<>();
 
+        String urlInventorySvc = inventoryServiceUrl + "/inventory";
+        ResponseEntity<List<Inventory>> responseEntity2 = restTemplate.exchange(urlInventorySvc, HttpMethod.GET, null, new ParameterizedTypeReference<List<Inventory>>() {});
+        List<Inventory> inventories = responseEntity2.getBody();
+
+        Iterator<Card> cardIterator = cards.iterator();
+        while (cardIterator.hasNext()) {
+            Card currentCard = cardIterator.next();
+            for (Inventory inventory : inventories) {
+                if (inventory.getCards().contains(currentCard.getId())) {
+                    cardIterator.remove();
+                    break;
+                }
+            }
+        }
+        System.out.println("after" + cards.size());
         Collections.shuffle(cards);
         for (int i = 0; i < 3 && i < cards.size(); i++) {
-            //check if card.get(i) is already in an inventory. This @GetMapping("/inventory") is returning a list of inventories
             cardsList.add(cards.get(i));
         }
         return cardsList;

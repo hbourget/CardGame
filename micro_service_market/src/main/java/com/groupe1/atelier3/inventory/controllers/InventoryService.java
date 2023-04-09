@@ -28,6 +28,9 @@ public class InventoryService {
         if (inventory.getCards().contains(cardId)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La carte "+ cardId +" est déjà dans l'inventaire.");
         }
+        if (getInventoryByCardId(cardId) != null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La carte est déjà attribué à un autre utilisateur.");
+        }
 
         inventory.getCards().add(cardId);
         inventoryRepository.save(inventory);
