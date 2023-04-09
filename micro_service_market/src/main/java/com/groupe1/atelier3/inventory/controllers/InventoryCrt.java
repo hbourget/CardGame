@@ -54,7 +54,7 @@ public class InventoryCrt {
     public ResponseEntity<InventoryResponse> getInventory(@PathVariable Integer idUser) {
         UserDTO user;
         try {
-            user = restTemplate.getForObject("http://localhost:8081/user/" + idUser, UserDTO.class);
+            user = restTemplate.getForObject("http://localhost:8081/users/" + idUser, UserDTO.class);
         } catch (HttpClientErrorException e) {
             if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);

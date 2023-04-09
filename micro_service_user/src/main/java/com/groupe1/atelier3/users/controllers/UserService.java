@@ -23,27 +23,27 @@ public class UserService {
     private final RestTemplate restTemplate = new RestTemplate();
     private final String inventoryServiceUrl = "http://localhost:8083";
 
-    public ResponseEntity<UserDTO> GetUserById(Integer id) {
+    public UserDTO getUserById(Integer id) {
         Optional<User> userOptional = userRepository.findById(id);
         if (userOptional.isPresent()) {
             UserDTO userDto = userMapper.toDTO(userOptional.get());
-            return ResponseEntity.ok(userDto);
+            return userDto;
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return null;
         }
     }
 
-    public Object GetUserByUsername(String username) {
+    public UserDTO getUserByUsername(String username) {
         Optional<User> userOptional = userRepository.findByUsername(username);
         if (userOptional.isPresent()) {
             UserDTO userDto = userMapper.toDTO(userOptional.get());
             return userDto;
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("L'utilisateur n'existe pas").getBody();
+            return null;
         }
     }
 
-    public Object GetUserAuthById(Integer id) {
+    public Object getUserAuthById(Integer id) {
         Optional<User> userOptional = userRepository.findById(id);
         if (userOptional.isPresent()) {
             return userOptional.get();
@@ -52,7 +52,7 @@ public class UserService {
         }
     }
 
-    public Object GetUserAuthByUsername(String username) {
+    public Object getUserAuthByUsername(String username) {
         Optional<User> userOptional = userRepository.findByUsername(username);
         if (userOptional.isPresent()) {
             return userOptional.get();
@@ -61,7 +61,7 @@ public class UserService {
         }
     }
 
-    public Iterable<UserDTO> GetUsers() {
+    public List<UserDTO> getUsers() {
         Iterable<User> users = userRepository.findAll();
         List<UserDTO> usersDTO = new ArrayList<>();
         for (User user : users) {
@@ -70,24 +70,22 @@ public class UserService {
         return usersDTO;
     }
 
-    public void setBalance(String username, int amount) {
-        Optional<User> userOptional = userRepository.findByUsername(username);
-        User user = userOptional.get();
-        user.setBalance(amount);
-        userRepository.save(user);
-    }
-
     public UserDTO addBalance(Integer idUser, int amount) {
         Optional<User> userOptional = userRepository.findById(idUser);
+        if (userOptional.isEmpty()) {
+            return null;
+        }
         User user = userOptional.get();
         user.setBalance(user.getBalance() + amount);
         userRepository.save(user);
         return userMapper.toDTO(user);
-
     }
 
     public UserDTO subtractBalance(Integer idUser, int amount) {
         Optional<User> userOptional = userRepository.findById(idUser);
+        if (userOptional.isEmpty()) {
+            return null;
+        }
         User user = userOptional.get();
         user.setBalance(user.getBalance() - amount);
         userRepository.save(user);
@@ -114,18 +112,18 @@ public class UserService {
             userRepository.save(userToUpdate);
             return userMapper.toDTO(userToUpdate);
         } else {
-            throw new NoSuchElementException("L'utilisateur n'existe pas");
+            return null;
         }
     }
 
-    public Object deleteUser(Integer id) {
+    public boolean deleteUser(Integer id) {
         Optional<User> userOptional = userRepository.findById(id);
         if (userOptional.isPresent()) {
             User userToDelete = userOptional.get();
             userRepository.delete(userToDelete);
-            return userToDelete;
+            return true;
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("L'utilisateur n'existe pas").getBody();
+            return false;
         }
     }
 

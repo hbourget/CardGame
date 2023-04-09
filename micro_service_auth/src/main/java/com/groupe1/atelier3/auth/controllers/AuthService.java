@@ -24,40 +24,42 @@ public class AuthService {
     private final String userServiceUrl = "http://localhost:8081";
     private final String cardServiceUrl = "http://localhost:8082";
     private final String inventoryServiceUrl = "http://localhost:8083";
-    public Object checkAuth(Object obj, String password) {
+    public UserDTO checkAuth(Object obj, String password) {
         if (obj == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("L'utilisateur n'existe pas.");
+            return null;
         }
         User user = (User) obj;
         if (user.getPassword().equals(password)) {
-            String url = userServiceUrl + "/user/" + user.getId();
+            String url = userServiceUrl + "/users/" + user.getId();
             UserDTO userdto = restTemplate.getForObject(url, UserDTO.class);
-            return ResponseEntity.status(HttpStatus.OK).body(userdto);
+            return userdto;
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Mot de passe incorrect.");
+            return null;
         }
     }
-    public Object register(AuthDTO authDTO) {
+    public UserDTO register(AuthDTO authDTO) {
         String usr = authDTO.getUsername();
 
         String urlGetAllUsers = userServiceUrl + "/users";
         ResponseEntity<List<UserDTO>> responseEntity = restTemplate.exchange(urlGetAllUsers, HttpMethod.GET, null, new ParameterizedTypeReference<List<UserDTO>>() {});
         List<UserDTO> usersDTO = responseEntity.getBody();
 
-        //check if usr already exists
-        for (UserDTO userDTO : usersDTO) {
-            if (userDTO.getUsername().equals(usr)) {
-                return ResponseEntity.status(409).body("Un utilisateur existe déjà avec le nom " + usr + ".");
+        if (usersDTO != null) {
+            for (UserDTO userDTO : usersDTO) {
+                if (userDTO.getUsername().equals(usr)) {
+                    return null;
+                }
             }
         }
 
         User userNew = authMapper.toEntity(authDTO);
 
-        String urlSave = userServiceUrl + "/user/save/{username}/{password}";
-        User myUser = restTemplate.postForObject(urlSave, null, User.class, userNew.getUsername(), userNew.getPassword());
+        String urlSave = userServiceUrl + "/users";
+        User myUser = restTemplate.postForObject(urlSave, userNew, User.class);
+
 
         // On récupère le UserDTO correspondant a retourner
-        String url = userServiceUrl + "/user/" + myUser.getId();
+        String url = userServiceUrl + "/users/" + myUser.getId();
         UserDTO userdto = restTemplate.getForObject(url, UserDTO.class);
 
         ArrayList<Card> cardsList = getStarterCards();

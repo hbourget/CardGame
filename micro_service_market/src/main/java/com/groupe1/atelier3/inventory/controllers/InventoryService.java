@@ -74,7 +74,7 @@ public class InventoryService {
         List<Card> cards = new ArrayList<>();
         Inventory inv = inventoryRepository.findById(idInv).get();
         for (Integer cardId : inv.getCards()) {
-            Card card = restTemplate.getForObject(cardServiceUrl + "/card/" + cardId, Card.class);
+            Card card = restTemplate.getForObject(cardServiceUrl + "/cards/" + cardId, Card.class);
             cards.add(card);
         }
         return new InventoryResponse(inv, cards);

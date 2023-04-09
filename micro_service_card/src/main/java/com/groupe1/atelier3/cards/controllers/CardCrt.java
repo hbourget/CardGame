@@ -1,16 +1,15 @@
 package com.groupe1.atelier3.cards.controllers;
 
 import com.groupe1.atelier3.cards.models.Card;
-import com.groupe1.atelier3.cards.models.CardWrapper;
+import com.groupe1.atelier3.cards.models.CardDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
 
 @RestController
-@Order(1)
 public class CardCrt {
     @Autowired
     private CardService cService;
@@ -19,41 +18,69 @@ public class CardCrt {
         this.cService = cService;
     }
 
-    @GetMapping("/card/{id}")
-    public Object GetCard(@PathVariable int id) {
-        return cService.GetCard(id);
-    }
-
-    @GetMapping("/cards")
-    public Iterable<Card> getAllCards() {
-        return cService.getAllCards();
-    }
-
-    @PostMapping("/card")
-    public List<Card> addCards(@RequestBody CardWrapper cardWrapper) {
-        if (cardWrapper.getCard() != null && cardWrapper.getCards() == null) {
-            return Collections.singletonList(cService.addCard(cardWrapper.getCard()));
-        } else if (cardWrapper.getCard() == null && cardWrapper.getCards() != null) {
-            return cService.addCards(cardWrapper.getCards());
+    @GetMapping("/cards/{id}")
+    public ResponseEntity<Card> getCard(@PathVariable int id) {
+        Card card = cService.getCard(id);
+        if (card == null) {
+            return ResponseEntity.notFound().build();
         } else {
-            throw new IllegalArgumentException("Veuillez fournir une carte ou une liste de cartes, mais pas les deux.");
+            return ResponseEntity.ok(card);
         }
     }
 
-    @DeleteMapping ("/card/{id}")
-    public void deleteCard(@PathVariable int id) {
-        cService.deleteCard(id);
+    @GetMapping("/cards")
+    public ResponseEntity<List<Card>> getAllCards() {
+        List<Card> cards = cService.getAllCards();
+        if (cards.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.ok(cards);
+        }
     }
 
-    @DeleteMapping ("/cards")
-    public void deleteAllCards() {
+    @PostMapping("/cards")
+    public ResponseEntity<Card> addCard(@RequestBody CardDTO card) {
+        Card createdCard = cService.addCard(card);
+        if (createdCard == null) {
+            return ResponseEntity.badRequest().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdCard);
+        }
+    }
+
+    @PostMapping("/cards/bulk")
+    public ResponseEntity<List<Card>> addCards(@RequestBody List<CardDTO> cards) {
+        List<Card> createdCards = cService.addCards(cards);
+        if (createdCards.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdCards);
+        }
+    }
+
+    @DeleteMapping("/cards/{id}")
+    public ResponseEntity<Void> deleteCard(@PathVariable int id) {
+        boolean cardDeleted = cService.deleteCard(id);
+        if (cardDeleted) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/cards")
+    public ResponseEntity<Void> deleteAllCards() {
         cService.deleteAllCards();
+        return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/card/{id}")
-    public Object updateCard(@PathVariable int id, @RequestBody Card card) {
-        return cService.updateCard(id, card);
+    @PutMapping("/cards/{id}")
+    public ResponseEntity<Card> updateCard(@PathVariable int id, @RequestBody Card card) {
+        Card updatedCard = cService.updateCard(id, card);
+        if (updatedCard == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(updatedCard);
+        }
     }
 }
-
-

@@ -59,11 +59,11 @@ public class RoomService {
             Room room = roomOpt.get();
             List<Card> cards = new ArrayList<>();
             if (room.getIdUser_1() != 0) {
-                Card card1 = restTemplate.getForObject(cardServiceUrl + "/card/" + room.getIdCardUser_1(), Card.class);
+                Card card1 = restTemplate.getForObject(cardServiceUrl + "/cards/" + room.getIdCardUser_1(), Card.class);
                 cards.add(card1);
             }
             if (room.getIdUser_2() != 0) {
-                Card card2 = restTemplate.getForObject(cardServiceUrl + "/card/" + room.getIdCardUser_2(), Card.class);
+                Card card2 = restTemplate.getForObject(cardServiceUrl + "/cards/" + room.getIdCardUser_2(), Card.class);
                 cards.add(card2);
             }
             roomResponse = new RoomResponse(room, cards);
@@ -81,11 +81,11 @@ public class RoomService {
             Room room = roomOpt.get();
             List<Card> cards = new ArrayList<>();
             if (room.getIdUser_1() != 0) {
-                Card card1 = restTemplate.getForObject(cardServiceUrl + "/card/" + room.getIdCardUser_1(), Card.class);
+                Card card1 = restTemplate.getForObject(cardServiceUrl + "/cards/" + room.getIdCardUser_1(), Card.class);
                 cards.add(card1);
             }
             if (room.getIdUser_2() != 0) {
-                Card card2 = restTemplate.getForObject(cardServiceUrl + "/card/" + room.getIdCardUser_2(), Card.class);
+                Card card2 = restTemplate.getForObject(cardServiceUrl + "/cards/" + room.getIdCardUser_2(), Card.class);
                 cards.add(card2);
             }
             roomResponse = new RoomResponse(room, cards);
@@ -109,7 +109,7 @@ public class RoomService {
 
     public Object joinRoom(int id, int idUser) {
         Optional<Room> roomOpt = roomRepository.findById(id);
-        String url = userServiceUrl + "/user/" + idUser;
+        String url = userServiceUrl + "/users/" + idUser;
         UserDTO userdto = restTemplate.getForObject(url, UserDTO.class);
 
         if (userdto == null) {
@@ -142,7 +142,7 @@ public class RoomService {
 
     public Object leaveRoom(int id, int idUser) {
         Optional<Room> roomOpt = roomRepository.findById(id);
-        String url = userServiceUrl + "/user/" + idUser;
+        String url = userServiceUrl + "/users/" + idUser;
         UserDTO userdto = restTemplate.getForObject(url, UserDTO.class);
 
         if (userdto == null) {
@@ -191,14 +191,14 @@ public class RoomService {
 
     public Object addCardToRoom(int roomId, int cardId, int playerId) {
         Optional<Room> roomOpt = roomRepository.findById(roomId);
-        String urlUser = userServiceUrl + "/user/" + playerId;
+        String urlUser = userServiceUrl + "/users/" + playerId;
         Object objUser = restTemplate.getForObject(urlUser, UserDTO.class);
 
         if (!(objUser instanceof UserDTO)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("L'utilisateur n'existe pas.");
         }
 
-        String urlCard = cardServiceUrl + "/card/" + cardId;
+        String urlCard = cardServiceUrl + "/cards/" + cardId;
         Object objCard = restTemplate.getForObject(urlCard, Card.class);
 
         if (!(objCard instanceof Card)) {
@@ -250,7 +250,7 @@ public class RoomService {
     public Object playRound(int roomId, int playerId)
     {
         Optional<Room> roomOpt = roomRepository.findById(roomId);
-        String urlUser = userServiceUrl + "/user/" + playerId;
+        String urlUser = userServiceUrl + "/users/" + playerId;
         Object objUser = restTemplate.getForObject(urlUser, UserDTO.class);
 
 
@@ -291,7 +291,7 @@ public class RoomService {
                 idCardVictim = roomOpt.get().getIdCardUser_1();
                 idCardAttacker = roomOpt.get().getIdCardUser_2();
             }
-            String urlCard = cardServiceUrl + "/card/" + idCardVictim;
+            String urlCard = cardServiceUrl + "/cards/" + idCardVictim;
             Object objCardVictim = restTemplate.getForObject(urlCard, Card.class);
 
             if (!(objCardVictim instanceof Card)) {
@@ -303,7 +303,7 @@ public class RoomService {
             int healthVictim = cardVictim.getHealth();
             String typeVictim = cardVictim.getType();
 
-            urlCard = cardServiceUrl + "/card/" + idCardAttacker;
+            urlCard = cardServiceUrl + "/cards/" + idCardAttacker;
             Object objCardAttacker = restTemplate.getForObject(urlCard, Card.class);
 
             if (!(objCardAttacker instanceof Card)) {
@@ -359,7 +359,7 @@ public class RoomService {
             }
 
             cardVictim.setHealth(healthVictim);
-            restTemplate.put(cardServiceUrl + "/card/" + idCardVictim, cardVictim);
+            restTemplate.put(cardServiceUrl + "/cards/" + idCardVictim, cardVictim);
 
             //set remove 1 coup from the attacker
             if(playerId == roomOpt.get().getIdUser_1()) {
@@ -376,12 +376,12 @@ public class RoomService {
                 room.setStatus("ended");
                 if(playerId == room.getIdUser_1()) {
                     room.setIdUserWinner(room.getIdUser_1());
-                    String urlUserWinner = userServiceUrl + "/user/addbalance/" + room.getIdUser_1() + "/" + room.getReward();
+                    String urlUserWinner = userServiceUrl + "/users/addbalance/" + room.getIdUser_1() + "/" + room.getReward();
                     restTemplate.postForObject(urlUserWinner, null, UserDTO.class);
                 }
                 else {
                     room.setIdUserWinner(room.getIdCardUser_2());
-                    String urlUserWinner = userServiceUrl + "/user/addbalance/" + room.getIdUser_2() + "/" + room.getReward();
+                    String urlUserWinner = userServiceUrl + "/users/addbalance/" + room.getIdUser_2() + "/" + room.getReward();
                     restTemplate.postForObject(urlUserWinner, null, UserDTO.class);
                 }
                 List<Card> cards = new ArrayList<>();
@@ -393,8 +393,8 @@ public class RoomService {
                 cardVictim.setHealth(150);
                 cardAttacker.setEnergy(cardVictim.getEnergy() -5);
                 cardAttacker.setHealth(150);
-                restTemplate.put(cardServiceUrl + "/card/" + idCardVictim, cardVictim);
-                restTemplate.put(cardServiceUrl + "/card/" + idCardAttacker, cardAttacker);
+                restTemplate.put(cardServiceUrl + "/cards/" + idCardVictim, cardVictim);
+                restTemplate.put(cardServiceUrl + "/cards/" + idCardAttacker, cardAttacker);
                 roomRepository.save(room);
 
                 return new RoomResponse(room, cards, ResponseEntity.status(HttpStatus.OK).body("La partie est terminée."));

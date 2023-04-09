@@ -34,7 +34,7 @@ public class MarketService {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La carte est déjà attribué à un autre utilisateur.");
             }
 
-            String url = userServiceUrl + "/user/{id}/subtractbalance";
+            String url = userServiceUrl + "/users/{id}/subtractbalance";
             HttpEntity<Integer> requestEntity = new HttpEntity<>(card.getPrice());
             restTemplate.exchange(url, HttpMethod.PUT, requestEntity, Void.class, user.getId());
 
@@ -51,7 +51,7 @@ public class MarketService {
             if (!inventoryService.getInventory(idInv).getCards().contains(card.getId())) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("L'utilisateur ne possède pas la carte.");
             }
-            String url = userServiceUrl + "/user/{id}/addbalance";
+            String url = userServiceUrl + "/users/{id}/addbalance";
             HttpEntity<Integer> requestEntity = new HttpEntity<>(card.getPrice());
             restTemplate.exchange(url, HttpMethod.PUT, requestEntity, Void.class, user.getId());
 
@@ -70,11 +70,11 @@ public class MarketService {
             }
             //sell all cards
             for (Integer cardId : inventoryService.getInventory(idInv).getCards()) {
-                String urlCard = "http://localhost:8082/card/" + cardId;
+                String urlCard = "http://localhost:8082/cards/" + cardId;
                 ResponseEntity<Card> response = restTemplate.getForEntity(urlCard, Card.class);
                 Card card = response.getBody();
 
-                String url = userServiceUrl + "/user/{id}/addbalance";
+                String url = userServiceUrl + "/users/{id}/addbalance";
                 HttpEntity<Integer> requestEntity = new HttpEntity<>(card.getPrice());
                 restTemplate.exchange(url, HttpMethod.PUT, requestEntity, Void.class, user.getId());
 

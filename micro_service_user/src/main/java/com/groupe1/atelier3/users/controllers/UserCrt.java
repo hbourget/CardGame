@@ -7,64 +7,105 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class UserCrt {
     @Autowired
     private UserService uService;
 
-    @GetMapping("/user/{idOrUsername}")
-    public Object GetUser(@PathVariable String idOrUsername) {
+    @GetMapping("/users/{idOrUsername}")
+    public ResponseEntity<UserDTO> getUser(@PathVariable String idOrUsername) {
+        UserDTO user;
         try {
             Integer id = Integer.parseInt(idOrUsername);
-            return uService.GetUserById(id);
+            user = uService.getUserById(id);
         } catch (NumberFormatException e) {
-            return uService.GetUserByUsername(idOrUsername);
+            user = uService.getUserByUsername(idOrUsername);
+        }
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(user);
         }
     }
 
     @GetMapping("/users")
-    public Iterable<UserDTO> GetUsers() {
-        return uService.GetUsers();
+    public ResponseEntity<List<UserDTO>> getUsers() {
+        List<UserDTO> users = uService.getUsers();
+        if (users.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.ok(users);
+        }
     }
 
-    @PutMapping("/user/{id}")
-    public UserDTO UpdateUser(@PathVariable Integer id, @RequestBody User user) {
-        return uService.updateUser(id, user);
+    @PutMapping("/users/{id}")
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Integer id, @RequestBody User user) {
+        UserDTO updatedUser = uService.updateUser(id, user);
+        if (updatedUser == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(updatedUser);
+        }
     }
 
-    @PutMapping("/user/{id}/addbalance")
-    public UserDTO addBalance(@PathVariable Integer id, @RequestBody Integer balanceToAdd) {
-        return uService.addBalance(id, balanceToAdd);
+    @PutMapping("/users/{id}/addbalance")
+    public ResponseEntity<UserDTO> addBalance(@PathVariable Integer id, @RequestBody Integer balanceToAdd) {
+        UserDTO updatedUser = uService.addBalance(id, balanceToAdd);
+        if (updatedUser == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(updatedUser);
+        }
     }
 
-    @PutMapping("/user/{id}/subtractbalance")
-    public UserDTO subtractBalance(@PathVariable Integer id, @RequestBody Integer balanceToSubtract) {
-        return uService.subtractBalance(id, balanceToSubtract);
+    @PutMapping("/users/{id}/subtractbalance")
+    public ResponseEntity<UserDTO> subtractBalance(@PathVariable Integer id, @RequestBody Integer balanceToSubtract) {
+        UserDTO updatedUser = uService.subtractBalance(id, balanceToSubtract);
+        if (updatedUser == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(updatedUser);
+        }
     }
 
-    @DeleteMapping("/user/{id}")
-    public void DeleteUser(@PathVariable Integer id) {
-        uService.deleteUser(id);
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Integer id) {
+        boolean userDeleted = uService.deleteUser(id);
+        if (userDeleted) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/users")
-    public void DeleteUsers() {
+    public ResponseEntity<Void> deleteUsers() {
         uService.deleteAllUsers();
+        return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/user/auth/{idOrUsername}")
+    @GetMapping("/users/auth/{idOrUsername}")
     public Object GetUserAuth(@PathVariable String idOrUsername) {
         try {
             Integer id = Integer.parseInt(idOrUsername);
-            return uService.GetUserAuthById(id);
+            return uService.getUserAuthById(id);
         } catch (NumberFormatException e) {
-            return uService.GetUserAuthByUsername(idOrUsername);
+            return uService.getUserAuthByUsername(idOrUsername);
         }
     }
-    @PostMapping("/user/save/{username}/{password}")
-    public User SaveUser(@PathVariable String username, @PathVariable String password) {
-        User user = new User(username, password);
-        return uService.saveUser(user);
+    @PostMapping("/users")
+    public ResponseEntity<User> saveUser(@RequestBody User user) {
+        if (user.getUsername() == null || user.getPassword() == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        User createdUser = uService.saveUser(user);
+        if (createdUser == null) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        } else {
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+        }
     }
 
 }

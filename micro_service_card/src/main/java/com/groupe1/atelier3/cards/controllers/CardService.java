@@ -35,29 +35,35 @@ public class CardService {
         return savedCards;
     }
 
-    public Object GetCard(int id) {
+    public Card getCard(int id) {
         Optional<Card> cardOpt = cardRepository.findById(id);
         if (cardOpt.isPresent()) {
             return cardOpt.get();
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La carte n'existe pas.");
+        return null;
     }
 
 
-    public void deleteCard(int id) {
-        cardRepository.deleteById(id);
+    public boolean deleteCard(int id) {
+        Optional<Card> cardOpt = cardRepository.findById(id);
+        if (cardOpt.isPresent()) {
+            cardRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 
     public void deleteAllCards() {
         cardRepository.deleteAll();
     }
 
-    public Iterable<Card> getAllCards() {
-        Iterable<Card> cards = cardRepository.findAll();
+    public List<Card> getAllCards() {
+        List<Card> cards = new ArrayList<>();
+        cardRepository.findAll().forEach(cards::add);
         return cards;
     }
 
-    public Object updateCard(int id, Card cardNew) {
+    public Card updateCard(int id, Card cardNew) {
         Optional<Card> cardOpt = cardRepository.findById(id);
         if (cardOpt.isPresent()) {
             Card card = cardOpt.get();
@@ -72,7 +78,7 @@ public class CardService {
             card = cardRepository.save(card);
             return card;
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La carte n'existe pas.");
+        return null;
     }
 
 
