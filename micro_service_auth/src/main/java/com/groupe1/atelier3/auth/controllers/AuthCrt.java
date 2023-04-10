@@ -19,19 +19,20 @@ public class AuthCrt {
       @Autowired private final AuthService AuthService;
       private final RestTemplate restTemplate = new RestTemplate();
       public AuthCrt(AuthService authService) { this.AuthService = authService; }
-    @PostMapping("/login")
-    public ResponseEntity<UserDTO> login(@RequestBody Map<String, String> credentials) {
-        String username = credentials.get("username");
-        String password = credentials.get("password");
 
-        Object obj = restTemplate.getForObject("http://localhost:8081/users/auth/" + username, User.class);
-        UserDTO userdto = AuthService.checkAuth(obj, password);
-        if (userdto != null) {
-            return ResponseEntity.ok(userdto);
-        } else {
-            return ResponseEntity.status(401).build();
+        @PostMapping("/login")
+        public ResponseEntity<UserDTO> login(@RequestBody Map<String, String> credentials) {
+            String username = credentials.get("username");
+            String password = credentials.get("password");
+
+            Object obj = restTemplate.getForObject("http://localhost:8081/users/auth/" + username, User.class);
+            UserDTO userdto = AuthService.checkAuth(obj, password);
+            if (userdto != null) {
+                return ResponseEntity.ok(userdto);
+            } else {
+                return ResponseEntity.status(401).build();
+            }
         }
-    }
 
       @PostMapping("/register")
       public Object registerPost(@RequestBody AuthDTO auth) {

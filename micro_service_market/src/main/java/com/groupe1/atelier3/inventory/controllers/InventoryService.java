@@ -1,10 +1,13 @@
 package com.groupe1.atelier3.inventory.controllers;
-
+import com.groupe1.atelier3.users.models.User;
 import com.groupe1.atelier3.inventory.models.Inventory;
 import com.groupe1.atelier3.cards.models.Card;
 import com.groupe1.atelier3.inventory.models.InventoryRepository;
 import com.groupe1.atelier3.inventory.models.InventoryResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -12,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,59 +24,94 @@ public class InventoryService {
     private InventoryRepository inventoryRepository;
 
     private final String cardServiceUrl = "http://localhost:8082";
+    private final String userServiceUrl = "http://localhost:8081";
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public Object addCardToInv(Integer inventoryId, Integer cardId) {
-        Inventory inventory = inventoryRepository.findById(inventoryId).get();
+    public InventoryResponse addCardToInv(Integer userId, Integer cardId) {
+        User user = restTemplate.getForObject(userServiceUrl + "/users/" + userId, User.class);
+        if (user == null) {
+            return null;
+        }
+
+        ResponseEntity<Card> responseEntity = restTemplate.exchange(cardServiceUrl + "/cards/" + cardId, HttpMethod.GET, null, new ParameterizedTypeReference<Card>() {});
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            return null;
+        }
+
+        Inventory inventory = inventoryRepository.findById(user.getIdInventory()).get();
         if (inventory.getCards().contains(cardId)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La carte "+ cardId +" est déjà dans l'inventaire.");
+            return null;
         }
         if (getInventoryByCardId(cardId) != null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La carte est déjà attribué à un autre utilisateur.");
+            return null;
         }
 
         inventory.getCards().add(cardId);
         inventoryRepository.save(inventory);
-        return getInventoryCardsIds(inventoryId);
+        return getInventoryCards(user.getIdInventory());
     }
 
-    public Object removeCardFromInv(Integer inventoryId, Integer cardId) {
-        Inventory inventory = inventoryRepository.findById(inventoryId).get();
+    public InventoryResponse removeCardFromInv(Integer userId, Integer cardId) {
+        User user = restTemplate.getForObject(userServiceUrl + "/users/" + userId, User.class);
+        if (user == null) {
+            return null;
+        }
+        Inventory inventory = inventoryRepository.findById(user.getIdInventory()).get();
         if (!inventory.getCards().contains(cardId)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La carte n'est pas dans l'inventaire.");
+            return null;
         }
         inventory.getCards().remove(cardId);
         inventoryRepository.save(inventory);
-        return getInventoryCardsIds(inventoryId);
+        return getInventoryCards(user.getIdInventory());
     }
 
-    public Object addAllCardToInv(Integer inventoryId, List<Card> cards) {
-        Inventory inventory = inventoryRepository.findById(inventoryId).get();
+    public InventoryResponse addAllCardToInv(Integer userId, List<Card> cards) {
+        User user = restTemplate.getForObject(userServiceUrl + "/users/" + userId, User.class);
+        if (user == null) {
+            return null;
+        }
+        Optional<Inventory> inventoryOptional = inventoryRepository.findById(user.getIdInventory());
+        if (!inventoryOptional.isPresent()) {
+            return null;
+        }
+        Inventory inventory = inventoryOptional.get();
         for (Card card : cards) {
             if (!inventory.getCards().contains(card.getId())) {
                 inventory.getCards().add(card.getId());
             }
         }
         inventoryRepository.save(inventory);
-        return getInventoryCards(inventoryId);
+        return getInventoryCards(user.getIdInventory());
     }
 
     //remove all existing cards in inventory
-    public Object removeAllCardFromInv(Integer inventoryId) {
-        Inventory inventory = inventoryRepository.findById(inventoryId).get();
+    public InventoryResponse removeAllCardFromInv(Integer userId) {
+        User user = restTemplate.getForObject(userServiceUrl + "/users/" + userId, User.class);
+        if (user == null) {
+            return null;
+        }
+        Optional<Inventory> inventoryOptional = inventoryRepository.findById(user.getIdInventory());
+        if (!inventoryOptional.isPresent()) {
+            return null;
+        }
+        Inventory inventory = inventoryOptional.get();
         inventory.getCards().clear();
         inventoryRepository.save(inventory);
-        return getInventoryCards(inventoryId);
+        return getInventoryCards(user.getIdInventory());
     }
 
     public Inventory getInventory(Integer idInv) {
         return inventoryRepository.findById(idInv).get();
     }
 
-    public InventoryResponse getInventoryCards(Integer idInv) {
+    public InventoryResponse getInventoryCards(Integer idUser) {
         List<Card> cards = new ArrayList<>();
-        Inventory inv = inventoryRepository.findById(idInv).get();
+        User user = restTemplate.getForObject(userServiceUrl + "/users/" + idUser, User.class);
+        if (user == null) {
+            return null;
+        }
+        Inventory inv = inventoryRepository.findById(user.getIdInventory()).get();
         for (Integer cardId : inv.getCards()) {
             Card card = restTemplate.getForObject(cardServiceUrl + "/cards/" + cardId, Card.class);
             cards.add(card);
@@ -106,5 +145,69 @@ public class InventoryService {
 
     public void saveInventory(Inventory inventory) {
         inventoryRepository.save(inventory);
+    }
+
+    public Card buyCard(User user, Card card) {
+        if (user != null) {
+
+            if (user.getBalance() < card.getPrice()) {
+                return null;
+            }
+
+            Integer idInv = user.getIdInventory();
+            if (getInventory(idInv).getCards().contains(card.getId())) {
+                return null;
+            }
+
+            if (getInventoryByCardId(card.getId()) != null) {
+                return null;
+            }
+
+            String url = userServiceUrl + "/users/{id}/subtractbalance";
+            HttpEntity<Integer> requestEntity = new HttpEntity<>(card.getPrice());
+            restTemplate.exchange(url, HttpMethod.PUT, requestEntity, Void.class, user.getId());
+
+            addCardToInv(user.getIdInventory(), card.getId());
+        }
+        return card;
+    }
+
+    public Card sellCard(User user, Card card) {
+        if (user != null) {
+            Integer idInv = user.getIdInventory();
+            if (!getInventory(idInv).getCards().contains(card.getId())) {
+                return null;
+            }
+            String url = userServiceUrl + "/users/{id}/addbalance";
+            HttpEntity<Integer> requestEntity = new HttpEntity<>(card.getPrice());
+            restTemplate.exchange(url, HttpMethod.PUT, requestEntity, Void.class, user.getId());
+
+            removeCardFromInv(user.getIdInventory(), card.getId());
+        }
+        return card;
+    }
+    public boolean sellAllCards(User user) {
+        if (user != null) {
+
+            Integer idInv = user.getIdInventory();
+            if (getInventory(idInv).getCards().isEmpty()) {
+                return false;
+            }
+
+            for (Integer cardId : getInventory(idInv).getCards()) {
+                String urlCard = "http://localhost:8082/cards/" + cardId;
+                ResponseEntity<Card> response = restTemplate.getForEntity(urlCard, Card.class);
+                Card card = response.getBody();
+
+                String url = userServiceUrl + "/users/{id}/addbalance";
+                HttpEntity<Integer> requestEntity = new HttpEntity<>(card.getPrice());
+                restTemplate.exchange(url, HttpMethod.PUT, requestEntity, Void.class, user.getId());
+            }
+            removeAllCardFromInv(user.getIdInventory());
+        }
+        else {
+            return false;
+        }
+        return true;
     }
 }

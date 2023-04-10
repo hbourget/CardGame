@@ -66,9 +66,8 @@ public class AuthService {
 
         for (int i = 0; i < 3 && i < cardsList.size(); i++) {
             Integer cardId = cardsList.get(i).getId();
-            Integer inventoryId = userdto.getIdInventory();
-            String inventoryAddCard = inventoryServiceUrl + "/inventory/add/{inventoryId}/{cardId}";
-            ResponseEntity<Void> inventoryAddCardResponse = restTemplate.postForEntity(inventoryAddCard, null, Void.class, inventoryId, cardId);
+            String inventoryAddCard = inventoryServiceUrl + "/inventories/users/{userId}/cards/{cardId}";
+            ResponseEntity<Void> inventoryAddCardResponse = restTemplate.postForEntity(inventoryAddCard, null, Void.class, userdto.getId(), cardId);
         }
 
         return userdto;
@@ -81,7 +80,7 @@ public class AuthService {
         List<Card> cards = responseEntity.getBody();
         ArrayList<Card> cardsList = new ArrayList<>();
 
-        String urlInventorySvc = inventoryServiceUrl + "/inventory";
+        String urlInventorySvc = inventoryServiceUrl + "/inventories";
         ResponseEntity<List<Inventory>> responseEntity2 = restTemplate.exchange(urlInventorySvc, HttpMethod.GET, null, new ParameterizedTypeReference<List<Inventory>>() {});
         List<Inventory> inventories = responseEntity2.getBody();
 
