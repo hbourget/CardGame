@@ -101,6 +101,19 @@ public class InventoryService {
         return getInventoryCards(user.getIdInventory());
     }
 
+    public boolean deleteInventory(Integer idUser) {
+        User user = restTemplate.getForObject(userServiceUrl + "/users/" + idUser, User.class);
+        if (user == null) {
+            return false;
+        }
+        Integer idInv = user.getIdInventory();
+        if (inventoryRepository.findById(idInv).isPresent()) {
+            inventoryRepository.deleteById(idInv);
+            return true;
+        }
+        return false;
+    }
+
     public Inventory getInventory(Integer idInv) {
         return inventoryRepository.findById(idInv).get();
     }

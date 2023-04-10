@@ -120,6 +120,8 @@ public class UserService {
         Optional<User> userOptional = userRepository.findById(id);
         if (userOptional.isPresent()) {
             User userToDelete = userOptional.get();
+            String urlDeleteInv = inventoryServiceUrl + "/inventories/users/" + userToDelete.getIdInventory();
+            restTemplate.delete(urlDeleteInv);
             userRepository.delete(userToDelete);
             return true;
         } else {

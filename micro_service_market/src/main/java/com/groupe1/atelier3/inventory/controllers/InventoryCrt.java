@@ -60,6 +60,16 @@ public class InventoryCrt {
         return inventoryService.removeAllCardFromInv(userId);
     }
 
+    @DeleteMapping("/inventories/users/{userId}")
+    public ResponseEntity<Boolean> deleteInventory(@PathVariable Integer userId) {
+        boolean b = inventoryService.deleteInventory(userId);
+        if (b) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @GetMapping("/inventories/users/{userId}")
     public ResponseEntity<InventoryResponse> getInventoryByUser(@PathVariable Integer userId) {
         UserDTO user;
