@@ -1,5 +1,7 @@
 package com.groupe1.atelier3.room.controllers;
 
+import com.groupe1.atelier3.cards.models.Card;
+import com.groupe1.atelier3.cards.models.CardDTO;
 import com.groupe1.atelier3.room.models.Room;
 import com.groupe1.atelier3.room.models.RoomWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +23,7 @@ public class RoomCrt {
         this.rService = rService;
     }
 
-    @GetMapping("/room/{idOrName}")
+    @GetMapping("/rooms/{idOrName}")
     public Object GetRoom(@PathVariable String idOrName) {
         try {
             int id = Integer.parseInt(idOrName);
@@ -31,33 +33,34 @@ public class RoomCrt {
         }
     }
 
-    @PostMapping("/room")
-    public ResponseEntity<List<Room>> addRooms(@RequestBody RoomWrapper roomWrapper) {
-        if (roomWrapper.getRoom() != null && roomWrapper.getRooms() == null) {
-            Room result = rService.addRoom(roomWrapper.getRoom());
-            if (result == null) {
-                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-            }
-            return ResponseEntity.ok(Collections.singletonList(result));
-        } else if (roomWrapper.getRoom() == null && roomWrapper.getRooms() != null) {
-            List<Room> results = rService.addRooms(roomWrapper.getRooms());
-            if (results == null) {
-                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-            }
-            return ResponseEntity.ok(results);
-        } else {
-            throw new IllegalArgumentException("Veuillez fournir une carte ou une liste de cartes, mais pas les deux.");
-        }
-    }
-
     @GetMapping("/rooms")
     public Iterable<Room> getAllRooms() {
         return rService.getAllRooms();
     }
 
-    @DeleteMapping("/room/{id}")
-    public Object deleteRoom(@PathVariable int id) {
-        return rService.deleteRoom(id);
+    @PostMapping("/rooms")
+    public ResponseEntity<Room> addCard(@RequestBody Room room) {
+        Room createdRoom = rService.addRoom(room);
+        if (createdRoom == null) {
+            return ResponseEntity.badRequest().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdRoom);
+        }
+    }
+
+    @PostMapping("/rooms/bulk")
+    public ResponseEntity<List<Room>> addCards(@RequestBody List<Room> rooms) {
+        List<Room> createdRooms = rService.addRooms(rooms);
+        if (createdRooms.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdRooms);
+        }
+    }
+
+    @DeleteMapping("/rooms/{idRoom}")
+    public Object deleteRoom(@PathVariable int idRoom) {
+        return rService.deleteRoom(idRoom);
     }
 
     @DeleteMapping("/rooms")
@@ -65,28 +68,24 @@ public class RoomCrt {
         return rService.deleteAllRooms();
     }
 
-    @PostMapping("/room/{id}/join/{playerId}")
-    public Object joinRoom(@PathVariable int id, @PathVariable int playerId) {
-        return rService.joinRoom(id, playerId);
+    @PutMapping("/rooms/join/{idRoom}/users/{playerId}")
+    public Object joinRoom(@PathVariable int idRoom, @PathVariable int playerId) {
+        return rService.joinRoom(idRoom, playerId);
     }
 
-    @PostMapping("/room/{id}/leave/{playerId}")
-    public Object leaveRoom(@PathVariable int id, @PathVariable int playerId) {
-        return rService.leaveRoom(id, playerId);
-    }
-    @PostMapping("/room/{id}/addCard/{cardId}/{playerId}")
-    public Object addCardToRoom(@PathVariable int id, @PathVariable int cardId, @PathVariable int playerId) {
-        return rService.addCardToRoom(id, cardId, playerId);
+    @PutMapping("/rooms/leave/{idRoom}/users/{playerId}")
+    public Object leaveRoom(@PathVariable int idRoom, @PathVariable int playerId) {
+        return rService.leaveRoom(idRoom, playerId);
     }
 
-    @PostMapping("/room/{id}/playround/{idUser}")
-    public Object playRound(@PathVariable int id, @PathVariable int idUser) {
-        return rService.playRound(id, idUser);
+    @PutMapping("/rooms/{idRoom}/users/{playerId}/cards/{cardId}")
+    public Object addCardToRoom(@PathVariable int idRoom, @PathVariable int cardId, @PathVariable int playerId) {
+        return rService.addCardToRoom(idRoom, cardId, playerId);
     }
 
-    @PostMapping("/room/{id}/delete")
-    public Object stopRoom(@PathVariable int id) {
-        return rService.deleteRoom(id);
+    @PutMapping("/rooms/play/{idRoom}/users/{idUser}")
+    public Object playRound(@PathVariable int idRoom, @PathVariable int idUser) {
+        return rService.playRound(idRoom, idUser);
     }
 }
 
