@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.groupe1</groupId>
-    <artifactId>service-market</artifactId>
+    <artifactId>service-inventory</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>SVC_MARKET</name>
-    <description>ServiceMarket</description>
+    <name>SVC_INVENTORY</name>
+    <description>ServiceInventory</description>
     <properties>
         <java.version>17</java.version>
     </properties>
