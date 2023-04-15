@@ -31,8 +31,17 @@ L'application permet aux utilisateurs de jouer à un jeu de cartes en ligne cont
 9. **Marché** : Il existe un marché où l'on peut acheter des cartes avec ses pièces.
 
 
-
 # Documentation API
+
+Par défaut le port utilisé par l'application est le **8888**. Le proxy s'occupe des redirections.
+
+Pour plus de détails, les ports des endpoints sont les suivants :
+- Auth Service : **8080**
+- User Service : **8081**
+- Card Service : **8082**
+- Inventory Service : **8083**
+- Room Service : **8084**
+
 
 # Card Service
 
