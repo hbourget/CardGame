@@ -1,4 +1,39 @@
 
+# Documentation fonctionnelle de l'application :
+
+L'application permet aux utilisateurs de jouer à un jeu de cartes en ligne contre d'autres joueurs. Voici les principales fonctionnalités de l'application :
+
+1. **Création de compte** : L'utilisateur peut créer un compte en fournissant un nom d'utilisateur et un mot de passe.
+
+
+2. **Inventaire de cartes** : Après la création du compte, l'application attribue automatiquement trois cartes aléatoires à l'inventaire de l'utilisateur. Chaque carte est unique et ne peut se retrouver dans deux inventaires différents.
+
+
+3. **Création de room** : Un utilisateur peut créer une room en lui donnant un nom. Une récompense aléatoire est attribuée au moment de la création de la room, entre 15 et 30 pièces.
+
+
+4. **Attente du deuxième joueur** : Lorsqu'un utilisateur a créé la room, cette dernière a son statut en "waiting". En effet, elle attend un deuxième joueur. Une fois que le deuxième joueur a rejoint la room, le statut passe en "ready", personne d'autres ne peut rejoindre.
+
+
+5. **Sélection de la carte** : À ce moment-là, chaque utilisateur choisit une carte dans son inventaire pour la partie.
+
+
+6. **Déroulement de la partie** : Une fois les deux joueurs ayant choisi leur carte, le partie commence, le statut passe en "started". Chaque joueur joue chacun son tour.
+   Un tour représente la carte du joueur actuel, l'attaquant, qui va attaquer la carte du joueur adverse.
+   Les dégâts envoyés sont différents en fonction de l'attribut power et type de la carte. Il existe trois types : Feu, Eau, Terre. Il y a aussi 30% de chance d'envoyer un coup critique.
+   La première carte arrivant à 0 point de vie a perdu. La carte du perdant perd 10 points d'énergie et celle du gagnant perd que 5 points d'énergie.
+   Une carte qui a 0 d'énergie ne peut pas participer à une partie.
+
+
+8. **Récupération de l'énergie** : Toutes les 30 secondes sur l'application, chaque carte reçoit 1 point d'énergie.
+
+
+9. **Marché** : Il existe un marché où l'on peut acheter des cartes avec ses pièces.
+
+
+
+# Documentation API
+
 # Card Service
 
 ## Endpoints
@@ -48,7 +83,7 @@ Ajouter plusieurs cartes en une seule fois.
 
 Supprimer une carte par son ID.
 
-- **Paramètres**  :
+- **Paramètres** :
   - id (int) : L'ID de la carte.
 
 - **Réponse** :
@@ -66,7 +101,7 @@ Supprimer toutes les cartes.
 
 Mettre à jour une carte par son ID.
 
-- **Paramètres**  :
+- **Paramètres** :
   - id (int) : L'ID de la carte.
 
 - **Corps de la requête** :
