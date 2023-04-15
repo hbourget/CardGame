@@ -20,7 +20,7 @@ public class AuthCrt {
       private final RestTemplate restTemplate = new RestTemplate();
       public AuthCrt(AuthService authService) { this.AuthService = authService; }
 
-        @PostMapping("/login")
+        @PostMapping("/auth/login")
         public ResponseEntity<UserDTO> login(@RequestBody Map<String, String> credentials) {
             String username = credentials.get("username");
             String password = credentials.get("password");
@@ -34,7 +34,7 @@ public class AuthCrt {
             }
         }
 
-      @PostMapping("/register")
+      @PostMapping("/auth/register")
       public Object registerPost(@RequestBody AuthDTO auth) {
         UserDTO userdto = AuthService.register(auth);
         if (userdto != null) {
