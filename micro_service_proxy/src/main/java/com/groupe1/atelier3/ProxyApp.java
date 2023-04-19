@@ -11,13 +11,7 @@ import org.springframework.web.cors.reactive.CorsWebFilter;
 
 @SpringBootApplication
 public class ProxyApp extends SpringBootServletInitializer {
-    @Autowired
-    private CorsConfigurationSource corsConfigurationSource;
     public static void main(String[] args) {
         SpringApplication.run(ProxyApp.class, args);
-    }
-    @Bean
-    public CorsWebFilter corsWebFilter() {
-        return new CorsWebFilter(corsConfigurationSource);
     }
 }
