@@ -117,7 +117,7 @@ public class RoomService {
         }
 
         if (roomOpt.isPresent()) {
-            if (roomOpt.get().getStatus().equals("ended")) {
+            if (roomOpt.get().getStatus().equals("Ended")) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("La room est terminée.");
             }
             Room room = roomOpt.get();
@@ -129,7 +129,7 @@ public class RoomService {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("La room est pleine.");
             }
             if (room.getIdUser_1() != 0 && room.getIdUser_2() != 0) {
-                room.setStatus("ready");
+                room.setStatus("Ready");
             }
 
             roomRepository.save(room);
@@ -152,8 +152,8 @@ public class RoomService {
         if (roomOpt.isPresent()) {
             Room room = roomOpt.get();
             if (room.getIdUser_1() == idUser) {
-                if (room.getStatus().equals("started")) {
-                    room.setStatus("ended");
+                if (room.getStatus().equals("Started")) {
+                    room.setStatus("Ended");
                     room.setIdUserWinner(room.getIdUser_2());
                     roomRepository.save(room);
                     return room;
@@ -163,8 +163,8 @@ public class RoomService {
                     room.setIdCardUser_1(0);
                 }
             } else if (room.getIdUser_2() == idUser) {
-                if (room.getStatus().equals("started")) {
-                    room.setStatus("ended");
+                if (room.getStatus().equals("Started")) {
+                    room.setStatus("Ended");
                     room.setIdUserWinner(room.getIdUser_1());
                     roomRepository.save(room);
                     return room;
@@ -177,7 +177,13 @@ public class RoomService {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("L'utilisateur n'est pas dans la room.");
             }
             if (room.getIdUser_1() == 0 || room.getIdUser_2() == 0) {
-                room.setStatus("waiting");
+                room.setStatus("Waiting 0/2");
+            }
+            if (room.getIdUser_1() != 0 && room.getIdUser_2() == 0) {
+                room.setStatus("Waiting 1/2");
+            }
+            if (room.getIdUser_1() == 0 && room.getIdUser_2() != 0) {
+                room.setStatus("Waiting 1/2");
             }
             roomRepository.save(room);
             return room;
@@ -237,7 +243,7 @@ public class RoomService {
                 room.setIdCardUser_2(cardId);
             }
             if (room.getIdCardUser_1() != 0 && room.getIdCardUser_2() != 0) {
-                room.setStatus("started");
+                room.setStatus("Started");
             }
             roomRepository.save(room);
             List<Card> cardsList = new ArrayList<>();
@@ -258,10 +264,10 @@ public class RoomService {
 
         if (roomOpt.isPresent()) {
             Room room = roomOpt.get();
-            if (room.getStatus().equals("ended")) {
+            if (room.getStatus().equals("Ended")) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("La room est terminée.");
             }
-            if (!room.getStatus().equals("started")) {
+            if (!room.getStatus().equals("Started")) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("La partie n'a pas encore commencé, les 2 joueurs doivent selectionné une carte.");
             }
 
@@ -375,7 +381,7 @@ public class RoomService {
 
             //check if both remaningCoups are 0
             if(cardVictim.getHealth() <= 0) {
-                room.setStatus("ended");
+                room.setStatus("Ended");
                 if(playerId == room.getIdUser_1()) {
                     room.setIdUserWinner(room.getIdUser_1());
                     String urlUserWinner = userServiceUrl + "/users/" + room.getIdUser_1() + "/addbalance";

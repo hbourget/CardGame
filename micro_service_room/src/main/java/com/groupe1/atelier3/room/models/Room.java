@@ -30,7 +30,7 @@ public class Room {
         this.idCardUser_2 = 0;
         this.cooldownUser_1 = 0;
         this.cooldownUser_2 = 0;
-        this.status = "waiting";
+        this.status = "Waiting 0/2";
         this.idUserWinner = 0;
         Random random = new Random();
         this.reward = random.nextInt(30 - 10 + 1) + 10;
@@ -44,7 +44,7 @@ public class Room {
         this.idCardUser_2 = 0;
         this.cooldownUser_1 = 0;
         this.cooldownUser_2 = 0;
-        this.status = "waiting";
+        this.status = "Waiting 0/2";
         this.idUserWinner = 0;
         Random random = new Random();
         this.reward = random.nextInt(30 - 10 + 1) + 10;
