@@ -116,6 +116,10 @@ public class RoomService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("L'utilisateur n'existe pas.");
         }
 
+        if (checkIfUserIsInARoom(idUser)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("L'utilisateur est déjà dans une room.");
+        }
+
         if (roomOpt.isPresent()) {
             if (roomOpt.get().getStatus().equals("Ended")) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("La room est terminée.");
@@ -438,5 +442,16 @@ public class RoomService {
         else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La room n'existe pas.");
         }
+    }
+
+    //check if user is already in a room
+    public boolean checkIfUserIsInARoom(int idUser) {
+        Iterable<Room> rooms = roomRepository.findAll();
+        for(Room room : rooms) {
+            if(room.getIdUser_1() == idUser || room.getIdUser_2() == idUser) {
+                return true;
+            }
+        }
+        return false;
     }
 }
