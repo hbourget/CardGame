@@ -19,6 +19,10 @@ public class CardService {
     private CardRepository cardRepository;
     private CardMapper cardMapper = new CardMapper();
 
+    private final String userServiceUrl = "http://localhost:8081";
+
+    private final String inventoryServiceUrl = "http://localhost:8083";
+
     public Card addCard(CardDTO cardDTO) {
         Card card = cardMapper.toEntity(cardDTO);
         card = cardRepository.save(card);

@@ -10,7 +10,7 @@
     />
 
     <!-- Site Properties -->
-    <title th:text="${titreSite}">CardTrafik</title>
+    <title th:text="${titreSite}">CardGame</title>
 
     <link
       rel="stylesheet"
@@ -19,6 +19,7 @@
     />
     <link rel="stylesheet" type="text/css" href="../css/account.css" />
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <script src="https://kit.fontawesome.com/371ee80cb5.js" crossorigin="anonymous"></script>
 
     <link
       rel="stylesheet"
@@ -51,7 +52,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
       <div class="container-fluid">
-        <a th:text="${titreSite}" class="navbar-brand" href="#">CardTrafik</a>
+        <a class="navbar-brand" href="index.html">CardGame</a>
         <button
           class="navbar-toggler"
           type="button"
@@ -61,25 +62,30 @@
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <span class="navbar-toggler-icon"></span>
+      <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarColor02">
           <ul class="navbar-nav me-auto">
             <li class="nav-item">
-              <a class="nav-link active" href="account.html">Account</a>
-              <span class="visually-hidden">(current)</span>
+              <li class="nav-item">
+                <a class="nav-link" href="index.html">Accueil / Classement</a>
+              </li>
+              <a class="nav-link" href="account.html">Account</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="cardList.html">Liste des cartes </a>
+              <a class="nav-link" href="cardList.html">Liste des cartes</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="classement.html">Classement</a>
+              <a class="nav-link" href="rooms.html">Rooms</a>
             </li>
           </ul>
           <form class="d-flex">
             <ul class="navbar-nav me-auto">
               <li class="nav-item">
-                <a class="nav-link" href="index.html">Disconnect</a>
+                <a class="nav-link" href="auth.html">Authentification</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="auth.html">Deconnexion</a>
               </li>
             </ul>
           </form>
@@ -99,64 +105,6 @@
         </div>
         <div class="money">
           <span id="money"></span>
-        </div>
-      </div>
-
-    <!-- Icons -->
-      <div class="cardsImg">
-        <div class="cardWrapper">
-          <button onclick="window.location.href='buyCard.html'" type="button" class="btn btn-primary">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="32"
-              height="32"
-              viewBox="0 0 24 24"
-            >
-              <path
-                fill="currentColor"
-                d="M7 22q-.825 0-1.413-.588T5 20q0-.825.588-1.413T7 18q.825 0 1.413.588T9 20q0 .825-.588 1.413T7 22Zm10 0q-.825 0-1.413-.588T15 20q0-.825.588-1.413T17 18q.825 0 1.413.588T19 20q0 .825-.588 1.413T17 22ZM6.15 6l2.4 5h7l2.75-5H6.15ZM7 17q-1.125 0-1.7-.988t-.05-1.962L6.6 11.6L3 4H1.975q-.425 0-.7-.288T1 3q0-.425.288-.713T2 2h1.625q.275 0 .525.15t.375.425L5.2 4h14.75q.675 0 .925.5t-.025 1.05l-3.55 6.4q-.275.5-.725.775T15.55 13H8.1L7 15h11.025q.425 0 .7.288T19 16q0 .425-.288.713T18 17H7Zm1.55-6h7h-7Z"
-              />
-            </svg>
-            Buy
-          </button>
-        </div>
-
-        <div class="cardWrapper">
-          <button onclick="window.location.href='sellCard.html'" type="button" class="btn btn-primary">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="32"
-              height="32"
-              viewBox="0 0 24 24"
-            >
-              <path
-                fill="none"
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M3 21h18M3 10h18M5 6l7-3l7 3M4 10v11m16-11v11M8 14v3m4-3v3m4-3v3"
-              />
-            </svg>
-            Sell
-          </button>
-        </div>
-
-        <div class="cardWrapper">
-          <button onclick="window.location.href='room.html'" type="button" class="btn btn-primary">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="32"
-              height="32"
-              viewBox="0 0 24 24"
-            >
-              <path
-                fill="currentColor"
-                d="M22.584 17.011c-.43.543-1.482.93-1.482.93l-7.833 2.817V18.68l5.764-2.057c.655-.234.755-.566.223-.74c-.53-.175-1.491-.125-2.146.111l-3.84 1.354v-2.155l.22-.075s1.11-.394 2.671-.567c1.56-.172 3.472.024 4.972.593c1.69.535 1.88 1.323 1.451 1.866zm-8.57-3.537V8.162c0-.624-.114-1.198-.699-1.36c-.447-.144-.725.272-.725.895V21l-3.584-1.139V4c1.524.283 3.744.953 4.937 1.355c3.035 1.043 4.064 2.342 4.064 5.267c0 2.851-1.758 3.932-3.992 2.852zm-11.583 4.99c-1.735-.49-2.024-1.51-1.233-2.097c.731-.542 1.974-.95 1.974-.95l5.138-1.83v2.086l-3.697 1.325c-.653.234-.754.566-.223.74c.531.175 1.493.125 2.147-.11l1.773-.644v1.865l-.353.06c-1.774.29-3.664.169-5.526-.445z"
-              />
-            </svg>
-            Play
-          </button>
         </div>
       </div>
 

@@ -29,16 +29,8 @@ $(document).ready(function () {
             // Ajout de la ligne de tableau au tableau d'affichage
             $("#account tbody").append(html);
           },
-          error: function () {
-            alert(
-              "Erreur lors de la récupération des informations de la carte."
-            );
-          },
         });
       }
-    },
-    error: function () {
-      alert("Erreur lors de la récupération de l'inventaire de l'utilisateur.");
     },
   });
 });

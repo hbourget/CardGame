@@ -17,11 +17,6 @@
   <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script type="text/javascript" charset="utf8"
     src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
-  <script>
-    $(document).ready(function () {
-      $("#employeeTable").DataTable();
-    });
-  </script>
 </head>
 
 <title th:text="${titrePage}">Account</title>
@@ -29,6 +24,7 @@
 
 <body>
   <!-- Navbar -->
+
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container-fluid">
       <a class="navbar-brand" href="index.html">CardGame</a>
@@ -72,71 +68,48 @@
     </div>
   </nav>
 
-  <!-- Account infos -->
-  <div class="cardsImg">
-    <div class="profileInfo">
-      <img class="img"
-        src="https://64.media.tumblr.com/670c9879b4b28c5fe2d5b04a41cbd8eb/tumblr_o9hsauAmbC1vvqbiuo1_1280.jpg" alt="" />
-      <span th:text="${NomUser}">Nek</span>
-    </div>
-    <div class="money">
-      <span th:text="${argentUser}">5000 $</span>
+  <!-- Account -->
+
+  <div class="cardsWrapper center">
+    <div class="cardWrapper">
+      <button onclick="window.location.href='createRoom.html'" type="button" class="btn btn-primary btnweight">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+          <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M3 21h18M3 10h18M5 6l7-3l7 3M4 10v11m16-11v11M8 14v3m4-3v3m4-3v3" />
+        </svg>
+        Creer une salle
+      </button>
     </div>
   </div>
 
-  <br>
-
   <!--Liste-->
   <div class="cardsWrapperList">
-    <h1>Selectionnez une carte</h1>
+    <h1>Salles</h1>
     <br>
-    <table id="example" class="table table-striped" style="width:100%">
+    <table id="rooms" class="table table-striped" style="width:100%">
       <thead>
         <tr>
-          <th>name</th>
-          <th>description</th>
-          <th>family_name</th>
-          <th>hp</th>
-          <th>energy</th>
-          <th>defense</th>
-          <th>attack</th>
-          <th>price</th>
+          <th>ID</th>
+          <th>Nom</th>
+          <th>Status</th>
+          <th>Récompense</th>
+          <th>Action</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td th:text="${username}">John Doe</td>
-          <td th:text="${description}">Manager</td>
-          <td th:text="${famillyName}">XXX</td>
-          <td th:text="${hp}">50 000</td>
-          <td th:text="${energie}">50 000</td>
-          <td th:text="${defense}">50 000</td>
-          <td th:text="${attaque}">50 000</td>
-          <td th:text="${prix}">1 000 000</td>
-        </tr>
       </tbody>
     </table>
   </div>
 
   <script src="../lib/jquery-3.3.1.min.js"></script>
   <script src="../lib/Semantic-UI-CSS-master/semantic.js"></script>
-  <script src="../js/selectCard.js"></script>
+  <script src="../js/rooms.js"></script>
   <script src="../js/common.js"></script>
 
 
   <script>
     $(document).ready(function () {
-      $('#example').DataTable();
-    });
-
-    $(document).ready(function () {
-      $('#IdDeLelementACHANGER!').DataTable({
-        "order": [[4, "desc"]],
-        "language":
-        {
-          "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json"
-        }
-      });
+      $('#rooms').DataTable();
     });
   </script>
 

@@ -14,8 +14,5 @@ $(document).ready(function () {
       $("#user-info").html(data.username);
       $("#money").html(data.balance);
     },
-    error: function () {
-      alert("error");
-    },
   });
 });

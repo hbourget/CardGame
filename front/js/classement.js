@@ -1,36 +1,28 @@
-$(document).ready(function () {
+$(document).ready(function() {
+  // Initialiser le tableau DataTable en français et trier sur la première colonne
+  var dataTable = $("#allUsers").DataTable({
+    language: {
+      url: "https://cdn.datatables.net/plug-ins/1.11.2/i18n/French.json"
+    },
+    columns: [
+      { title: "ID", data: "id" },
+      { title: "Nom", data: "username" },
+      { title: "Balance", data: "balance" }
+    ],
+    order: [[2, "desc"]]
+  });
+
+  // Faire une requête AJAX pour récupérer les données JSON
   $.ajax({
     url: "http://localhost:8888/users",
     type: "GET",
     dataType: "json",
-    success: function (data) {
-      // Pour chaque utilisateur, récupération des informations
-      for (var i = 0; i < data.length; i++) {
-        $.ajax({
-          url: "http://localhost:8888/users/" + data[i].id,
-          type: "GET",
-          dataType: "json",
-          success: function (userData) {
-            // Création d'une ligne de tableau avec les informations de l'utilisateur
-            var html = "<tr>";
-            html += "<td>" + userData.id + "</td>";
-            html += "<td>" + userData.username + "</td>";
-            html += "<td>" + userData.balance + "</td>";
-            html += "<td>" + userData.idInventory + "</td>";
-            html += "</tr>";
-            // Ajout de la ligne de tableau au tableau d'affichage
-            $("#allUsers tbody").append(html);
-          },
-          error: function () {
-            alert(
-              "Erreur lors de la récupération des informations de l'utilisateur."
-            );
-          },
-        });
-      }
+    success: function(data) {
+      // Ajouter les données JSON récupérées au tableau DataTable
+      dataTable.rows.add(data).draw();
     },
-    error: function () {
-      alert("Erreur lors de la récupération de la liste des utilisateurs.");
-    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      console.log(textStatus, errorThrown);
+    }
   });
 });

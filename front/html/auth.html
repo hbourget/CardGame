@@ -8,9 +8,9 @@
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
     />
 
-    <title th:text="${titreSite}">CardGame</title>
+    <title>CardGame</title>
 
-    <script src="../js/register.js" defer></script>
+    <script src="../js/login.js" defer></script>
     <link rel="stylesheet" type="text/css" href="../css/account.css" />
     <link
       rel="stylesheet"
@@ -41,12 +41,10 @@
             <ul class="navbar-nav me-auto">
               <li class="nav-item">
                 <a class="nav-link" href="auth.html">Login</a>
+                <span class="visually-hidden">(current)</span>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="register.html"
-                  >Register
-                  <span class="visually-hidden">(current)</span>
-                </a>
+                <a class="nav-link" href="register.html">Register </a>
               </li>
             </ul>
           </form>
@@ -54,33 +52,9 @@
       </div>
     </nav>
 
-    <!-- Formulaire register -->
-
-    <div class="form-group">
-      <label class="form-label mt-4">Register</label>
-
-      <div class="form-floating mb-3">
-        <input
-          type="name"
-          name="name"
-          id="name"
-          class="form-control"
-          placeholder="Password"
-        />
-        <label for="floatingPassword" th:text="${nomUser}">name</label>
-      </div>
-
-      <div class="form-floating mb-5">
-        <input
-          type="text"
-          name="surname"
-          id="surname"
-          class="form-control"
-          placeholder="name@example.com"
-        />
-        <label for="floatingInput" th:text="${surnomUser}">Surname</label>
-      </div>
-
+    <!-- Formulaire login -->
+    <form method="post" class="form-group">
+      <label class="form-label mt-4">Login</label>
       <div class="form-floating mb-3">
         <input
           type="text"
@@ -89,9 +63,8 @@
           class="form-control"
           placeholder="name@example.com"
         />
-        <label for="floatingInput" th:text="${emailUser}">Email address</label>
+        <label for="floatingInput">Email address</label>
       </div>
-
       <div class="form-floating mb-3">
         <input
           type="password"
@@ -100,24 +73,10 @@
           class="form-control"
           placeholder="Password"
         />
-        <label for="floatingPassword" th:text="${mdpUser}">Password</label>
+        <label for="floatingPassword">Password</label>
       </div>
-
-      <div class="form-floating mb-3">
-        <input
-          type="password"
-          name="password"
-          id="password"
-          class="form-control"
-          placeholder="Password"
-        />
-        <label for="floatingPassword" th:text="${mdpConfirmUser}"
-          >Confirm password</label
-        >
-      </div>
-
-      <button type="button" class="btn btn-primary">Enroll</button>
-    </div>
+      <button type="button" class="btn btn-primary">Login</button>
+    </form>
 
     <script src="../lib/jquery-3.3.1.min.js"></script>
     <script src="../lib/Semantic-UI-CSS-master/semantic.js"></script>
