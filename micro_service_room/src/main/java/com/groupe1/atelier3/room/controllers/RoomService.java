@@ -128,6 +128,15 @@ public class RoomService {
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("La room est pleine.");
             }
+            if (room.getIdUser_1() == 0 || room.getIdUser_2() == 0) {
+                room.setStatus("Waiting 0/2");
+            }
+            if (room.getIdUser_1() != 0 && room.getIdUser_2() == 0) {
+                room.setStatus("Waiting 1/2");
+            }
+            if (room.getIdUser_1() == 0 && room.getIdUser_2() != 0) {
+                room.setStatus("Waiting 1/2");
+            }
             if (room.getIdUser_1() != 0 && room.getIdUser_2() != 0) {
                 room.setStatus("Ready");
             }
