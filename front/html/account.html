@@ -12,13 +12,13 @@
     <!-- Site Properties -->
     <title th:text="${titreSite}">CardGame</title>
 
-    <link
+    <!-- <link
       rel="stylesheet"
       type="text/css"
       href="../lib/Semantic-UI-CSS-master/semantic.min.css"
-    />
+    /> -->
     <link rel="stylesheet" type="text/css" href="../css/account.css" />
-    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="../css/style.css" /> -->
     <script src="https://kit.fontawesome.com/371ee80cb5.js" crossorigin="anonymous"></script>
 
     <link
@@ -43,6 +43,11 @@
     ></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
+        
+    <!-- <script src="../lib/jquery-3.3.1.min.js"></script>
+    <script src="../lib/Semantic-UI-CSS-master/semantic.js"></script> -->
+    <script src="../js/account.js" defer ></script>
+        <!-- <script src="../js/common.js"></script> -->
   </head>
 
     <title th:text="${titrePage}">Account</title>
@@ -135,24 +140,5 @@
         </table>
               
         </div>
-        
-
-
-
-        
-        <script src="../lib/jquery-3.3.1.min.js"></script>
-        <script src="../lib/Semantic-UI-CSS-master/semantic.js"></script>
-        <script src="../js/account.js"></script>
-        <script src="../js/common.js"></script>
-
-
-    <script>
-      $(document).ready(function () {
-          $('#account').DataTable();
-      });
-
-    </script>
-
-
   </body>
 </html>
