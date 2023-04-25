@@ -7,6 +7,7 @@ import com.groupe1.atelier3.users.models.User;
 import com.groupe1.atelier3.users.models.UserDTO;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -23,8 +24,6 @@ public class AuthService {
     private final String userServiceUrl = "http://localhost:8081";
     private final String cardServiceUrl = "http://localhost:8082";
     private final String inventoryServiceUrl = "http://localhost:8083";
-
-
     public UserDTO checkAuth(Object obj, String password) {
         if (obj == null) {
             return null;
