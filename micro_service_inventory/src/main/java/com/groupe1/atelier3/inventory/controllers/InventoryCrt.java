@@ -86,6 +86,12 @@ public class InventoryCrt {
         return new ResponseEntity<>(inventoryResponse, HttpStatus.OK);
     }
 
+    @GetMapping("/inventories/availablecards")
+    public ResponseEntity<List<Card>> getAvailableCards() {
+        List<Card> cards = inventoryService.getAllAvailableCards();
+        return new ResponseEntity<>(cards, HttpStatus.OK);
+    }
+
     @GetMapping("/inventories")
     public List<Inventory> getAllInventories() {
         List<Inventory> inventories = inventoryService.getAllInventories();
