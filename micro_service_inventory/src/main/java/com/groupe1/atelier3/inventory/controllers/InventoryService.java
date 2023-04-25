@@ -223,4 +223,24 @@ public class InventoryService {
         }
         return true;
     }
+
+    public List<Card> getAllAvailableCards() {
+        //get cards that are not already present in a user's inventory
+        List<Card> cards = new ArrayList<>();
+        List<Inventory> inventories = getAllInventories();
+        List<Integer> cardsInInventories = new ArrayList<>();
+        for (Inventory inventory : inventories) {
+            cardsInInventories.addAll(inventory.getCards());
+        }
+        String url = cardServiceUrl + "/cards";
+        ResponseEntity<List<Card>> response = restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<List<Card>>() {
+        });
+        List<Card> allCards = response.getBody();
+        for (Card card : allCards) {
+            if (!cardsInInventories.contains(card.getId())) {
+                cards.add(card);
+            }
+        }
+        return cards;
+    }
 }

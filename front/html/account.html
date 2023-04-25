@@ -10,14 +10,17 @@
     />
 
     <!-- Site Properties -->
-    <title th:text="${titreSite}">CardTrafik</title>
+    <title th:text="${titreSite}">CardGame</title>
 
-    <link
+    <!-- <link
       rel="stylesheet"
       type="text/css"
       href="../lib/Semantic-UI-CSS-master/semantic.min.css"
-    />
+    /> -->
     <link rel="stylesheet" type="text/css" href="../css/account.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="../css/style.css" /> -->
+    <script src="https://kit.fontawesome.com/371ee80cb5.js" crossorigin="anonymous"></script>
+
     <link
       rel="stylesheet"
       type="text/css"
@@ -38,11 +41,13 @@
       charset="utf8"
       src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"
     ></script>
-    <script>
-      $(document).ready(function () {
-        $("#employeeTable").DataTable();
-      });
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+        
+    <!-- <script src="../lib/jquery-3.3.1.min.js"></script>
+    <script src="../lib/Semantic-UI-CSS-master/semantic.js"></script> -->
+    <script src="../js/account.js" defer ></script>
+        <!-- <script src="../js/common.js"></script> -->
   </head>
 
     <title th:text="${titrePage}">Account</title>
@@ -50,9 +55,9 @@
 
   <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-game">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
       <div class="container-fluid">
-        <a th:text="${titreSite}" class="navbar-brand" href="#">CardTrafik</a>
+        <a class="navbar-brand" href="index.html">CardGame</a>
         <button
           class="navbar-toggler"
           type="button"
@@ -62,25 +67,30 @@
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <span class="navbar-toggler-icon"></span>
+      <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarColor02">
           <ul class="navbar-nav me-auto">
             <li class="nav-item">
-              <a class="nav-link active" href="account.html">Account</a>
-              <span class="visually-hidden">(current)</span>
+              <li class="nav-item">
+                <a class="nav-link" href="index.html">Accueil / Classement</a>
+              </li>
+              <a class="nav-link" href="account.html">Account</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="cardList.html">Liste des cartes </a>
+              <a class="nav-link" href="cardList.html">Liste des cartes</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="classement.html">Classement</a>
+              <a class="nav-link" href="rooms.html">Rooms</a>
             </li>
           </ul>
           <form class="d-flex">
             <ul class="navbar-nav me-auto">
               <li class="nav-item">
-                <a class="nav-link" href="index.html">Disconnect</a>
+                <a class="nav-link" href="auth.html">Authentification</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="auth.html">Deconnexion</a>
               </li>
             </ul>
           </form>
@@ -96,67 +106,39 @@
             src="https://64.media.tumblr.com/670c9879b4b28c5fe2d5b04a41cbd8eb/tumblr_o9hsauAmbC1vvqbiuo1_1280.jpg"
             alt=""
           />
-          <span th:text="${NomUser}">Nek</span>
+          <span id="user-info"></span>
         </div>
         <div class="money">
-          <span th:text="${argentUser}">5000 $</span>
+          <span id="money"></span>
         </div>
       </div>
 
       <br>
-
+    
         <!--Liste-->
       <div class="cardsWrapperList">
-        <h1>Selectionnez une carte</h1>
+        <h1>Your Cards</h1>
         <br>
-        <table id="example" class="table table-striped" style="width:100%">
+        <table id="account" class="table table-striped" style="width:100%">
           <thead>
-              <tr>
-                <th>name</th>
-                <th>description</th>
-                <th>family_name</th>
-                <th>hp</th>
-                <th>energy</th>
-                <th>defense</th>
-                <th>attack</th>
-                <th>price</th>
-              </tr>
+            <tr>
+              <th>id</th>
+              <th>name</th>
+              <th>description</th>
+              <th>power</th>
+              <th>health</th>
+              <th>type</th>
+              <th>energy</th>
+              <th>price</th>
+              <th>image</th>
+              <th>acheter</th>
+              <th>vendre</th>
+            </tr>
           </thead>
-          <tbody>
-              <tr>
-                <td th:text="${username}">John Doe</td>
-                <td th:text="${description}">Manager</td>
-                <td th:text="${famillyName}">XXX</td>
-                <td th:text="${hp}">50 000</td>
-                <td th:text="${energie}">50 000</td>
-                <td th:text="${defense}">50 000</td>
-                <td th:text="${attaque}">50 000</td>
-                <td th:text="${prix}">1 000 000</td>      
-              </tr>
-            </tbody>
-          </table>
+          <tbody id="card-list">
+          </tbody>
+        </table>
+              
         </div>
-  
-    <script src="../lib/jquery-3.3.1.min.js"></script>
-    <script src="../lib/Semantic-UI-CSS-master/semantic.js"></script>
-    <script src="./js/cardList.js"></script>
-  
-    <script>
-      $(document).ready(function () {
-          $('#example').DataTable();
-      });
-
-      $(document).ready(function() {
-                    $('#IdDeLelementACHANGER!').DataTable( {
-                        "order": [[ 4, "desc" ]],
-                        "language":
-                        {
-                            "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json"
-                        }
-                    } );
-                } );
-    </script>
-
-
   </body>
 </html>

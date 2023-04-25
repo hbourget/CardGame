@@ -9,6 +9,18 @@ spring:
     import: "optional:configserver:"
   cloud:
     gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "http://localhost:8888"
+              - "http://127.0.0.1:80"
+              - "http://127.0.0.1"
+              - "http://localhost"
+              - "http://localhost:80"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+            allowCredentials: true
       routes:
         - id: auth-service
           uri: http://localhost:8080
