@@ -1,0 +1,30 @@
+<div class="container">
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nom</th>
+      <th>Description</th>
+      <th>Power</th>
+      <th>Health</th>
+      <th>Type</th>
+      <th>Energy</th>
+      <th>Price</th>
+      <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let card of cards">
+      <td>{{card.id}}</td>
+      <td>{{card.name}}</td>
+      <td>{{card.description}}</td>
+      <td>{{card.power}}</td>
+      <td>{{card.health}}</td>
+      <td>{{card.type}}</td>
+      <td>{{card.energy}}</td>
+      <td>{{card.price}}</td>
+      <button (click)="buyCard(card.id)">Acheter</button>
+    </tr>
+    </tbody>
+  </table>
+</div>
