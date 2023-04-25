@@ -15,6 +15,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { InventoryComponent } from './inventory/inventory.component';
 import { MarketComponent } from './market/market.component';
 import { RankingComponent } from './ranking/ranking.component';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { RankingComponent } from './ranking/ranking.component';
     NavbarComponent,
     InventoryComponent,
     MarketComponent,
-    RankingComponent
+    RankingComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
