@@ -59,12 +59,16 @@ public class RoomService {
             Room room = roomOpt.get();
             List<Card> cards = new ArrayList<>();
             if (room.getIdUser_1() != 0) {
-                Card card1 = restTemplate.getForObject(cardServiceUrl + "/cards/" + room.getIdCardUser_1(), Card.class);
-                cards.add(card1);
+                if (room.getIdCardUser_1() != 0) {
+                    Card card1 = restTemplate.getForObject(cardServiceUrl + "/cards/" + room.getIdCardUser_1(), Card.class);
+                    cards.add(card1);
+                }
             }
             if (room.getIdUser_2() != 0) {
-                Card card2 = restTemplate.getForObject(cardServiceUrl + "/cards/" + room.getIdCardUser_2(), Card.class);
-                cards.add(card2);
+                if (room.getIdCardUser_1() != 0) {
+                    Card card2 = restTemplate.getForObject(cardServiceUrl + "/cards/" + room.getIdCardUser_2(), Card.class);
+                    cards.add(card2);
+                }
             }
             roomResponse = new RoomResponse(room, cards);
             return roomResponse;
@@ -449,7 +453,9 @@ public class RoomService {
         Iterable<Room> rooms = roomRepository.findAll();
         for(Room room : rooms) {
             if(room.getIdUser_1() == idUser || room.getIdUser_2() == idUser) {
-                return true;
+                if (!room.getStatus().equals("Ended")) {
+                    return true;
+                }
             }
         }
         return false;

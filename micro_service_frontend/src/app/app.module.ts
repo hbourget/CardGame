@@ -16,6 +16,9 @@ import { InventoryComponent } from './inventory/inventory.component';
 import { MarketComponent } from './market/market.component';
 import { RankingComponent } from './ranking/ranking.component';
 import { HomeComponent } from './home/home.component';
+import { RoomsComponent } from './rooms/rooms.component';
+import { GameComponent } from './game/game.component';
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -25,7 +28,9 @@ import { HomeComponent } from './home/home.component';
     InventoryComponent,
     MarketComponent,
     RankingComponent,
-    HomeComponent
+    HomeComponent,
+    RoomsComponent,
+    GameComponent
   ],
   imports: [
     BrowserModule,
@@ -35,7 +40,8 @@ import { HomeComponent } from './home/home.component';
     MatIconModule,
     BrowserAnimationsModule,
     MatButtonModule,
-    DataTablesModule
+    DataTablesModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
