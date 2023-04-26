@@ -248,9 +248,6 @@ public class RoomService {
 
         if (roomOpt.isPresent()) {
             Room room = roomOpt.get();
-            if (room.getIdUser_1() == 0 || room.getIdUser_2() == 0) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("La room n'est pas prête.");
-            }
             if (room.getIdUser_1() != playerId && room.getIdUser_2() != playerId) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("L'utilisateur n'est pas dans la room.");
             }

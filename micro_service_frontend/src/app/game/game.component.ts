@@ -48,13 +48,13 @@ export class GameComponent implements OnInit {
   }
 
   addCardToUser1(selectedCard1: any) {
-    this.http.put('localhost:8888/rooms/'+this.roomId+'/users/1/cards/' + selectedCard1, null).subscribe(data => {
+    this.http.put('http://localhost:8888/rooms/'+this.roomId+'/users/1/cards/' + selectedCard1, null).subscribe(data => {
       this.ngOnInit();
     });
   }
 
   addCardToUser2(selectedCard2: any) {
-    this.http.put('localhost:8888/rooms/'+this.roomId+'/users/1/cards/' + selectedCard2, null).subscribe(data => {
+    this.http.put('http://localhost:8888/rooms/'+this.roomId+'/users/1/cards/' + selectedCard2, null).subscribe(data => {
       this.ngOnInit();
     });
   }
