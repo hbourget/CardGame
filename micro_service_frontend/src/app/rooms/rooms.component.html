@@ -1,20 +1,24 @@
-<table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped" style="width:100%">
-  <thead>
-  <tr>
-    <th>Nom</th>
-    <th>Status</th>
-    <th>Récompense</th>
-    <th>Action</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let room of rooms">
-    <td>{{room.name}}</td>
-    <td>{{room.status}}</td>
-    <td>{{room.reward}}</td>
-    <td><button (click)="join(room.id)">Rejoindre</button>
-      <button (click)="view(room.id)">Voir</button>
-    </td>
-  </tr>
-  </tbody>
-</table>
+<div class="container2">
+  <h2>Rooms</h2>
+  <br>
+  <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped" style="width:100%">
+    <thead>
+    <tr>
+      <th>Nom</th>
+      <th>Status</th>
+      <th>Récompense</th>
+      <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let room of rooms">
+      <td>{{room.name}}</td>
+      <td>{{room.status}}</td>
+      <td>{{room.reward}}</td>
+      <td><button class="btn btn-success btn-sm btnjoin" (click)="join(room.id)">Rejoindre</button>
+        <button class="btn btn-primary btn-sm" (click)="view(room.id)">Voir</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,14 +1,18 @@
-<table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped" style="width:100%">
-  <thead>
-  <tr>
-    <th>Nom</th>
-    <th>Argent</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let user of users">
-    <td>{{user.username}}</td>
-    <td>{{user.balance}}</td>
-  </tr>
-  </tbody>
-</table>
+<h2 class="marge">Classement des meilleurs joueurs</h2>
+<div class="container2">
+  <br>
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>Nom</th>
+      <th>Argent</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let user of users">
+      <td>{{user.username}}</td>
+      <td>{{user.balance}}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
