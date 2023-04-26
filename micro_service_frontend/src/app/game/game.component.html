@@ -1,0 +1,36 @@
+<br>
+<div *ngIf="gameData && gameData.room && gameData.cards">
+  <h2 class="room-title">{{ gameData.room.name }}</h2>
+  <div class="card-container">
+    <ng-container *ngFor="let card of gameData.cards">
+      <div *ngIf="card.id === gameData.room.idCardUser_1 || card.id === gameData.room.idCardUser_2">
+        <h3 *ngIf="card.id === gameData.room.idCardUser_1">User: <b>{{ user1?.username }}</b></h3>
+        <h3 *ngIf="card.id === gameData.room.idCardUser_2">User: <b>{{ user2?.username }}</b></h3>
+        <span>Carte : <b>{{ card.name }}</b></span>
+        <br>
+        <img [src]="'../assets/' + card.image" class="card-image" height="128" width="128" />
+        <div class="card-info">
+          <div class="health-bar">
+            <div class="health-bar-inner" [style.width.%]="(card.health / 150) * 100"></div>
+          </div>
+          <span>Santé: {{ card.health }} ❤️</span>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="!gameData.room.idCardUser_1 && user1Inventory">
+      <h3>U{{ user1?.username }}</h3>
+      <select [(ngModel)]="selectedCard1">
+        <option *ngFor="let card of user1Inventory.cards" [value]="card.id">{{ card.name }}</option>
+      </select>
+      <button (click)="addCardToUser1(selectedCard1)">Selectionner</button>
+    </ng-container>
+    <ng-container *ngIf="!gameData.room.idCardUser_2 && user2Inventory">
+      <h3>{{ user2?.username }}</h3>
+      <select [(ngModel)]="selectedCard2">
+        <option *ngFor="let card of user2Inventory.cards" [value]="card.id">{{ card.name }}</option>
+      </select>
+      <button (click)="addCardToUser2(selectedCard2)">Selectionner</button>
+    </ng-container>
+  </div>
+</div>
+

@@ -1,0 +1,49 @@
+.card-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 0 auto;
+  max-width: 90%;
+  gap: 1rem;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-image {
+  max-width: 150px;
+  max-height: 150px;
+  object-fit: cover;
+  margin-bottom: 1rem;
+}
+
+.card-info {
+  text-align: center;
+}
+
+.room-title {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.health-bar {
+  width: 100%;
+  height: 10px;
+  background-color: #ddd;
+  margin-bottom: 5px;
+}
+
+.health-bar-inner {
+  height: 100%;
+  background-color: #4caf50;
+}

@@ -1,0 +1,14 @@
+<table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped" style="width:100%">
+  <thead>
+  <tr>
+    <th>Nom</th>
+    <th>Argent</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let user of users">
+    <td>{{user.username}}</td>
+    <td>{{user.balance}}</td>
+  </tr>
+  </tbody>
+</table>

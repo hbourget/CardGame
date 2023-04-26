@@ -77,7 +77,6 @@ public class RoomCrt {
     public Object leaveRoom(@PathVariable int idRoom, @PathVariable int playerId) {
         return rService.leaveRoom(idRoom, playerId);
     }
-
     @PutMapping("/rooms/{idRoom}/users/{playerId}/cards/{cardId}")
     public Object addCardToRoom(@PathVariable int idRoom, @PathVariable int cardId, @PathVariable int playerId) {
         return rService.addCardToRoom(idRoom, cardId, playerId);
