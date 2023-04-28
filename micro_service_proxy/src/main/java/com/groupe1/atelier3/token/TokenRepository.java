@@ -1,6 +1,5 @@
 package com.groupe1.atelier3.token;
 
-import com.groupe1.atelier3.users.models.User;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;

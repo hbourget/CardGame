@@ -15,8 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig {
-
-
   @Bean
   public CustomAuthenticationProvider authenticationProvider() {
     return new CustomAuthenticationProvider();
