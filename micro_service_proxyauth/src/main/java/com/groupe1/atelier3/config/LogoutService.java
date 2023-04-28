@@ -1,0 +1,33 @@
+package com.groupe1.atelier3.config;
+
+import com.groupe1.atelier3.token.TokenRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.http.server.reactive.ServerHttpResponse;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class LogoutService {
+
+  private final TokenRepository tokenRepository;
+
+  public void logout(ServerHttpRequest request, ServerHttpResponse response, Authentication authentication) {
+    String authHeader = request.getHeaders().getFirst("Authorization");
+    String jwt;
+    System.out.println("authHeader: " + authHeader);
+
+    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+      return;
+    }
+    jwt = authHeader.substring(7);
+    var storedToken = tokenRepository.findByToken(jwt)
+            .orElse(null);
+    if (storedToken != null) {
+      storedToken.setExpired(true);
+      storedToken.setRevoked(true);
+      tokenRepository.save(storedToken);
+    }
+  }
+}

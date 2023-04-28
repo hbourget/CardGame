@@ -25,7 +25,7 @@ public class JwtAuthenticationFilter implements WebFilter {
   @Override
   public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
 
-    if (exchange.getRequest().getURI().getPath().contains("/api/v1/auth")) {
+    if (exchange.getRequest().getURI().getPath().contains("/auth")) {
       return chain.filter(exchange);
     }
     final String authHeader = exchange.getRequest().getHeaders().getFirst("Authorization");

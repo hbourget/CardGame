@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
-import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 
 @Configuration
@@ -15,17 +14,19 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 public class SecurityConfiguration {
 
   private final JwtAuthenticationFilter jwtAuthFilter;
-  private final CustomAuthenticationProvider authenticationProvider;
-  private final LogoutHandler logoutHandler;
+  private final ServerLogoutHandlerAdapter serverLogoutHandler;
   @Bean
   public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
     http
             .authorizeExchange()
-            .pathMatchers("/api/v1/auth/**").permitAll()
+            .pathMatchers("/auth/**").permitAll()
             .anyExchange().authenticated()
             .and()
             .csrf(csrf -> csrf.disable())
-            .addFilterAt(jwtAuthFilter, SecurityWebFiltersOrder.AUTHENTICATION);
+            .addFilterAt(jwtAuthFilter, SecurityWebFiltersOrder.AUTHENTICATION)
+            .logout()
+            .logoutUrl("/auth/logout")
+            .logoutHandler(serverLogoutHandler);
 
     return http.build();
   }

@@ -1,5 +1,5 @@
 server:
-  port: 8888
+  port: 8080
 spring:
   main:
     web-application-type: reactive
@@ -12,7 +12,7 @@ spring:
         corsConfigurations:
           '[/**]':
             allowedOrigins:
-              - "http://localhost:8888"
+              - "http://localhost:8080"
               - "http://localhost:4200"
             allowedMethods:
               - "GET"
@@ -23,10 +23,6 @@ spring:
             allowedHeaders: "*"
             allowCredentials: true
       routes:
-        - id: auth-service
-          uri: http://localhost:8080
-          predicates:
-            - Path=/auth/**
         - id: card-service
           uri: http://localhost:8082
           predicates:
@@ -46,7 +42,7 @@ spring:
 application:
   security:
     jwt:
-      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5971
       expiration: 600000000
       refresh-token:
         expiration: 604800000
