@@ -1,5 +1,6 @@
 package com.groupe1.atelier3.config;
 
+import com.groupe1.atelier3.users.models.User;
 import com.groupe1.atelier3.users.models.UserDTO;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -21,12 +22,12 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = authentication.getName();
         String password = authentication.getCredentials().toString();
+        System.out.println("hello"+username);
 
         try {
-            UserDTO userDTO = restTemplate.getForObject("http://localhost:8888/auth/login?username={username}&password={password}",
-                    UserDTO.class, username, password);
-
-            if (userDTO != null) {
+            User user = restTemplate.getForObject("http://localhost:8081/users/auth/" + username, User.class);
+            System.out.println(user);
+            if (user != null) {
                 return new UsernamePasswordAuthenticationToken(username, password, new ArrayList<>());
             } else {
                 throw new BadCredentialsException("Invalid username or password");

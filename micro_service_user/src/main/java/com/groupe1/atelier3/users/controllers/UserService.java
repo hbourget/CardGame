@@ -93,6 +93,7 @@ public class UserService {
     }
 
     public User saveUser(User user) {
+
         userRepository.save(user);
         String urlSaveInv = inventoryServiceUrl + "/inventories";
         Inventory inventory = restTemplate.postForObject(urlSaveInv, null, Inventory.class);

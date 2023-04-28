@@ -46,20 +46,8 @@ public class AuthenticationService {
             .build();
   }
 
-  private UserDetails userDTOtoUserDetails(UserDTO user) {
-    return org.springframework.security.core.userdetails.User
-            .withUsername(user.getUsername())
-            .password(null)
-            .authorities("USER")
-            .accountExpired(false)
-            .accountLocked(false)
-            .credentialsExpired(false)
-            .disabled(false)
-            .build();
-  }
-
-
   public AuthenticationResponse register(RegisterRequest request) {
+    request.setPassword(passwordEncoder.encode(request.getPassword()));
     User savedUser = restTemplate.postForObject("http://localhost:8081/users", request, User.class);
     UserDetails userDetails = usertoUserDetails(savedUser);
     var jwtToken = jwtService.generateToken(userDetails);
