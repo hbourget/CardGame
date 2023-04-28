@@ -22,7 +22,7 @@ export class RankingComponent {
       order: [[1, 'desc']] // Sort by balance in descending order
     };
 
-    this.http.get('http://localhost:8888/users').subscribe((data) => {
+    this.http.get('http://localhost:8080/users').subscribe((data) => {
       this.users = data;
       // @ts-ignore
       this.dtTrigger.next();

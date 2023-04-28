@@ -15,22 +15,7 @@ export class CardsComponent implements OnInit {
   }
 
   ngOnInit() {
-    let response = this.http.get('http://localhost:8888/cards');
+    let response = this.http.get('http://localhost:8080/cards');
     response.subscribe((data)=>this.cards=data);
     }
-
-  buyCard(id: any) {
-    let response = this.http.post('http://localhost:8888/inventories/buy/users/1/cards/'+id, null).pipe(
-      catchError((error) => {
-        if (error.status === 409) {
-          alert("Vous n'avez pas assez d'argent!");
-        }
-        return throwError(error);
-      })
-    );
-    response.subscribe((data)=>{
-      let updatedResponse = this.http.get('http://localhost:8888/inventories/availablecards');
-      updatedResponse.subscribe((updatedData)=>this.cards=updatedData);
-    });
-  }
 }

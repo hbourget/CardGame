@@ -22,7 +22,7 @@ export class RoomsComponent {
       pageLength: 10,
     };
 
-    this.http.get('http://localhost:8888/rooms').subscribe((data) => {
+    this.http.get('http://localhost:8080/rooms').subscribe((data) => {
       this.rooms = data;
       // @ts-ignore
       this.dtTrigger.next();
@@ -30,7 +30,7 @@ export class RoomsComponent {
   }
 
   join(idRoom: any) {
-    let response = this.http.put('http://localhost:8888/rooms/join/' + idRoom + '/users/1', { id: idRoom }).pipe(
+    let response = this.http.put('http://localhost:8080/rooms/join/' + idRoom + '/users/1', { id: idRoom }).pipe(
       catchError((error) => {
         if (error.status === 401) {
           alert("Vous ne pouvez pas rejoindre cette room. Il est possible que celle-ci soit déjà pleine ou que vous soyez déjà engagé dans une autre partie");

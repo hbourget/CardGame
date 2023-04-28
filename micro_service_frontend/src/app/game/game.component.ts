@@ -24,23 +24,23 @@ export class GameComponent implements OnInit {
     this.route.paramMap.pipe(
       switchMap(params => {
         this.roomId = params.get('idRoom');
-        return this.http.get('http://localhost:8888/rooms/' + this.roomId);
+        return this.http.get('http://localhost:8080/rooms/' + this.roomId);
       }),
       switchMap(data => {
         this.gameData = data;
-        return this.http.get('http://localhost:8888/users/' + this.gameData.room.idUser_1);
+        return this.http.get('http://localhost:8080/users/' + this.gameData.room.idUser_1);
       }),
       switchMap(dataU1 => {
         this.user1 = dataU1;
-        return this.http.get('http://localhost:8888/inventories/users/' + this.user1.id);
+        return this.http.get('http://localhost:8080/inventories/users/' + this.user1.id);
       }),
       switchMap(dataInv1 => {
         this.user1Inventory = dataInv1;
-        return this.http.get('http://localhost:8888/users/' + this.gameData.room.idUser_2);
+        return this.http.get('http://localhost:8080/users/' + this.gameData.room.idUser_2);
       }),
       switchMap(dataU2 => {
         this.user2 = dataU2;
-        return this.http.get('http://localhost:8888/inventories/users/' + this.user2.id);
+        return this.http.get('http://localhost:8080/inventories/users/' + this.user2.id);
       })
     ).subscribe(dataInv2 => {
       this.user2Inventory = dataInv2;
@@ -48,13 +48,13 @@ export class GameComponent implements OnInit {
   }
 
   addCardToUser1(selectedCard1: any) {
-    this.http.put('http://localhost:8888/rooms/'+this.roomId+'/users/1/cards/' + selectedCard1, null).subscribe(data => {
+    this.http.put('http://localhost:8080/rooms/'+this.roomId+'/users/1/cards/' + selectedCard1, null).subscribe(data => {
       this.ngOnInit();
     });
   }
 
   addCardToUser2(selectedCard2: any) {
-    this.http.put('http://localhost:8888/rooms/'+this.roomId+'/users/1/cards/' + selectedCard2, null).subscribe(data => {
+    this.http.put('http://localhost:8080/rooms/'+this.roomId+'/users/1/cards/' + selectedCard2, null).subscribe(data => {
       this.ngOnInit();
     });
   }

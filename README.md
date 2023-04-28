@@ -33,7 +33,7 @@ L'application permet aux utilisateurs de jouer à un jeu de cartes en ligne cont
 
 # Documentation API
 
-Par défaut le port utilisé par l'application est le **8888**. Le proxy s'occupe des redirections.
+Par défaut le port utilisé par l'application est le **8080**. Le proxy s'occupe des redirections.
 
 Pour plus de détails, les ports des endpoints sont les suivants :
 - Auth Service : **8080**

@@ -14,12 +14,12 @@ export class MarketComponent {
   }
 
   ngOnInit() {
-    let response = this.http.get('http://localhost:8888/inventories/availablecards');
+    let response = this.http.get('http://localhost:8080/inventories/availablecards');
     response.subscribe((data)=>this.cards=data);
   }
 
   buyCard(id: any) {
-    let response = this.http.post('http://localhost:8888/inventories/buy/users/1/cards/'+id, null).pipe(
+    let response = this.http.post('http://localhost:8080/inventories/buy/users/1/cards/'+id, null).pipe(
       catchError((error) => {
         if (error.status === 409) {
           alert("Vous n'avez pas assez d'argent!");
@@ -28,7 +28,7 @@ export class MarketComponent {
       })
     );
     response.subscribe((data)=>{
-      let updatedResponse = this.http.get('http://localhost:8888/inventories/availablecards');
+      let updatedResponse = this.http.get('http://localhost:8080/inventories/availablecards');
       updatedResponse.subscribe((updatedData)=>this.cards=updatedData);
     });
   }

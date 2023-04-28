@@ -15,12 +15,12 @@ export class InventoryComponent {
   }
 
   ngOnInit() {
-    let response = this.http.get('http://localhost:8888/inventories/users/1');
+    let response = this.http.get('http://localhost:8080/inventories/users/1');
     response.subscribe((data)=>this.inv=data);
   }
 
   sellCard(id: any) {
-    let response = this.http.post('http://localhost:8888/inventories/sell/users/1/cards/'+id, null).pipe(
+    let response = this.http.post('http://localhost:8080/inventories/sell/users/1/cards/'+id, null).pipe(
       catchError((error) => {
         if (error.status === 409) {
           alert("Vous ne possédez pas la carte");
@@ -29,7 +29,7 @@ export class InventoryComponent {
       })
     );
     response.subscribe((data)=>{
-      let updatedResponse = this.http.get('http://localhost:8888/inventories/users/1');
+      let updatedResponse = this.http.get('http://localhost:8080/inventories/users/1');
       updatedResponse.subscribe((updatedData)=>this.inv=updatedData);
     });
   }
