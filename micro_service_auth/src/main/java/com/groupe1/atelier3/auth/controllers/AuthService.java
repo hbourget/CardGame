@@ -67,7 +67,7 @@ public class AuthService {
         for (int i = 0; i < 3 && i < cardsList.size(); i++) {
             Integer cardId = cardsList.get(i).getId();
             String inventoryAddCard = inventoryServiceUrl + "/inventories/users/{userId}/cards/{cardId}";
-            ResponseEntity<Void> inventoryAddCardResponse = restTemplate.postForEntity(inventoryAddCard, null, Void.class, userdto.getId(), cardId);
+            restTemplate.postForEntity(inventoryAddCard, null, Void.class, userdto.getId(), cardId);
         }
 
         return userdto;
