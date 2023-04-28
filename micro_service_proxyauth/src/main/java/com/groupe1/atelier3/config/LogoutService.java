@@ -16,7 +16,6 @@ public class LogoutService {
   public void logout(ServerHttpRequest request, ServerHttpResponse response, Authentication authentication) {
     String authHeader = request.getHeaders().getFirst("Authorization");
     String jwt;
-    System.out.println("authHeader: " + authHeader);
 
     if (authHeader == null || !authHeader.startsWith("Bearer ")) {
       return;
