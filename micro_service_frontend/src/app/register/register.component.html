@@ -1,0 +1,18 @@
+<div class="register-form-container">
+  <form class="register-form" (submit)="onSubmit(registerForm)" #registerForm="ngForm">
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Identifiant </mat-label>
+      <input matInput placeholder="Entrer votre identifiant" name="username" [(ngModel)]="user.username" required>
+      <mat-error *ngIf="registerForm.controls['username'].invalid">Identifiant requis</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Mot de passe </mat-label>
+      <input matInput placeholder="Entrer votre mot de passe" type="password" name="password" [(ngModel)]="user.password" required>
+      <mat-error *ngIf="registerForm.controls['password'].invalid">Mot de passe requis</mat-error>
+    </mat-form-field>
+    <button class="btn btn-warning submit-btn" type="submit" [disabled]="!registerForm.form.valid">S'enregistrer</button>
+    <br>
+    <div class="login-message">Vous avez déjà un compte? <a routerLink="/login">Connectez-vous ici</a>.</div>
+  </form>
+</div>

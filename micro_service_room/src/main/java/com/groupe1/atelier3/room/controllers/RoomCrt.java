@@ -69,21 +69,21 @@ public class RoomCrt {
     }
 
     @PutMapping("/rooms/join/{idRoom}/users/{playerId}")
-    public Object joinRoom(@PathVariable int idRoom, @PathVariable int playerId) {
+    public Object joinRoom(@PathVariable int idRoom, @PathVariable String playerId) {
         return rService.joinRoom(idRoom, playerId);
     }
 
     @PutMapping("/rooms/leave/{idRoom}/users/{playerId}")
-    public Object leaveRoom(@PathVariable int idRoom, @PathVariable int playerId) {
+    public Object leaveRoom(@PathVariable int idRoom, @PathVariable String playerId) {
         return rService.leaveRoom(idRoom, playerId);
     }
     @PutMapping("/rooms/{idRoom}/users/{playerId}/cards/{cardId}")
-    public Object addCardToRoom(@PathVariable int idRoom, @PathVariable int cardId, @PathVariable int playerId) {
+    public Object addCardToRoom(@PathVariable int idRoom, @PathVariable int cardId, @PathVariable String playerId) {
         return rService.addCardToRoom(idRoom, cardId, playerId);
     }
 
     @PutMapping("/rooms/play/{idRoom}/users/{idUser}")
-    public Object playRound(@PathVariable int idRoom, @PathVariable int idUser) {
+    public Object playRound(@PathVariable int idRoom, @PathVariable String idUser) {
         return rService.playRound(idRoom, idUser);
     }
 }

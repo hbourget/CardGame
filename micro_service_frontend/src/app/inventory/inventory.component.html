@@ -1,32 +1,23 @@
 <div class="container2">
-  <h2>Inventaire</h2>
-  <br>
-  <table class="table table-striped">
-    <thead>
-    <tr>
-      <th>ID</th>
-      <th>Nom</th>
-      <th>Description</th>
-      <th>Power</th>
-      <th>Health</th>
-      <th>Type</th>
-      <th>Energy</th>
-      <th>Price</th>
-      <th>Action</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let card of inv.cards">
-      <td>{{card.id}}</td>
-      <td>{{card.name}}</td>
-      <td>{{card.description}}</td>
-      <td>{{card.power}}</td>
-      <td>{{card.health}}</td>
-      <td>{{card.type}}</td>
-      <td>{{card.energy}}</td>
-      <td>{{card.price}}</td>
-      <td><button class="btn btn-danger btn-sm" (click)="sellCard(card.id)">Vendre</button></td>
-    </tr>
-    </tbody>
-  </table>
+  <h2>Mon inventaire</h2>
+  <div class="row">
+    <div class="col-sm-6 col-md-4 col-lg-3 mb-4" *ngFor="let card of inv.cards">
+      <div class="card">
+        <img src="assets/{{card.image}}" class="card-img-top" alt="{{card.name}}" width="256" height="256">
+        <div class="card-body">
+          <h2 class="card-title">{{card.name}}</h2>
+          <h5 class="card-text">{{card.description}}</h5>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">Puissance: {{card.power}}</li>
+            <li class="list-group-item">Santé: {{card.health}}</li>
+            <li class="list-group-item">Type: {{card.type}}</li>
+            <li class="list-group-item">Energie: {{card.energy}}</li>
+            <li class="list-group-item">Prix: {{card.price}}</li>
+            <br>
+            <button class="btn btn-warning btn-sm" (click)="sellCard(card.id)">Vendre</button>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

@@ -26,7 +26,7 @@ public class InventoryCrt {
         this.inventoryService = inventoryService;
     }
     @PostMapping("/inventories/users/{userId}/cards/{cardId}")
-    public ResponseEntity<InventoryResponse> addCardToInventory(@PathVariable Integer userId, @PathVariable Integer cardId) {
+    public ResponseEntity<InventoryResponse> addCardToInventory(@PathVariable String userId, @PathVariable Integer cardId) {
         InventoryResponse inv = inventoryService.addCardToInv(userId, cardId);
         if (inv == null) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -35,7 +35,7 @@ public class InventoryCrt {
     }
 
     @DeleteMapping("/inventories/users/{userId}/cards/{cardId}")
-    public ResponseEntity<InventoryResponse> removeCardFromInventory(@PathVariable Integer userId, @PathVariable Integer cardId) {
+    public ResponseEntity<InventoryResponse> removeCardFromInventory(@PathVariable String userId, @PathVariable Integer cardId) {
         InventoryResponse inv = inventoryService.removeCardFromInv(userId, cardId);
         if (inv == null) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -44,7 +44,7 @@ public class InventoryCrt {
     }
 
     @PostMapping("/inventories/users/{userId}/cards")
-    public ResponseEntity<InventoryResponse> addAllCardsToInventory(@PathVariable Integer userId) {
+    public ResponseEntity<InventoryResponse> addAllCardsToInventory(@PathVariable String userId) {
         String urlCardSvc = cardServiceUrl + "/cards";
         ResponseEntity<List<Card>> responseEntity = restTemplate.exchange(urlCardSvc, HttpMethod.GET, null, new ParameterizedTypeReference<List<Card>>() {});
         List<Card> cards = responseEntity.getBody();
@@ -56,12 +56,12 @@ public class InventoryCrt {
     }
 
     @DeleteMapping("/inventories/users/{userId}/cards")
-    public Object removeAllCardsFromInventory(@PathVariable Integer userId) {
+    public Object removeAllCardsFromInventory(@PathVariable String userId) {
         return inventoryService.removeAllCardFromInv(userId);
     }
 
     @DeleteMapping("/inventories/users/{userId}")
-    public ResponseEntity<Boolean> deleteInventory(@PathVariable Integer userId) {
+    public ResponseEntity<Boolean> deleteInventory(@PathVariable String userId) {
         boolean b = inventoryService.deleteInventory(userId);
         if (b) {
             return new ResponseEntity<>(HttpStatus.OK);
@@ -71,7 +71,7 @@ public class InventoryCrt {
     }
 
     @GetMapping("/inventories/users/{userId}")
-    public ResponseEntity<InventoryResponse> getInventoryByUser(@PathVariable Integer userId) {
+    public ResponseEntity<InventoryResponse> getInventoryByUser(@PathVariable String userId) {
         UserDTO user;
         try {
             user = restTemplate.getForObject("http://localhost:8081/users/" + userId, UserDTO.class);
@@ -106,7 +106,7 @@ public class InventoryCrt {
     }
 
     @PostMapping("/inventories/buy/users/{idUser}/cards/{cardId}")
-    public ResponseEntity<Card> BuyCard(@PathVariable Integer idUser, @PathVariable Integer cardId) {
+    public ResponseEntity<Card> BuyCard(@PathVariable String idUser, @PathVariable Integer cardId) {
         Card card = restTemplate.getForObject("http://localhost:8082/cards/" + cardId, Card.class);
         User user = restTemplate.getForObject("http://localhost:8081/users/" + idUser, User.class);
         Card c = inventoryService.buyCard(user, card);
@@ -119,7 +119,7 @@ public class InventoryCrt {
     }
 
     @PostMapping("/inventories/sell/users/{idUser}/cards/{cardId}")
-    public ResponseEntity<Card> SellCard(@PathVariable Integer idUser, @PathVariable Integer cardId) {
+    public ResponseEntity<Card> SellCard(@PathVariable String idUser, @PathVariable Integer cardId) {
         Card card = restTemplate.getForObject("http://localhost:8082/cards/" + cardId, Card.class);
         User user = restTemplate.getForObject("http://localhost:8081/users/" + idUser, User.class);
         Card c = inventoryService.sellCard(user, card);
@@ -132,7 +132,7 @@ public class InventoryCrt {
     }
 
     @PostMapping("/inventories/sell/users/{idUser}")
-    public ResponseEntity<Boolean> SellAllCards(@PathVariable Integer idUser) {
+    public ResponseEntity<Boolean> SellAllCards(@PathVariable String idUser) {
         User user = restTemplate.getForObject("http://localhost:8081/users/" + idUser, User.class);
         boolean b = inventoryService.sellAllCards(user);
         if (!b) {

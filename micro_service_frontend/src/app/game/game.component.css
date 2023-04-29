@@ -56,5 +56,44 @@
   height: 100%;
   background-color: lawngreen;
   border-radius: 5px;
+}
 
+.message {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 5px;
+  color: #721c24;
+  font-weight: bold;
+}
+
+.messageWin {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: darkseagreen;
+  border: 1px solid #f5c6cb;
+  border-radius: 5px;
+  color: forestgreen;
+  font-weight: bold;
+}
+
+.action-container {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.btnattack {
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  background-color: slategray;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 20%;
 }

@@ -1,29 +1,21 @@
 <div class="container2">
   <h2>Cartes</h2>
-  <table class="table table-striped">
-<thead>
-      <tr>
-        <th>ID</th>
-        <th>Nom</th>
-        <th>Description</th>
-        <th>Power</th>
-        <th>Health</th>
-        <th>Type</th>
-        <th>Energy</th>
-        <th>Price</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let card of cards">
-        <td>{{card.id}}</td>
-        <td>{{card.name}}</td>
-        <td>{{card.description}}</td>
-        <td>{{card.power}}</td>
-        <td>{{card.health}}</td>
-        <td>{{card.type}}</td>
-        <td>{{card.energy}}</td>
-        <td>{{card.price}}</td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="row">
+    <div class="col-sm-6 col-md-4 col-lg-3 mb-4" *ngFor="let card of cards">
+      <div class="card">
+        <img src="assets/{{card.image}}" class="card-img-top" alt="{{card.name}}" width="256" height="256">
+        <div class="card-body">
+          <p class="card-title">{{card.name}}</p>
+          <h5 class="card-text">{{card.description}}</h5>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">Puissance: {{card.power}}</li>
+            <li class="list-group-item">Santé: {{card.health}}</li>
+            <li class="list-group-item">Type: {{card.type}}</li>
+            <li class="list-group-item">Energie: {{card.energy}}</li>
+            <li class="list-group-item">Prix: {{card.price}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

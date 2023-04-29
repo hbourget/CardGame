@@ -1,10 +1,21 @@
 <mat-toolbar color="primary">
-<span>Card Game</span>
+  <span>Card Game</span>
   <span class="spacer"></span>
   <button mat-button routerLink="home">Accueil</button>
-  <button mat-button routerLink="cards">Cartes</button>
-  <button mat-button routerLink="inventory">Inventaire</button>
-  <button mat-button routerLink="market">Marché</button>
-  <button mat-button routerLink="ranking">Classement</button>
-  <button mat-raised-button color="accent" routerLink="rooms">Rooms</button>
+
+  <ng-container *ngIf="user$ | async as user">
+    <button mat-button routerLink="ranking">Joueurs</button>
+    <button mat-button routerLink="cards">Cartes</button>
+    <button mat-button routerLink="inventory">Inventaire</button>
+    <button mat-button routerLink="market">Marché</button>
+    <button mat-button routerLink="rooms">Rooms</button>
+    <span class="spacer"></span>
+    <span>{{ user.username }} - ${{ user.balance }}</span>
+    <span class="spacer"></span>
+    <button mat-raised-button color="accent" routerLink="logout">Déconnexion</button>
+  </ng-container>
+  <ng-container *ngIf="!(user$ | async)">
+    <span class="spacer"></span>
+    <button mat-raised-button color="accent" routerLink="login">Connexion</button>
+  </ng-container>
 </mat-toolbar>

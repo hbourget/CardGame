@@ -1,0 +1,19 @@
+<div class="login-form-container">
+  <form class="login-form" (submit)="onSubmit(loginForm)" #loginForm="ngForm">
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Identifiant </mat-label>
+      <input matInput placeholder="Entrer votre identifiant" name="username" [(ngModel)]="user.username" required>
+      <mat-error *ngIf="loginForm.controls['username'].invalid">Identifiant requis</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Mot de passe </mat-label>
+      <input matInput placeholder="Entrer votre mot de passe" type="password" name="password" [(ngModel)]="user.password" required>
+      <mat-error *ngIf="loginForm.controls['password'].invalid">Mot de passe requis</mat-error>
+    </mat-form-field>
+    <button class="btn btn-primary submit-btn" type="submit" [disabled]="!loginForm.form.valid">Se connecter</button>
+    <br>
+    <div class="login-message">Vous n'avez pas encore de compte? <a routerLink="/register">Créez le ici</a>.</div>
+    <div *ngIf="loginError" class="message">Identifiants incorrects. Veuillez réessayer.</div>
+  </form>
+</div>
