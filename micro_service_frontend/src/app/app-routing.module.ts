@@ -10,7 +10,7 @@ import {GameComponent} from "./game/game.component";
 import {RegisterComponent} from "./register/register.component";
 import {LoginComponent} from "./login/login.component";
 import { AuthGuard } from './auth.guard';
-import {LogoutComponent} from "./logout/logout.component"; // Import the AuthGuard
+import {LogoutComponent} from "./logout/logout.component";
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },

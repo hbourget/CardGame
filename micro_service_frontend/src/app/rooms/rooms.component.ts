@@ -1,6 +1,6 @@
 // rooms.component.ts
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject, throwError, Subscription } from "rxjs";
+import { throwError } from "rxjs";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import { catchError } from "rxjs/operators";
 import { Router } from '@angular/router';

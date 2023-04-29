@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.function.EntityResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -174,7 +173,10 @@ public class RoomService {
             if (room.getIdUser_1() == userdto.getId()) {
                 if (room.getStatus().equals("Started")) {
                     room.setStatus("Ended");
-                    room.setUsernameWinner(userdto.getUsername());
+                    String getUsernameWinner = userServiceUrl + "/users/" + room.getIdUser_2();
+                    Object objUserWinner = restTemplate.getForObject(getUsernameWinner, UserDTO.class);
+                    UserDTO userWinner = (UserDTO) objUserWinner;
+                    room.setUsernameWinner(userWinner.getUsername());
                     roomRepository.save(room);
                     return room;
                 }
@@ -185,7 +187,10 @@ public class RoomService {
             } else if (room.getIdUser_2() == userdto.getId()) {
                 if (room.getStatus().equals("Started")) {
                     room.setStatus("Ended");
-                    room.setUsernameWinner(userdto.getUsername());
+                    String getUsernameWinner = userServiceUrl + "/users/" + room.getIdUser_1();
+                    Object objUserWinner = restTemplate.getForObject(getUsernameWinner, UserDTO.class);
+                    UserDTO userWinner = (UserDTO) objUserWinner;
+                    room.setUsernameWinner(userWinner.getUsername());
                     roomRepository.save(room);
                     return room;
                 }
@@ -409,12 +414,18 @@ public class RoomService {
             if(cardVictim.getHealth() <= 0) {
                 room.setStatus("Ended");
                 if(userdto.getId() == room.getIdUser_1()) {
-                    room.setUsernameWinner(userdto.getUsername());
+                    String getUsernameWinner = userServiceUrl + "/users/" + room.getIdUser_1();
+                    Object objUserWinner = restTemplate.getForObject(getUsernameWinner, UserDTO.class);
+                    UserDTO userWinner = (UserDTO) objUserWinner;
+                    room.setUsernameWinner(userWinner.getUsername());
                     String urlUserWinner = userServiceUrl + "/users/" + room.getIdUser_1() + "/addbalance";
                     restTemplate.put(urlUserWinner, room.getReward(), UserDTO.class);
                 }
                 else {
-                    room.setUsernameWinner(userdto.getUsername());
+                    String getUsernameWinner = userServiceUrl + "/users/" + room.getIdUser_1();
+                    Object objUserWinner = restTemplate.getForObject(getUsernameWinner, UserDTO.class);
+                    UserDTO userWinner = (UserDTO) objUserWinner;
+                    room.setUsernameWinner(userWinner.getUsername());
                     String urlUserWinner = userServiceUrl + "/users/" + room.getIdUser_2() + "/addbalance";
                     restTemplate.put(urlUserWinner, room.getReward(), UserDTO.class);
                 }

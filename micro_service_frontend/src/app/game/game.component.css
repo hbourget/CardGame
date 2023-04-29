@@ -2,6 +2,7 @@
   text-align: center;
 }
 
+/*noinspection CssNoGenericFontName*/
 .font{
   font-family: Cascadia Code;
   font-size: 20px;
@@ -65,16 +66,6 @@
   border: 1px solid #f5c6cb;
   border-radius: 5px;
   color: #721c24;
-  font-weight: bold;
-}
-
-.messageWin {
-  margin-top: 1rem;
-  padding: 1rem;
-  background-color: darkseagreen;
-  border: 1px solid #f5c6cb;
-  border-radius: 5px;
-  color: forestgreen;
   font-weight: bold;
 }
 

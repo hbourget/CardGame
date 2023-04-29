@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {catchError, switchMap} from 'rxjs/operators';
 import { AuthService, User } from '../auth.service';
-import {Subscription, throwError} from 'rxjs';
+import {throwError} from 'rxjs';
 
 @Component({
   selector: 'app-game',

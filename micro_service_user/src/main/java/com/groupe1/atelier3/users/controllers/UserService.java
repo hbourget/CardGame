@@ -4,15 +4,12 @@ import com.groupe1.atelier3.users.models.User;
 import com.groupe1.atelier3.users.models.UserDTO;
 import com.groupe1.atelier3.users.models.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.groupe1.atelier3.inventory.models.Inventory;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { AuthService } from '../auth.service'; // Import the AuthService
-import { Router } from '@angular/router'; // Import the Router
+import { AuthService } from '../auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +13,7 @@ export class LoginComponent implements OnInit {
     username: '',
     password: ''
   };
-  loginError = false; // Variable to track login error
+  loginError = false;
 
   constructor(private http: HttpClient, private authService: AuthService, private router: Router) { }
 
@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
         },
         (error) => {
           console.error(error);
-          this.loginError = true; // Set login error to true
+          this.loginError = true;
         }
       );
     }
