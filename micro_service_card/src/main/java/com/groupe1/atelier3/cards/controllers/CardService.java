@@ -3,9 +3,6 @@ import com.groupe1.atelier3.cards.models.Card;
 import com.groupe1.atelier3.cards.models.CardDTO;
 import com.groupe1.atelier3.cards.models.CardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,11 +14,7 @@ import java.util.Optional;
 public class CardService {
     @Autowired
     private CardRepository cardRepository;
-    private CardMapper cardMapper = new CardMapper();
-
-    private final String userServiceUrl = "http://localhost:8081";
-
-    private final String inventoryServiceUrl = "http://localhost:8083";
+    private final CardMapper cardMapper = new CardMapper();
 
     public Card addCard(CardDTO cardDTO) {
         Card card = cardMapper.toEntity(cardDTO);

@@ -13,7 +13,7 @@
             <span class="font"><b>{{ card.name }}</b></span>
             <br><br>
             <div>
-              <img class="card-image" [src]="'../assets/' + card.image"/>
+              <img class="card-image" [src]="'../assets/' + card.image" width="256" height="256"/>
               <br><br>
               <div class="health-bar">
                 <div class="health-bar-inner" [style.width.%]="(card.health / 150) * 100"></div>

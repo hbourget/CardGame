@@ -1,7 +1,5 @@
 package com.groupe1.atelier3.cards.models;
 
-import jakarta.persistence.*;
-
 public class Card {
 
     private Integer id;

@@ -1,16 +1,12 @@
 package com.groupe1.atelier3.room.controllers;
 
-import com.groupe1.atelier3.cards.models.Card;
-import com.groupe1.atelier3.cards.models.CardDTO;
 import com.groupe1.atelier3.room.models.Room;
-import com.groupe1.atelier3.room.models.RoomWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
 
 @RestController

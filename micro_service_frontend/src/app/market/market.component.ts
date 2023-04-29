@@ -1,8 +1,7 @@
-// market.component.ts
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
-import { throwError, Subscription } from 'rxjs';
+import { throwError } from 'rxjs';
 import { AuthService } from '../auth.service';
 import { User } from '../auth.service';
 

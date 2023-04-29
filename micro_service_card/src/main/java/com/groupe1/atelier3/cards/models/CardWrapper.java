@@ -6,7 +6,6 @@ public class CardWrapper {
     private CardDTO card;
     private List<CardDTO> cards;
 
-    // Getters and Setters
     public CardDTO getCard() {
         return card;
     }

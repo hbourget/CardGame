@@ -1,7 +1,6 @@
 package com.groupe1.atelier3.cards.models;
 
 public class CardDTO {
-    //class Card with attributes name, description, power , health, price and image
     private Integer id;
     private String name;
     private String description;
@@ -12,7 +11,6 @@ public class CardDTO {
     private int price;
     private String image;
 
-    //constructor
     public CardDTO(Integer id, String name, String description, int power, int health, int price, String image, String type, int energy) {
         this.id = id;
         this.name = name;
@@ -38,7 +36,6 @@ public class CardDTO {
     public CardDTO() {
 
     }
-    //getters and setters
 
     public String getName() {
         return name;

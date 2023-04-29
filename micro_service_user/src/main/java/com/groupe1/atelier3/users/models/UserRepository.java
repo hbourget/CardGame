@@ -1,7 +1,6 @@
 package com.groupe1.atelier3.users.models;
 import org.springframework.data.repository.CrudRepository;
 
-import java.util.List;
 import java.util.Optional;
 
 

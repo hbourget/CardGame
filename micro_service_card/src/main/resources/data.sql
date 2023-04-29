@@ -1,0 +1,18 @@
+INSERT INTO CARD (name, description, power, health, price, image, type, energy) VALUES ('Poseidon', 'God of the Sea', 20, 150, 300, 'poseidon.png', 'Eau', 50);
+INSERT INTO CARD (name, description, power, health, price, image, type, energy) VALUES ('Hades', 'God of the Underworld', 25, 150, 350, 'hades.png', 'Feu', 60);
+INSERT INTO CARD (name, description, power, health, price, image, type, energy) VALUES ('Zeus', 'God of Thunder', 30, 150, 400, 'zeus.png', 'Feu', 70);
+INSERT INTO CARD (name, description, power, health, price, image, type, energy) VALUES ('Athena', 'Goddess of Wisdom', 15, 150, 250, 'athena.png', 'Terre', 40);
+INSERT INTO CARD (name, description, power, health, price, image, type, energy) VALUES ('Hera', 'Goddess of Marriage', 10, 150, 200, 'hera.png', 'Terre', 30);
+INSERT INTO CARD (name, description, power, health, price, image, type, energy) VALUES ('Inferno', 'Flaming Monster', 25, 150, 350, 'inferno.png', 'Feu', 60);
+INSERT INTO CARD (name, description, power, health, price, image, type, energy) VALUES ('Hydra', 'Multi-headed Serpent', 30, 150, 400, 'hydra.png', 'Eau', 70);
+INSERT INTO CARD (name, description, power, health, price, image, type, energy) VALUES ('Golem', 'Elemental Creature', 20, 150, 300, 'golem.png', 'Terre', 50);
+INSERT INTO CARD (name, description, power, health, price, image, type, energy) VALUES ('Kraken', 'Legendary Sea Monster', 35, 150, 450, 'kraken.png', 'Eau', 80);
+INSERT INTO CARD (name, description, power, health, price, image, type, energy) VALUES ('Salamander', 'Feu Elemental', 15, 150, 250, 'salamander.png', 'Feu', 40);
+INSERT INTO CARD (name, description, power, health, price, image, type, energy) VALUES ('Tremor', 'Terrequake Beast', 10, 150, 200, 'tremor.png', 'Terre', 30);
+INSERT INTO CARD (name, description, power, health, price, image, type, energy) VALUES ('Troll', 'Enormous Monster', 10, 150, 200, 'troll.png', 'Terre', 20);
+INSERT INTO CARD (name, description, power, health, price, image, type, energy) VALUES ('Unicorn', 'Mythical Creature', 15, 150, 250, 'unicorn.png', 'Terre', 30);
+INSERT INTO CARD (name, description, power, health, price, image, type, energy) VALUES ('Dragon', 'Legendary Creature', 30, 150, 400, 'dragon.png', 'Feu', 60);
+INSERT INTO CARD (name, description, power, health, price, image, type, energy) VALUES ('Phoenix', 'Mystical Bird', 25, 150, 350, 'phoenix.png', 'Feu', 50);
+INSERT INTO CARD (name, description, power, health, price, image, type, energy) VALUES ('Leviathan', 'Giant Sea Creature', 30, 150, 400, 'leviathan.png', 'Eau', 60);
+INSERT INTO CARD (name, description, power, health, price, image, type, energy) VALUES ('Mermaid', 'Enchanting Creature', 25, 150, 350, 'mermaid.png', 'Eau', 50);
+INSERT INTO CARD (name, description, power, health, price, image, type, energy) VALUES ('Neptune', 'God of the Sea', 30, 150, 400, 'neptune.png', 'Eau', 60);

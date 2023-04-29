@@ -1,6 +1,5 @@
 package com.groupe1.atelier3.users.controllers;
 
-import com.groupe1.atelier3.inventory.models.Inventory;
 import com.groupe1.atelier3.users.models.User;
 import com.groupe1.atelier3.users.models.UserDTO;
 
