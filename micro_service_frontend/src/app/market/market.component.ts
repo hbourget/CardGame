@@ -1,35 +1,60 @@
-import { Component } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {catchError} from "rxjs/operators";
-import {throwError} from "rxjs";
+// market.component.ts
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { catchError } from 'rxjs/operators';
+import { throwError, Subscription } from 'rxjs';
+import { AuthService } from '../auth.service';
+import { User } from '../auth.service';
 
 @Component({
   selector: 'app-market',
   templateUrl: './market.component.html',
   styleUrls: ['./market.component.css']
 })
-export class MarketComponent {
-  cards:any
-  constructor(private http:HttpClient) {
-  }
+export class MarketComponent implements OnInit, OnDestroy {
+  cards: any;
+  user: User | null = null;
+  userSubscription: any;
+
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   ngOnInit() {
-    let response = this.http.get('http://localhost:8888/inventories/availablecards');
-    response.subscribe((data)=>this.cards=data);
+    this.userSubscription = this.authService.user$.subscribe((user) => {
+      this.user = user;
+      if (user) {
+        const token = this.authService.getAccessToken();
+        const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+        let response = this.http.get('http://localhost:8080/inventories/availablecards', { headers });
+        response.subscribe((data) => (this.cards = data));
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.userSubscription.unsubscribe();
   }
 
   buyCard(id: any) {
-    let response = this.http.post('http://localhost:8888/inventories/buy/users/1/cards/'+id, null).pipe(
-      catchError((error) => {
-        if (error.status === 409) {
-          alert("Vous n'avez pas assez d'argent!");
-        }
-        return throwError(error);
-      })
-    );
-    response.subscribe((data)=>{
-      let updatedResponse = this.http.get('http://localhost:8888/inventories/availablecards');
-      updatedResponse.subscribe((updatedData)=>this.cards=updatedData);
-    });
+    if (this.user) {
+      const token = this.authService.getAccessToken();
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+      let response = this.http
+        .post(`http://localhost:8080/inventories/buy/users/${this.user.username}/cards/${id}`, null, { headers })
+        .pipe(
+          catchError((error) => {
+            if (error.status === 409) {
+              alert("Vous n'avez pas assez d'argent!");
+            }
+            return throwError(error);
+          })
+        );
+      response.subscribe((data) => {
+        this.authService.getUserData();
+
+        let updatedResponse = this.http.get('http://localhost:8080/inventories/availablecards', { headers });
+        updatedResponse.subscribe((updatedData) => (this.cards = updatedData));
+      });
+    }
   }
+
 }

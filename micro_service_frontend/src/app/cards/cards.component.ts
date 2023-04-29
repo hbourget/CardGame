@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import { catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { AuthService } from '../auth.service';
+import {Subject} from "rxjs";
 
 @Component({
   selector: 'app-cards',
@@ -9,28 +9,34 @@ import { throwError } from 'rxjs';
   styleUrls: ['./cards.component.css']
 })
 export class CardsComponent implements OnInit {
+  cards: any;
+  dtOptions: DataTables.Settings = {};
+  dtTrigger: Subject<any> = new Subject<any>();
 
-  cards:any
-  constructor(private http:HttpClient) {
-  }
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   ngOnInit() {
-    let response = this.http.get('http://localhost:8888/cards');
-    response.subscribe((data)=>this.cards=data);
+    const token = this.authService.getAccessToken();
+    if (token) {
+      const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+      this.http
+        .get('http://localhost:8080/cards', { headers })
+        .subscribe((data) => {
+          this.cards = data;
+          // @ts-ignore
+          this.dtTrigger.next();
+        });
+    } else {
+      alert('Vous êtes déconnecté')
     }
 
-  buyCard(id: any) {
-    let response = this.http.post('http://localhost:8888/inventories/buy/users/1/cards/'+id, null).pipe(
-      catchError((error) => {
-        if (error.status === 409) {
-          alert("Vous n'avez pas assez d'argent!");
-        }
-        return throwError(error);
-      })
-    );
-    response.subscribe((data)=>{
-      let updatedResponse = this.http.get('http://localhost:8888/inventories/availablecards');
-      updatedResponse.subscribe((updatedData)=>this.cards=updatedData);
-    });
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 25,
+      language: {
+        url: '//cdn.datatables.net/plug-ins/1.10.25/i18n/French.json'
+      }
+    };
   }
+
 }

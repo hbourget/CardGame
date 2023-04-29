@@ -1,23 +1,37 @@
 <div class="container2">
   <h2>Rooms</h2>
+  <form (ngSubmit)="create()" #createForm="ngForm">
+    <div class="form-group">
+      <label for="roomName">Room Name:</label>
+      <input type="text" class="form-control" id="roomName" [(ngModel)]="roomName" name="roomName" required>
+    </div>
+    <br>
+    <button type="submit" class="btn btn-primary" [disabled]="!createForm.valid">Create Room</button>
+  </form>
   <br>
-  <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped" style="width:100%">
+  <br>
+  <br>
+  <table class="table table-striped" style="width:100%">
     <thead>
     <tr>
       <th>Nom</th>
       <th>Status</th>
-      <th>Récompense</th>
-      <th>Action</th>
+      <th></th>
+      <th>Winner</th>
     </tr>
     </thead>
     <tbody>
     <tr *ngFor="let room of rooms">
       <td>{{room.name}}</td>
       <td>{{room.status}}</td>
-      <td>{{room.reward}}</td>
-      <td><button class="btn btn-success btn-sm btnjoin" (click)="join(room.id)">Rejoindre</button>
-        <button class="btn btn-primary btn-sm" (click)="view(room.id)">Voir</button>
+      <td>
+        <div class="action-buttons">
+          <button class="btn btn-success btn-sm btnjoin" (click)="join(room.id)">Rejoindre</button>
+          <button class="btn btn-primary btn-sm btnjoin" (click)="view(room.id)">Voir</button>
+          <button class="btn btn-danger btn-sm" (click)="leave(room.id)">Quitter</button>
+        </div>
       </td>
+      <td>{{room.usernameWinner}}</td>
     </tr>
     </tbody>
   </table>

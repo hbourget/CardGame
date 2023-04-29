@@ -28,7 +28,7 @@ public class InventoryService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public InventoryResponse addCardToInv(Integer userId, Integer cardId) {
+    public InventoryResponse addCardToInv(String userId, Integer cardId) {
         User user = restTemplate.getForObject(userServiceUrl + "/users/" + userId, User.class);
         if (user == null) {
             return null;
@@ -52,7 +52,7 @@ public class InventoryService {
         return getInventoryCards(user.getIdInventory());
     }
 
-    public InventoryResponse removeCardFromInv(Integer userId, Integer cardId) {
+    public InventoryResponse removeCardFromInv(String userId, Integer cardId) {
         User user = restTemplate.getForObject(userServiceUrl + "/users/" + userId, User.class);
         if (user == null) {
             return null;
@@ -66,7 +66,7 @@ public class InventoryService {
         return getInventoryCards(user.getIdInventory());
     }
 
-    public InventoryResponse addAllCardToInv(Integer userId, List<Card> cards) {
+    public InventoryResponse addAllCardToInv(String userId, List<Card> cards) {
         User user = restTemplate.getForObject(userServiceUrl + "/users/" + userId, User.class);
         if (user == null) {
             return null;
@@ -86,7 +86,7 @@ public class InventoryService {
     }
 
     //remove all existing cards in inventory
-    public InventoryResponse removeAllCardFromInv(Integer userId) {
+    public InventoryResponse removeAllCardFromInv(String userId) {
         User user = restTemplate.getForObject(userServiceUrl + "/users/" + userId, User.class);
         if (user == null) {
             return null;
@@ -101,7 +101,7 @@ public class InventoryService {
         return getInventoryCards(user.getIdInventory());
     }
 
-    public boolean deleteInventory(Integer idUser) {
+    public boolean deleteInventory(String idUser) {
         User user = restTemplate.getForObject(userServiceUrl + "/users/" + idUser, User.class);
         if (user == null) {
             return false;
@@ -180,7 +180,7 @@ public class InventoryService {
             HttpEntity<Integer> requestEntity = new HttpEntity<>(card.getPrice());
             restTemplate.exchange(url, HttpMethod.PUT, requestEntity, Void.class, user.getId());
 
-            addCardToInv(user.getIdInventory(), card.getId());
+            addCardToInv(user.getUsername(), card.getId());
         }
         return card;
     }
@@ -195,7 +195,7 @@ public class InventoryService {
             HttpEntity<Integer> requestEntity = new HttpEntity<>(card.getPrice());
             restTemplate.exchange(url, HttpMethod.PUT, requestEntity, Void.class, user.getId());
 
-            removeCardFromInv(user.getIdInventory(), card.getId());
+            removeCardFromInv(user.getUsername(), card.getId());
         }
         return card;
     }
@@ -216,7 +216,7 @@ public class InventoryService {
                 HttpEntity<Integer> requestEntity = new HttpEntity<>(card.getPrice());
                 restTemplate.exchange(url, HttpMethod.PUT, requestEntity, Void.class, user.getId());
             }
-            removeAllCardFromInv(user.getIdInventory());
+            removeAllCardFromInv(user.getUsername());
         }
         else {
             return false;

@@ -6,3 +6,8 @@
 .btnjoin{
   margin-right: 5px;
 }
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+}

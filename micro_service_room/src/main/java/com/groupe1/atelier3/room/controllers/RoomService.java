@@ -65,7 +65,7 @@ public class RoomService {
                 }
             }
             if (room.getIdUser_2() != 0) {
-                if (room.getIdCardUser_1() != 0) {
+                if (room.getIdCardUser_2() != 0) {
                     Card card2 = restTemplate.getForObject(cardServiceUrl + "/cards/" + room.getIdCardUser_2(), Card.class);
                     cards.add(card2);
                 }
@@ -111,7 +111,7 @@ public class RoomService {
     }
 
 
-    public Object joinRoom(int id, int idUser) {
+    public Object joinRoom(int id, String idUser) {
         Optional<Room> roomOpt = roomRepository.findById(id);
         String url = userServiceUrl + "/users/" + idUser;
         UserDTO userdto = restTemplate.getForObject(url, UserDTO.class);
@@ -120,7 +120,7 @@ public class RoomService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("L'utilisateur n'existe pas.");
         }
 
-        if (checkIfUserIsInARoom(idUser)) {
+        if (checkIfUserIsInARoom(userdto.getId())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("L'utilisateur est déjà dans une room.");
         }
 
@@ -130,9 +130,9 @@ public class RoomService {
             }
             Room room = roomOpt.get();
             if (room.getIdUser_1() == 0) {
-                room.setIdUser_1(idUser);
+                room.setIdUser_1(userdto.getId());
             } else if (room.getIdUser_2() == 0) {
-                room.setIdUser_2(idUser);
+                room.setIdUser_2(userdto.getId());
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("La room est pleine.");
             }
@@ -157,7 +157,7 @@ public class RoomService {
         }
     }
 
-    public Object leaveRoom(int id, int idUser) {
+    public Object leaveRoom(int id, String idUser) {
         Optional<Room> roomOpt = roomRepository.findById(id);
         String url = userServiceUrl + "/users/" + idUser;
         UserDTO userdto = restTemplate.getForObject(url, UserDTO.class);
@@ -168,10 +168,13 @@ public class RoomService {
 
         if (roomOpt.isPresent()) {
             Room room = roomOpt.get();
-            if (room.getIdUser_1() == idUser) {
+            if (room.getStatus().equals("Ended")) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("La room est terminée.");
+            }
+            if (room.getIdUser_1() == userdto.getId()) {
                 if (room.getStatus().equals("Started")) {
                     room.setStatus("Ended");
-                    room.setIdUserWinner(room.getIdUser_2());
+                    room.setUsernameWinner(userdto.getUsername());
                     roomRepository.save(room);
                     return room;
                 }
@@ -179,10 +182,10 @@ public class RoomService {
                     room.setIdUser_1(0);
                     room.setIdCardUser_1(0);
                 }
-            } else if (room.getIdUser_2() == idUser) {
+            } else if (room.getIdUser_2() == userdto.getId()) {
                 if (room.getStatus().equals("Started")) {
                     room.setStatus("Ended");
-                    room.setIdUserWinner(room.getIdUser_1());
+                    room.setUsernameWinner(userdto.getUsername());
                     roomRepository.save(room);
                     return room;
                 }
@@ -212,15 +215,19 @@ public class RoomService {
         }
     }
 
-    public Object addCardToRoom(int roomId, int cardId, int playerId) {
+    public Object addCardToRoom(int roomId, int cardId, String playerId) {
 
 
         Optional<Room> roomOpt = roomRepository.findById(roomId);
         String urlUser = userServiceUrl + "/users/" + playerId;
         Object objUser = restTemplate.getForObject(urlUser, UserDTO.class);
+        UserDTO userdto;
 
         if (!(objUser instanceof UserDTO)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("L'utilisateur n'existe pas.");
+        }
+        else {
+             userdto = (UserDTO) objUser;
         }
 
         String urlCard = cardServiceUrl + "/cards/" + cardId;
@@ -248,12 +255,12 @@ public class RoomService {
 
         if (roomOpt.isPresent()) {
             Room room = roomOpt.get();
-            if (room.getIdUser_1() != playerId && room.getIdUser_2() != playerId) {
+            if (room.getIdUser_1() != userdto.getId() && room.getIdUser_2() != userdto.getId()) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("L'utilisateur n'est pas dans la room.");
             }
-            if (room.getIdUser_1() == playerId) {
+            if (room.getIdUser_1() == userdto.getId()) {
                 room.setIdCardUser_1(cardId);
-            } else if (room.getIdUser_2() == playerId) {
+            } else if (room.getIdUser_2() == userdto.getId()) {
                 room.setIdCardUser_2(cardId);
             }
             if (room.getIdCardUser_1() != 0 && room.getIdCardUser_2() != 0) {
@@ -269,17 +276,24 @@ public class RoomService {
         }
     }
 
-    public Object playRound(int roomId, int playerId)
+    public Object playRound(int roomId, String playerId)
     {
         Optional<Room> roomOpt = roomRepository.findById(roomId);
         String urlUser = userServiceUrl + "/users/" + playerId;
         Object objUser = restTemplate.getForObject(urlUser, UserDTO.class);
+        UserDTO userdto;
 
+        if (!(objUser instanceof UserDTO)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("L'utilisateur n'existe pas.");
+        }
+        else {
+            userdto = (UserDTO) objUser;
+        }
 
         if (roomOpt.isPresent()) {
             Room room = roomOpt.get();
             if (room.getStatus().equals("Ended")) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("La room est terminée.");
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("La partie est terminée.");
             }
             if (!room.getStatus().equals("Started")) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("La partie n'a pas encore commencé, les 2 joueurs doivent selectionné une carte.");
@@ -288,11 +302,11 @@ public class RoomService {
             if (!(objUser instanceof UserDTO)) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("L'utilisateur n'existe pas.");
             }
-            if (room.getIdUser_1() != playerId && room.getIdUser_2() != playerId) {
+            if (room.getIdUser_1() != userdto.getId() && room.getIdUser_2() != userdto.getId()) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("L'utilisateur n'est pas dans la room.");
             }
 
-            if(playerId == roomOpt.get().getIdUser_1()) {
+            if(userdto.getId() == roomOpt.get().getIdUser_1()) {
                 if(room.getCooldownUser_1() == 1) {
                     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("L'utilisateur a déjà joué ce tour.");
                 }
@@ -305,7 +319,7 @@ public class RoomService {
 
             int idCardVictim = 0;
             int idCardAttacker = 0;
-            if(playerId == roomOpt.get().getIdUser_1()) {
+            if(userdto.getId() == roomOpt.get().getIdUser_1()) {
                 idCardVictim = roomOpt.get().getIdCardUser_2();
                 idCardAttacker = roomOpt.get().getIdCardUser_1();
             }
@@ -337,33 +351,33 @@ public class RoomService {
             int healthAttacker = cardAttacker.getHealth();
             String typeAttacker = cardAttacker.getType();
 
-            if(typeAttacker.equals("Fire")) {
-                if(typeVictim.equals("Water")) {
+            if(typeAttacker.equals("Feu")) {
+                if(typeVictim.equals("Eau")) {
                     healthVictim = healthVictim - (powerAttacker / 2);
                 }
-                else if(typeVictim.equals("Earth")) {
+                else if(typeVictim.equals("Terre")) {
                     healthVictim = healthVictim - (powerAttacker * 2);
                 }
                 else {
                     healthVictim = healthVictim - powerAttacker;
                 }
             }
-            else if(typeAttacker.equals("Water")) {
-                if(typeVictim.equals("Earth")) {
+            else if(typeAttacker.equals("Eau")) {
+                if(typeVictim.equals("Terre")) {
                     healthVictim = healthVictim - (powerAttacker / 2);
                 }
-                else if(typeVictim.equals("Fire")) {
+                else if(typeVictim.equals("Feu")) {
                     healthVictim = healthVictim - (powerAttacker * 2);
                 }
                 else {
                     healthVictim = healthVictim - powerAttacker;
                 }
             }
-            else if(typeAttacker.equals("Earth")) {
-                if(typeVictim.equals("Fire")) {
+            else if(typeAttacker.equals("Terre")) {
+                if(typeVictim.equals("Feu")) {
                     healthVictim = healthVictim - (powerAttacker / 2);
                 }
-                else if(typeVictim.equals("Water")) {
+                else if(typeVictim.equals("Eau")) {
                     healthVictim = healthVictim - (powerAttacker * 2);
                 }
                 else {
@@ -383,8 +397,7 @@ public class RoomService {
             cardVictim.setHealth(healthVictim);
             restTemplate.put(cardServiceUrl + "/cards/" + idCardVictim, cardVictim);
 
-            //set remove 1 coup from the attacker
-            if(playerId == roomOpt.get().getIdUser_1()) {
+            if(userdto.getId() == roomOpt.get().getIdUser_1()) {
                 room.setCooldownUser_1(1);
                 room.setCooldownUser_2(0);
             }
@@ -393,16 +406,15 @@ public class RoomService {
                 room.setCooldownUser_1(0);
             }
 
-            //check if both remaningCoups are 0
             if(cardVictim.getHealth() <= 0) {
                 room.setStatus("Ended");
-                if(playerId == room.getIdUser_1()) {
-                    room.setIdUserWinner(room.getIdUser_1());
+                if(userdto.getId() == room.getIdUser_1()) {
+                    room.setUsernameWinner(userdto.getUsername());
                     String urlUserWinner = userServiceUrl + "/users/" + room.getIdUser_1() + "/addbalance";
                     restTemplate.put(urlUserWinner, room.getReward(), UserDTO.class);
                 }
                 else {
-                    room.setIdUserWinner(room.getIdCardUser_2());
+                    room.setUsernameWinner(userdto.getUsername());
                     String urlUserWinner = userServiceUrl + "/users/" + room.getIdUser_2() + "/addbalance";
                     restTemplate.put(urlUserWinner, room.getReward(), UserDTO.class);
                 }

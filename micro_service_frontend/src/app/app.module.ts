@@ -6,6 +6,14 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import { DataTablesModule } from 'angular-datatables';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatCardModule } from '@angular/material/card';
 
 import { AppComponent } from './app.component';
 import { CardsComponent } from './cards/cards.component';
@@ -19,6 +27,9 @@ import { HomeComponent } from './home/home.component';
 import { RoomsComponent } from './rooms/rooms.component';
 import { GameComponent } from './game/game.component';
 import {FormsModule} from "@angular/forms";
+import { RegisterComponent } from './register/register.component';
+import { LoginComponent } from './login/login.component';
+import { LogoutComponent } from './logout/logout.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +41,10 @@ import {FormsModule} from "@angular/forms";
     RankingComponent,
     HomeComponent,
     RoomsComponent,
-    GameComponent
+    GameComponent,
+    RegisterComponent,
+    LoginComponent,
+    LogoutComponent
   ],
   imports: [
     BrowserModule,
@@ -41,6 +55,14 @@ import {FormsModule} from "@angular/forms";
     BrowserAnimationsModule,
     MatButtonModule,
     DataTablesModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatCheckboxModule,
+    MatRadioModule,
+    MatCardModule,
     FormsModule
   ],
   providers: [],

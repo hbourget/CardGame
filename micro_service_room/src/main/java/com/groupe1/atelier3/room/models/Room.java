@@ -18,7 +18,7 @@ public class Room {
     private int cooldownUser_1;
     private int cooldownUser_2;
     private String status;
-    private int idUserWinner;
+    private String usernameWinner;
     private int reward;
 
     public Room(int id, String name) {
@@ -31,7 +31,7 @@ public class Room {
         this.cooldownUser_1 = 0;
         this.cooldownUser_2 = 0;
         this.status = "Waiting 0/2";
-        this.idUserWinner = 0;
+        this.usernameWinner = "";
         Random random = new Random();
         this.reward = random.nextInt(30 - 10 + 1) + 10;
 
@@ -45,7 +45,7 @@ public class Room {
         this.cooldownUser_1 = 0;
         this.cooldownUser_2 = 0;
         this.status = "Waiting 0/2";
-        this.idUserWinner = 0;
+        this.usernameWinner = "";
         Random random = new Random();
         this.reward = random.nextInt(30 - 10 + 1) + 10;
     }
@@ -121,12 +121,12 @@ public class Room {
         this.cooldownUser_2 = cooldownUser_2;
     }
 
-    public int getIdUserWinner() {
-        return idUserWinner;
+    public String getUsernameWinner() {
+        return usernameWinner;
     }
 
-    public void setIdUserWinner(int idUserWinner) {
-        this.idUserWinner = idUserWinner;
+    public void setUsernameWinner(String usernameWinner) {
+        this.usernameWinner = usernameWinner;
     }
 
     public int getReward() {
