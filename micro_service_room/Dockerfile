@@ -1,4 +1,4 @@
-FROM maven:3-eclipse-temurin-17-alpine as build
+FROM maven:3-eclipse-temurin-17 as build
 
 ENV MICRO_SERVICE_NAME=room
 ENV PUBLIC_CARD=public_card
