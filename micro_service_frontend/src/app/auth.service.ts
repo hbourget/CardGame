@@ -31,7 +31,7 @@ export class AuthService {
       const decodedToken = jwt_decode(token) as DecodedToken;
       const username = decodedToken['sub'];
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-      this.http.get<User>(`http://proxyauth:8080/users/${username}`, { headers }).subscribe((user) => {
+      this.http.get<User>(`http://localhost:8080/users/${username}`, { headers }).subscribe((user) => {
         this.userSubject.next(user);
       });
     }

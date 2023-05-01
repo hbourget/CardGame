@@ -18,7 +18,7 @@ export class LogoutComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.http.post('http://proxyauth:8080/auth/logout', {access_token: this.authService.getAccessToken()});
+    this.http.post('http://localhost:8080/auth/logout', {access_token: this.authService.getAccessToken()});
     this.authService.removeTokens();
     this.authService.userSubject.next(null);
     this.router.navigate(['/login']);

@@ -20,7 +20,7 @@ export class CardsComponent implements OnInit {
     if (token) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
       this.http
-        .get('http://proxyauth:8080/cards', { headers })
+        .get('http://localhost:8080/cards', { headers })
         .subscribe((data) => {
           this.cards = data;
           // @ts-ignore

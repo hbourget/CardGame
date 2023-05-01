@@ -23,7 +23,7 @@ export class MarketComponent implements OnInit, OnDestroy {
       if (user) {
         const token = this.authService.getAccessToken();
         const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-        let response = this.http.get('http://proxyauth:8080/inventories/availablecards', { headers });
+        let response = this.http.get('http://localhost:8080/inventories/availablecards', { headers });
         response.subscribe((data) => (this.cards = data));
       }
     });
@@ -38,7 +38,7 @@ export class MarketComponent implements OnInit, OnDestroy {
       const token = this.authService.getAccessToken();
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
       let response = this.http
-        .post(`http://proxyauth:8080/inventories/buy/users/${this.user.username}/cards/${id}`, null, { headers })
+        .post(`http://localhost:8080/inventories/buy/users/${this.user.username}/cards/${id}`, null, { headers })
         .pipe(
           catchError((error) => {
             if (error.status === 409) {
@@ -50,7 +50,7 @@ export class MarketComponent implements OnInit, OnDestroy {
       response.subscribe((data) => {
         this.authService.getUserData();
 
-        let updatedResponse = this.http.get('http://proxyauth:8080/inventories/availablecards', { headers });
+        let updatedResponse = this.http.get('http://localhost:8080/inventories/availablecards', { headers });
         updatedResponse.subscribe((updatedData) => (this.cards = updatedData));
       });
     }

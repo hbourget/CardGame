@@ -26,7 +26,7 @@ export class RoomsComponent implements OnInit, OnDestroy {
       if (user) {
         const token = this.authService.getAccessToken();
         const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-        this.http.get('http://proxyauth:8080/rooms', { headers }).subscribe((data) => {
+        this.http.get('http://localhost:8080/rooms', { headers }).subscribe((data) => {
           this.rooms = data;
         });
       }
@@ -42,7 +42,7 @@ export class RoomsComponent implements OnInit, OnDestroy {
       const token = this.authService.getAccessToken();
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
       let response = this.http
-        .put(`http://proxyauth:8080/rooms/join/${idRoom}/users/${this.user.username}`, { id: idRoom }, { headers })
+        .put(`http://localhost:8080/rooms/join/${idRoom}/users/${this.user.username}`, { id: idRoom }, { headers })
         .pipe(
           catchError((error) => {
             if (error.status === 401) {
@@ -63,7 +63,7 @@ export class RoomsComponent implements OnInit, OnDestroy {
       const token = this.authService.getAccessToken();
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
       let response = this.http
-        .put(`http://proxyauth:8080/rooms/leave/${idRoom}/users/${this.user.username}`, { id: idRoom }, { headers })
+        .put(`http://localhost:8080/rooms/leave/${idRoom}/users/${this.user.username}`, { id: idRoom }, { headers })
         .pipe(
           catchError((error) => {
             if (error.status === 401) {
@@ -88,7 +88,7 @@ export class RoomsComponent implements OnInit, OnDestroy {
       const token = this.authService.getAccessToken();
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
       let response = this.http
-        .post(`http://proxyauth:8080/rooms`, { name: this.roomName }, { headers })
+        .post(`http://localhost:8080/rooms`, { name: this.roomName }, { headers })
         .pipe(
           catchError((error) => {
             return throwError(error);

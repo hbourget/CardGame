@@ -36,23 +36,23 @@ export class GameComponent implements OnInit, OnDestroy {
         this.route.paramMap.pipe(
           switchMap(params => {
             this.roomId = params.get('idRoom');
-            return this.http.get('http://proxyauth:8080/rooms/' + this.roomId, { headers });
+            return this.http.get('http://localhost:8080/rooms/' + this.roomId, { headers });
           }),
           switchMap(data => {
             this.gameData = data;
-            return this.http.get('http://proxyauth:8080/users/' + this.gameData.room.idUser_1, { headers });
+            return this.http.get('http://localhost:8080/users/' + this.gameData.room.idUser_1, { headers });
           }),
           switchMap(dataU1 => {
             this.user1 = dataU1;
-            return this.http.get('http://proxyauth:8080/inventories/users/' + this.user1.id, { headers });
+            return this.http.get('http://localhost:8080/inventories/users/' + this.user1.id, { headers });
           }),
           switchMap(dataInv1 => {
             this.user1Inventory = dataInv1;
-            return this.http.get('http://proxyauth:8080/users/' + this.gameData.room.idUser_2, { headers });
+            return this.http.get('http://localhost:8080/users/' + this.gameData.room.idUser_2, { headers });
           }),
           switchMap(dataU2 => {
             this.user2 = dataU2;
-            return this.http.get('http://proxyauth:8080/inventories/users/' + this.user2.id, { headers });
+            return this.http.get('http://localhost:8080/inventories/users/' + this.user2.id, { headers });
           })
         ).subscribe(dataInv2 => {
           this.user2Inventory = dataInv2;
@@ -69,7 +69,7 @@ export class GameComponent implements OnInit, OnDestroy {
     const token = this.authService.getAccessToken();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     if(this.user?.username != this.user1.username) { alert("Vous n'êtes pas " + this.user1.username); return; }
-    this.http.put('http://proxyauth:8080/rooms/'+this.roomId+'/users/'+this.user1.id+'/cards/' + selectedCard1, null, { headers }).subscribe(data => {
+    this.http.put('http://localhost:8080/rooms/'+this.roomId+'/users/'+this.user1.id+'/cards/' + selectedCard1, null, { headers }).subscribe(data => {
       this.ngOnInit();
     });
   }
@@ -78,7 +78,7 @@ export class GameComponent implements OnInit, OnDestroy {
     const token = this.authService.getAccessToken();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     if(this.user?.username != this.user2.username) { alert("Vous n'êtes pas " + this.user2.username); return; }
-    this.http.put('http://proxyauth:8080/rooms/' + this.roomId + '/users/' + this.user2.id + '/cards/' + selectedCard2, null, { headers }).subscribe(data => {
+    this.http.put('http://localhost:8080/rooms/' + this.roomId + '/users/' + this.user2.id + '/cards/' + selectedCard2, null, { headers }).subscribe(data => {
       this.ngOnInit();
     });
   }
@@ -86,7 +86,7 @@ export class GameComponent implements OnInit, OnDestroy {
   attack() {
     const token = this.authService.getAccessToken();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    this.http.put('http://proxyauth:8080/rooms/play/' + this.roomId + '/users/' + this.user?.username, null, { headers })
+    this.http.put('http://localhost:8080/rooms/play/' + this.roomId + '/users/' + this.user?.username, null, { headers })
       .pipe(
         catchError((error) => {
           if (error.status === 401) {
