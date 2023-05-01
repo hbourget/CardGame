@@ -20,7 +20,7 @@ import java.util.List;
 public class InventoryCrt {
     @Autowired
     private final InventoryService inventoryService;
-    private final String cardServiceUrl = "http://localhost:8082";
+    private final String cardServiceUrl = "http://card:8082";
     private final RestTemplate restTemplate = new RestTemplate();
     public InventoryCrt(InventoryService inventoryService) {
         this.inventoryService = inventoryService;
@@ -74,7 +74,7 @@ public class InventoryCrt {
     public ResponseEntity<InventoryResponse> getInventoryByUser(@PathVariable String userId) {
         UserDTO user;
         try {
-            user = restTemplate.getForObject("http://localhost:8081/users/" + userId, UserDTO.class);
+            user = restTemplate.getForObject("http://user:8081/users/" + userId, UserDTO.class);
         } catch (HttpClientErrorException e) {
             if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -107,8 +107,8 @@ public class InventoryCrt {
 
     @PostMapping("/inventories/buy/users/{idUser}/cards/{cardId}")
     public ResponseEntity<Card> BuyCard(@PathVariable String idUser, @PathVariable Integer cardId) {
-        Card card = restTemplate.getForObject("http://localhost:8082/cards/" + cardId, Card.class);
-        User user = restTemplate.getForObject("http://localhost:8081/users/" + idUser, User.class);
+        Card card = restTemplate.getForObject("http://card:8082/cards/" + cardId, Card.class);
+        User user = restTemplate.getForObject("http://user:8081/users/" + idUser, User.class);
         Card c = inventoryService.buyCard(user, card);
         if (c == null) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -120,8 +120,8 @@ public class InventoryCrt {
 
     @PostMapping("/inventories/sell/users/{idUser}/cards/{cardId}")
     public ResponseEntity<Card> SellCard(@PathVariable String idUser, @PathVariable Integer cardId) {
-        Card card = restTemplate.getForObject("http://localhost:8082/cards/" + cardId, Card.class);
-        User user = restTemplate.getForObject("http://localhost:8081/users/" + idUser, User.class);
+        Card card = restTemplate.getForObject("http://card:8082/cards/" + cardId, Card.class);
+        User user = restTemplate.getForObject("http://user:8081/users/" + idUser, User.class);
         Card c = inventoryService.sellCard(user, card);
         if (c == null) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -133,7 +133,7 @@ public class InventoryCrt {
 
     @PostMapping("/inventories/sell/users/{idUser}")
     public ResponseEntity<Boolean> SellAllCards(@PathVariable String idUser) {
-        User user = restTemplate.getForObject("http://localhost:8081/users/" + idUser, User.class);
+        User user = restTemplate.getForObject("http://user:8081/users/" + idUser, User.class);
         boolean b = inventoryService.sellAllCards(user);
         if (!b) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);

@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
 
   onSubmit(form: { valid: any; }) {
     if (form.valid) {
-      this.http.post('http://localhost:8080/auth/login', this.user).subscribe(
+      this.http.post('http://proxyauth:8080/auth/login', this.user).subscribe(
         (data: any) => {
           this.authService.setAccessToken(data.access_token);
           this.authService.setRefreshToken(data.refresh_token);

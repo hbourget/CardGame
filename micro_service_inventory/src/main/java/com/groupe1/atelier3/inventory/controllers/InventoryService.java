@@ -22,8 +22,8 @@ public class InventoryService {
     @Autowired
     private InventoryRepository inventoryRepository;
 
-    private final String cardServiceUrl = "http://localhost:8082";
-    private final String userServiceUrl = "http://localhost:8081";
+    private final String cardServiceUrl = "http://card:8082";
+    private final String userServiceUrl = "http://user:8081";
 
     private final RestTemplate restTemplate = new RestTemplate();
 
@@ -207,7 +207,7 @@ public class InventoryService {
             }
 
             for (Integer cardId : getInventory(idInv).getCards()) {
-                String urlCard = "http://localhost:8082/cards/" + cardId;
+                String urlCard = "http://card:8082/cards/" + cardId;
                 ResponseEntity<Card> response = restTemplate.getForEntity(urlCard, Card.class);
                 Card card = response.getBody();
 

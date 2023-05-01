@@ -16,7 +16,7 @@ export class RankingComponent implements OnInit{
     if (token) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
       this.http
-        .get('http://localhost:8080/users', { headers })
+        .get('http://proxyauth:8080/users', { headers })
         .subscribe((data) => (this.users = data));
     } else {
       alert('Vous êtes déconnecté')

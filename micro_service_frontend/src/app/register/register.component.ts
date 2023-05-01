@@ -20,7 +20,7 @@ export class RegisterComponent implements OnInit {
 
   onSubmit(form: { valid: any; }) {
     if (form.valid) {
-      this.http.post('http://localhost:8080/auth/register', this.user).subscribe(
+      this.http.post('http://proxyauth:8080/auth/register', this.user).subscribe(
         (data: any) => {
           this.router.navigate(['/login']);
         },
