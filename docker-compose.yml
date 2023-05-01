@@ -2,11 +2,11 @@ version: '3'
 
 services:
   frontend:
-    build: ./micro_service_frontend/
-    ports:
-      - '80:80'
-    networks:
-      - archistack
+   build: ./micro_service_frontend/
+   ports:
+     - '80:80'
+   networks:
+     - archistack
 
   card:
     build: ./micro_service_card/
@@ -17,7 +17,9 @@ services:
 
   # ! USER INVENTORY CARD
   proxyauth:
-    build: ./micro_service_proxyauth/
+    build:
+      context: ./
+      dockerfile: ./micro_service_proxyauth/Dockerfile
     ports:
       - '8080:8080'
     networks:
