@@ -21,9 +21,9 @@ public class RoomService {
     @Autowired
     private RoomRepository roomRepository;
     private final RestTemplate restTemplate = new RestTemplate();
-    private final String userServiceUrl = "http://localhost:8081";
-    private final String cardServiceUrl = "http://localhost:8082";
-    private final String marketServiceUrl = "http://localhost:8083";
+    private final String userServiceUrl = "http://user:8081";
+    private final String cardServiceUrl = "http://card:8082";
+    private final String marketServiceUrl = "http://inventory:8083";
 
     public Room addRoom(Room room) {
         Room roomFinal = new Room(room.getName());

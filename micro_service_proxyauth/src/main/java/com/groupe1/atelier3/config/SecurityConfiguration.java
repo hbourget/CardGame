@@ -25,11 +25,15 @@ public class SecurityConfiguration {
     CorsConfiguration configuration = new CorsConfiguration();
     configuration.setAllowedOrigins(Arrays.asList(
             "http://localhost:8080",
-            "http://localhost:8081",
-            "http://localhost:8082",
-            "http://localhost:8083",
-            "http://localhost:8084",
-            "http://localhost:4200"
+            "http://user:8081",
+            "http://card:8082",
+            "http://inventory:8083",
+            "http://room:8084",
+            "http://localhost:4200",
+            "http://localhost:80",
+            "http://localhost",
+            "http://frontend:80",
+            "http://frontend:4200"
     ));
     configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
     configuration.setAllowedHeaders(Arrays.asList(

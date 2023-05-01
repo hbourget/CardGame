@@ -40,9 +40,9 @@ public class AuthService {
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
   private final RestTemplate restTemplate = new RestTemplate();
-  private final String userServiceUrl = "http://localhost:8081";
-  private final String cardServiceUrl = "http://localhost:8082";
-  private final String inventoryServiceUrl = "http://localhost:8083";
+  private final String userServiceUrl = "http://user:8081";
+  private final String cardServiceUrl = "http://card:8082";
+  private final String inventoryServiceUrl = "http://inventory:8083";
 
   private UserDetails usertoUserDetails(User user) {
     return org.springframework.security.core.userdetails.User

@@ -1,0 +1,59 @@
+version: '3'
+
+services:
+  frontend:
+   build: ./micro_service_frontend/
+   ports:
+     - '80:80'
+   networks:
+     - archistack
+
+  card:
+    build: ./micro_service_card/
+    ports:
+      - '8082:8082'
+    networks:
+      - archistack
+
+  # ! USER INVENTORY CARD
+  proxyauth:
+    build:
+      context: ./
+      dockerfile: ./micro_service_proxyauth/Dockerfile
+    ports:
+      - '8080:8080'
+    networks:
+      - archistack
+
+  # ! INVENTORY
+  user:
+    build:
+      context: ./
+      dockerfile: ./micro_service_user/Dockerfile
+    ports:
+      - "8081:8081"
+    networks:
+      - archistack
+
+  # ! USER INVENTORY CARD
+  inventory:
+    build:
+      context: ./
+      dockerfile: ./micro_service_inventory/Dockerfile
+    ports:
+      - "8083:8083"
+    networks:
+      - archistack
+
+  # ! USER INVENTORY CARD
+  room:
+    build:
+      context: ./
+      dockerfile: ./micro_service_room/Dockerfile
+    ports:
+      - "8084:8084"
+    networks:
+      - archistack
+
+networks:
+  archistack:

@@ -18,7 +18,7 @@ public class UserService {
     private UserRepository userRepository;
     private UserMapper userMapper = new UserMapper();
     private final RestTemplate restTemplate = new RestTemplate();
-    private final String inventoryServiceUrl = "http://localhost:8083";
+    private final String inventoryServiceUrl = "http://inventory:8083";
 
     public UserDTO getUserById(Integer id) {
         Optional<User> userOptional = userRepository.findById(id);
