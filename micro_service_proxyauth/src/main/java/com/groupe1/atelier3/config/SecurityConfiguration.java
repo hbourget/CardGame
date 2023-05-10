@@ -34,7 +34,7 @@ public class SecurityConfiguration {
             "http://localhost",
             "http://frontend:80",
             "http://frontend:4200",
-            "http://frontend:2050",
+            "http://localhost:2050",
             "http://192.168.1.17:2050"
     ));
     configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
