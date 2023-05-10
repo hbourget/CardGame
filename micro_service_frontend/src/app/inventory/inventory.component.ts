@@ -18,7 +18,7 @@ interface DecodedToken {
 export class InventoryComponent {
   inv: any;
   username: any;
-  serverIp = 'http://192.168.1.17:8080';
+  serverIp = 'http://localhost:8080';
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 

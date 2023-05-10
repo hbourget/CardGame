@@ -16,7 +16,7 @@ export class RoomsComponent implements OnInit, OnDestroy {
   user: User | null = null;
   userSubscription: any;
   roomName: any;
-  serverIp = 'http://192.168.1.17:8080';
+  serverIp = 'http://localhost:8080';
 
   constructor(private http: HttpClient, private router: Router, private authService: AuthService) { }
 

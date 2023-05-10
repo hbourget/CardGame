@@ -9,7 +9,7 @@ import { AuthService } from '../auth.service';
 })
 export class RankingComponent implements OnInit{
   users:any
-  serverIp = 'http://192.168.1.17:8080';
+  serverIp = 'http://localhost:8080';
   constructor(private http: HttpClient, private authService: AuthService) {}
 
   ngOnInit() {

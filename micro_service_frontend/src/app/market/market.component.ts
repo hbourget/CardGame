@@ -14,7 +14,7 @@ export class MarketComponent implements OnInit, OnDestroy {
   cards: any;
   user: User | null = null;
   userSubscription: any;
-  serverIp = 'http://192.168.1.17:8080';
+  serverIp = 'http://localhost:8080';
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
