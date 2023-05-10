@@ -18,6 +18,7 @@ interface DecodedToken {
 export class InventoryComponent {
   inv: any;
   username: any;
+  serverIp = 'http://192.168.1.17:8080';
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
@@ -29,7 +30,7 @@ export class InventoryComponent {
 
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
       this.http
-        .get(`http://localhost:8080/inventories/users/${this.username}`, { headers })
+        .get(this.serverIp + '/inventories/users/' + this.username, { headers })
         .subscribe((data) => (this.inv = data));
     } else {
       alert('Vous êtes déconnecté')
@@ -41,7 +42,7 @@ export class InventoryComponent {
     if (token) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
       this.http
-        .post(`http://localhost:8080/inventories/sell/users/${this.username}/cards/${id}`, null, { headers })
+        .post(this.serverIp + '/inventories/sell/users/' + this.username + '/cards/' + id, null, { headers })
         .pipe(
           catchError((error) => {
             if (error.status === 409) {
@@ -53,7 +54,7 @@ export class InventoryComponent {
         .subscribe((data) => {
           this.authService.getUserData();
           this.http
-            .get(`http://localhost:8080/inventories/users/${this.username}`, { headers })
+            .get(this.serverIp + '/inventories/users/' + this.username, { headers })
             .subscribe((updatedData) => (this.inv = updatedData));
         });
     } else {

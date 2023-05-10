@@ -16,6 +16,7 @@ export class RoomsComponent implements OnInit, OnDestroy {
   user: User | null = null;
   userSubscription: any;
   roomName: any;
+  serverIp = 'http://192.168.1.17:8080';
 
   constructor(private http: HttpClient, private router: Router, private authService: AuthService) { }
 
@@ -26,7 +27,7 @@ export class RoomsComponent implements OnInit, OnDestroy {
       if (user) {
         const token = this.authService.getAccessToken();
         const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-        this.http.get('http://localhost:8080/rooms', { headers }).subscribe((data) => {
+        this.http.get(this.serverIp + '/rooms', { headers }).subscribe((data) => {
           this.rooms = data;
         });
       }
@@ -42,7 +43,7 @@ export class RoomsComponent implements OnInit, OnDestroy {
       const token = this.authService.getAccessToken();
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
       let response = this.http
-        .put(`http://localhost:8080/rooms/join/${idRoom}/users/${this.user.username}`, { id: idRoom }, { headers })
+        .put(this.serverIp + '/rooms/join/' + idRoom + '/users/' + this.user.username, { id: idRoom }, { headers })
         .pipe(
           catchError((error) => {
             if (error.status === 401) {
@@ -63,7 +64,7 @@ export class RoomsComponent implements OnInit, OnDestroy {
       const token = this.authService.getAccessToken();
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
       let response = this.http
-        .put(`http://localhost:8080/rooms/leave/${idRoom}/users/${this.user.username}`, { id: idRoom }, { headers })
+        .put(this.serverIp + '/rooms/leave/' + idRoom + '/users/' + this.user.username, { id: idRoom }, { headers })
         .pipe(
           catchError((error) => {
             if (error.status === 401) {
@@ -88,7 +89,7 @@ export class RoomsComponent implements OnInit, OnDestroy {
       const token = this.authService.getAccessToken();
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
       let response = this.http
-        .post(`http://localhost:8080/rooms`, { name: this.roomName }, { headers })
+        .post(this.serverIp + '/rooms', { name: this.roomName }, { headers })
         .pipe(
           catchError((error) => {
             return throwError(error);

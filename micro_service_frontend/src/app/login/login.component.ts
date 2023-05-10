@@ -14,6 +14,7 @@ export class LoginComponent implements OnInit {
     password: ''
   };
   loginError = false;
+  serverIp = 'http://192.168.1.17:8080';
 
   constructor(private http: HttpClient, private authService: AuthService, private router: Router) { }
 
@@ -22,7 +23,7 @@ export class LoginComponent implements OnInit {
 
   onSubmit(form: { valid: any; }) {
     if (form.valid) {
-      this.http.post('http://localhost:8080/auth/login', this.user).subscribe(
+      this.http.post(this.serverIp + '/auth/login', this.user).subscribe(
         (data: any) => {
           this.authService.setAccessToken(data.access_token);
           this.authService.setRefreshToken(data.refresh_token);

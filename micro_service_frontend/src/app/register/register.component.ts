@@ -12,6 +12,7 @@ export class RegisterComponent implements OnInit {
     username: '',
     password: ''
   };
+  serverIp = 'http://192.168.1.17:8080';
 
   constructor(private http: HttpClient, private router: Router) { }
 
@@ -20,7 +21,7 @@ export class RegisterComponent implements OnInit {
 
   onSubmit(form: { valid: any; }) {
     if (form.valid) {
-      this.http.post('http://localhost:8080/auth/register', this.user).subscribe(
+      this.http.post(this.serverIp + '/auth/register', this.user).subscribe(
         (data: any) => {
           this.router.navigate(['/login']);
         },
