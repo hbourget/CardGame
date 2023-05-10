@@ -12,6 +12,7 @@ export class CardsComponent implements OnInit {
   cards: any;
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
+  serverIp = 'http://localhost:8080';
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
@@ -20,7 +21,7 @@ export class CardsComponent implements OnInit {
     if (token) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
       this.http
-        .get('http://localhost:8080/cards', { headers })
+        .get(this.serverIp + '/cards', { headers })
         .subscribe((data) => {
           this.cards = data;
           // @ts-ignore

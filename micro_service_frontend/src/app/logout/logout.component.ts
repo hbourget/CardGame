@@ -12,13 +12,14 @@ import {Router} from "@angular/router";
 })
 export class LogoutComponent implements OnInit {
   user$: Observable<User | null>;
+  serverIp = 'http://192.168.1.17:8080';
 
   constructor(private http: HttpClient, private authService: AuthService, private router: Router) {
     this.user$ = this.authService.user$;
   }
 
   ngOnInit(): void {
-    this.http.post('http://localhost:8080/auth/logout', {access_token: this.authService.getAccessToken()});
+    this.http.post(this.serverIp + '/auth/logout', {access_token: this.authService.getAccessToken()});
     this.authService.removeTokens();
     this.authService.userSubject.next(null);
     this.router.navigate(['/login']);
