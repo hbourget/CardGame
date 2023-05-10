@@ -22,6 +22,5 @@ public class SchedulerConfig {
                 cService.updateCard(card.getId(), card);
             }
         });
-        System.out.println("JOB: Regen cards + 5");
     }
 }
