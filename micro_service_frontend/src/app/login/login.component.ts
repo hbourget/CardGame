@@ -14,7 +14,7 @@ export class LoginComponent implements OnInit {
     password: ''
   };
   loginError = false;
-  serverIp = 'http://192.168.1.17:8080';
+  serverIp = 'http://localhost:8080';
 
   constructor(private http: HttpClient, private authService: AuthService, private router: Router) { }
 

@@ -12,7 +12,7 @@ import {Router} from "@angular/router";
 })
 export class LogoutComponent implements OnInit {
   user$: Observable<User | null>;
-  serverIp = 'http://192.168.1.17:8080';
+  serverIp = 'http://localhost:8080';
 
   constructor(private http: HttpClient, private authService: AuthService, private router: Router) {
     this.user$ = this.authService.user$;
