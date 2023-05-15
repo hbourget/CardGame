@@ -43,3 +43,4 @@ secrets.yml
 node_modules/
 dist/
 .parcel-cache/
+sonar_tests/data/

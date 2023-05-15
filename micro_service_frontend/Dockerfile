@@ -1,7 +1,8 @@
 FROM node:20 as build
 WORKDIR /app
 COPY . .
-RUN NG_CLI_ANALYTICS=ci npm install && npm run build
+ENV NG_CLI_ANALYTICS=ci
+RUN npm install && npm run build
 
 FROM nginx:1.23.4
 WORKDIR /usr/share/nginx/html
