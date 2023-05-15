@@ -69,9 +69,7 @@ services:
       - archistack
 
   sonarqube:
-    image: sonarqube:community
-    hostname: sonarqube
-    container_name: sonarqube
+    image: sonarqube:lts
     depends_on:
       - db
     environment:
@@ -89,8 +87,6 @@ services:
 
   db:
     image: postgres:13
-    hostname: postgresql
-    container_name: postgresql
     environment:
       POSTGRES_USER: sonar
       POSTGRES_PASSWORD: sonar
@@ -109,7 +105,6 @@ volumes:
   sonarqube_logs:
   postgresql:
   postgresql_data:
-
 
 networks:
   archistack:
