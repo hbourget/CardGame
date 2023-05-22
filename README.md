@@ -1,3 +1,17 @@
+# Installation
+
+Nous avons un Dockerfile par micro service permettant de construire l'image du microservice.
+
+Pour lancer le projet il suffit de faire un `docker-compose up` à la racine.
+
+L'application démarre sur le port 80.
+
+Nous avons aussi un containeur pour les tests du microservice `card` (et aussi `inventory` mais il reste a tester). Ce containeur va générer un rapport de couverture de test et le persister dans le dossier `./sonar_tests/data/card` (ou `./sonar_tests/data/inventory`).
+
+Nous avons aussi un containeur sonarqube permettant de faire un rapport de code dans l'interface web de sonarqube. Les rapport sont effectué grace au containeur de test qui va executer un script.sh qui va executer une commande maven dans card et inventory permettant d'envoyer le rapport a sonarqube et de le voir dans l'interface web.
+
+# Schéma d'architecture :
+![ Archi](images/archimicro.png)
 
 # Documentation fonctionnelle de l'application
 
@@ -5,39 +19,54 @@ L'application permet aux utilisateurs de jouer à un jeu de cartes en ligne cont
 
 1. **Création de compte** : L'utilisateur peut créer un compte en fournissant un nom d'utilisateur et un mot de passe.
 
+
 2. **Inventaire de cartes** : Après la création du compte, l'application attribue automatiquement trois cartes aléatoires à l'inventaire de l'utilisateur. Chaque carte est unique et ne peut se retrouver dans deux inventaires différents.
 
+
 3. **Création de room** : Un utilisateur peut créer une room en lui donnant un nom. Une récompense aléatoire est attribuée au moment de la création de la room, entre 15 et 30 pièces.
+![ Room](images/Rooms.png)
 
 4. **Attente du deuxième joueur** : Lorsqu'un utilisateur a créé la room, cette dernière a son statut en "waiting". En effet, elle attend un deuxième joueur. Une fois que le deuxième joueur a rejoint la room, le statut passe en "ready", personne d'autres ne peut rejoindre.
 
 5. **Sélection de la carte** : À ce moment-là, chaque utilisateur choisit une carte dans son inventaire pour la partie.
 
 6. **Déroulement de la partie** : Une fois les deux joueurs ayant choisi leur carte, le partie commence, le statut passe en "started". Chaque joueur joue chacun son tour.
-   Un tour représente la carte du joueur actuel, l'attaquant, qui va attaquer la carte du joueur adverse.
-   Les dégâts envoyés sont différents en fonction de l'attribut power et type de la carte. Il existe trois types : Feu, Eau, Terre. Il y a aussi 30% de chance d'envoyer un coup critique.
+   Un tour correspond à l'attaque de la carte du joueur X sur celle du joueur Y.
+   Les dégâts envoyés sont différents en fonction de l'attribut power et type de la carte. Il existe trois types : Feu, Eau, Terre. Il y a également 30% de chance d'envoyer un coup critique.
    La première carte arrivant à 0 point de vie a perdu. La carte du perdant perd 10 points d'énergie et celle du gagnant perd que 5 points d'énergie.
    Une carte qui a 0 d'énergie ne peut pas participer à une partie.
+![ Game](images/Game.png)
 
-7. **Récupération de l'énergie** : Toutes les 30 secondes sur l'application, chaque carte reçoit 1 point d'énergie.
+8. **Récupération de l'énergie** : Toutes les 30 secondes sur, chaque carte récupère 1 point d'énergie.
 
-8. **Marché** : Il existe un marché où l'on peut acheter des cartes avec ses pièces.
+
+9. **Marché** : Il existe un marché où l'on peut acheter des cartes avec ses pièces.
+![ Marche](images/Marche.png)
+
+# CI CD
+
+Pour la CI CD nous avons un job qui build toutes les images docker des microservices et les push sur le container registry de gitlab.
+
+Nous avons aussi un deuxième job qui run les containeur pour assurer qu'il n'y a aucun problème lors de l'exécution des microservices.
+
+A terme la CI CD devra déployer les microservices sur un serveur, qui pour l'instant est fait manuellement.
+
+L'utilisation de kubernetes serait un plus car il permettrait de déployer les microservices sur plusieurs serveurs et de les scaler en fonction de la charge. Cela permet aussi de considéré les microservices en running si l'application n'a pas de problème et non dès le démarage du container.
+
 
 # Documentation API
 
-Par défaut le port utilisé par l'application est le **8080**. Le proxy s'occupe des redirections.
+Les ports des différents services sont les suivants : 
 
-Pour plus de détails, les ports des endpoints sont les suivants :
-
-- Auth Service : **8080**
+- Frontend : **80**
+- Proxy & Auth Service : **8080**
 - User Service : **8081**
 - Card Service : **8082**
 - Inventory Service : **8083**
 - Room Service : **8084**
 
-# Card Service
 
-## Endpoints
+# Card Service
 
 ### GET `/cards/{id}`
 
